@@ -1,0 +1,198 @@
+name: CD - Continuous Deployment
+
+# Run on manual triggers
+on:
+  # push:
+  #   branches: [main]
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: "Deployment stage (dev, production)"
+        required: true
+        default: "dev"
+        type: choice
+        options:
+          - dev
+          - production
+
+# Ensure only one deployment runs at a time
+concurrency:
+  group: deploy-${{ github.event.inputs.stage }}
+  cancel-in-progress: false
+
+# AWS OIDC permissions for role assumption
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  # Single comprehensive deployment job
+  deploy:
+    name: Deploy to AWS (${{ github.event.inputs.stage }})
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.stage }}
+
+    steps:
+      # Check out the repository code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Determine deployment stage
+      - name: Set deployment stage
+        id: set-stage
+        run: |
+          STAGE="${{ github.event.inputs.stage }}"
+          echo "stage=$STAGE" >> $GITHUB_OUTPUT
+          echo "🎯 Deploying to: $STAGE"
+
+      # Workaround with Pulumi version conflict in GitHub Actions environment ( https://github.com/anomalyco/sst/issues/6314 )
+      # Writing to $GITHUB_PATH causes GitHub Actions to prepend this directory to PATH,
+      # ensuring SST's version of Pulumi is found before GitHub Actions' version
+      - name: Add SST's bin directory to PATH
+        run: echo "$HOME/.config/sst/bin" >> $GITHUB_PATH
+
+      # Enable Corepack for Yarn package management
+      - name: Enable Corepack
+        run: corepack enable
+
+      # Set up Node.js environment with caching
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "yarn"
+
+      # Install dependencies
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      # Step 1: Pre-deployment validation
+      - name: Run pre-deployment checks
+        run: |
+          echo "🔍 Running pre-deployment validation..."
+          yarn lint
+          yarn typecheck
+
+      # Step 2: Build application
+      - name: Build Next.js application
+        run: |
+          echo "🏗️ Building application..."
+          yarn build
+
+      # Step 3: Configure AWS credentials via OIDC (no keys needed)
+      - name: Configure AWS credentials
+        id: aws-creds
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION || 'us-east-1' }}
+          role-session-name: GitHubActions-${{ github.run_id }}
+          output-credentials: true
+
+      - name: Set AWS profile
+        env:
+          profile: ts-web-starter
+        run: |
+          aws --profile ${{ env.profile }} configure set aws_access_key_id     ${{ steps.aws-creds.outputs.aws-access-key-id }}
+          aws --profile ${{ env.profile }} configure set aws_secret_access_key ${{ steps.aws-creds.outputs.aws-secret-access-key }}
+          aws --profile ${{ env.profile }} configure set aws_session_token     ${{ steps.aws-creds.outputs.aws-session-token }}
+
+      # Step 4: Deploy to AWS using SST
+      - name: Deploy with SST
+        id: deploy
+        env:
+          CI: true
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          PRISMA_CLI_BINARY_TARGETS: rhel-openssl-3.0.x # Needed for Prisma migrations in Lambda
+        run: |
+          echo "🚀 Deploying to ${{ steps.set-stage.outputs.stage }}..."
+          yarn sst deploy --stage ${{ steps.set-stage.outputs.stage }}
+
+          # Extract deployment URL from SST output
+          URL=$(yarn sst shell --stage ${{ steps.set-stage.outputs.stage }} -- node -e "console.log(require('sst').Resource.Web.url)" 2>/dev/null || echo "")
+          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "🌐 Deployed to: $URL"
+
+      # Step 5: Run database migrations via Lambda
+      - name: Apply database migrations
+        run: |
+          echo "📊 Applying database migrations via Lambda..."
+
+          # Get the migrator function name from SST
+          MIGRATOR_FUNCTION=$(yarn sst shell --stage ${{ steps.set-stage.outputs.stage }} -- node -e "console.log(require('sst').Resource.MigratorFunction.name)" 2>/dev/null)
+
+          if [ -z "$MIGRATOR_FUNCTION" ]; then
+            echo "❌ Could not find MigratorFunction. Skipping migrations."
+            exit 1
+          fi
+
+          echo "🔧 Invoking migrator function: $MIGRATOR_FUNCTION"
+
+          # Invoke the Lambda function and capture output
+          aws lambda invoke \
+            --function-name "$MIGRATOR_FUNCTION" \
+            --payload '{}' \
+            --cli-binary-format raw-in-base64-out \
+            /tmp/migration-response.json
+
+          # Display migration result
+          echo "📋 Migration result:"
+          cat /tmp/migration-response.json
+
+          # Check if migration was successful
+          SUCCESS=$(cat /tmp/migration-response.json | jq -r '.success')
+          if [ "$SUCCESS" != "true" ]; then
+            echo "❌ Migration failed!"
+            cat /tmp/migration-response.json | jq -r '.error // .message'
+            exit 1
+          fi
+
+          echo "✅ Migrations applied successfully"
+
+      # Step 6: Run smoke tests
+      - name: Run smoke tests
+        if: steps.deploy.outputs.url != ''
+        run: |
+          echo "🧪 Running smoke tests against ${{ steps.deploy.outputs.url }}"
+          curl -f "${{ steps.deploy.outputs.url }}" || exit 1
+
+      # Step 7: Tag commit with environment
+      - name: Tag deployed commit
+        run: |
+          TAG="${{ steps.set-stage.outputs.stage }}-env"
+          echo "🏷️ Tagging commit as $TAG"
+
+          # Delete existing tag (local + remote) so it always points to the latest deploy
+          git tag -d "$TAG" 2>/dev/null || true
+          git push origin ":refs/tags/$TAG" 2>/dev/null || true
+
+          # Create and push the new tag
+          git tag "$TAG"
+          git push origin "$TAG"
+
+      # Step 8: Deployment success notification
+      - name: Deployment complete
+        run: |
+          echo "✅ Deployment to ${{ steps.set-stage.outputs.stage }} successful!"
+          echo "🌐 URL: ${{ steps.deploy.outputs.url }}"
+
+      # Optional: Send Slack notification (uncomment if needed)
+      # - name: Slack notification
+      #   uses: slackapi/slack-github-action@v1
+      #   with:
+      #     payload: |
+      #       {
+      #         "text": "✅ Deployment to ${{ steps.set-stage.outputs.stage }} successful!",
+      #         "blocks": [
+      #           {
+      #             "type": "section",
+      #             "text": {
+      #               "type": "mrkdwn",
+      #               "text": "Deployment to *${{ steps.set-stage.outputs.stage }}* succeeded\n🌐 URL: ${{ steps.deploy.outputs.url }}"
+      #             }
+      #           }
+      #         ]
+      #       }
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

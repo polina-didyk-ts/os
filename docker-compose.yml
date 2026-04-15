@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  # PostgreSQL database service
+  postgres:
+    image: postgres:16-alpine
+    container_name: ts-web-starter-db
+    restart: unless-stopped
+
+    # Use port 5433 to avoid conflicts with local PostgreSQL
+    ports:
+      - "5433:5432"
+
+    # Environment variables for database configuration
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ts_web_starter_dev
+      # Performance tuning
+      POSTGRES_INITDB_ARGS: "-E UTF8 --locale=en_US.UTF-8"
+
+    # Persist data between container restarts
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Optional: Custom initialization scripts
+      # - ./prisma/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    # Health check to ensure database is ready
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    # Network configuration
+    networks:
+      - app_network
+
+# Named volumes for data persistence
+volumes:
+  postgres_data:
+    driver: local
+    name: ts-web-starter-postgres-data
+
+# Custom network
+networks:
+  app_network:
+    driver: bridge
+    name: ts-web-starter-network
