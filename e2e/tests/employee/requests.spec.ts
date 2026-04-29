@@ -15,34 +15,35 @@ test.describe("Employee Requests - Form Submission", () => {
     await expect(page).toHaveURL(/.*requests\/new.*type=order/);
 
     // 3. Verify form elements exist
-    await expect(page.getByText("Створити запит")).toBeVisible();
-    await expect(page.getByLabel(/що замовити/i)).toBeVisible();
+    await expect(page.getByText("New Request")).toBeVisible();
+    await expect(page.getByText(/what to order/i)).toBeVisible();
 
     // 4. Fill in the form
-    await page.getByPlaceholder(/напрклад: маркери/i).fill("Тестові маркери");
-    await page.getByLabel(/кількість/i).fill("5");
+    await page.getByPlaceholder(/whiteboard markers/i).fill("Test markers");
+    await page.locator('input[type="number"]').fill("5");
 
     // 5. Select priority
-    const mediumButton = page.getByRole("button", { name: /середній/i }).first();
+    const mediumButton = page.getByRole("button", { name: /medium/i }).first();
     await mediumButton.click();
 
     // 6. Add comment
-    await page.getByPlaceholder(/будь ласка, вважіть колір/i).fill("Синього кольору");
+    await page.getByPlaceholder(/please specify color/i).fill("Blue color");
 
     // 7. Submit form
-    const submitButton = page.getByRole("button", { name: /надіслати запит/i });
+    const submitButton = page.getByRole("button", { name: /submit request/i });
+    await expect(submitButton).toBeEnabled({ timeout: 3000 });
     await submitButton.click();
 
     // 8. Wait for success screen
-    await expect(page.getByText("Запит надіслано!")).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText("Request Submitted!")).toBeVisible({ timeout: 10000 });
 
     // 9. Verify ticket number is displayed
     const ticketNumberElement = page.getByText(/#\d{4}-\d{3}/);
     await expect(ticketNumberElement).toBeVisible();
 
     // 10. Verify success screen buttons
-    await expect(page.getByRole("button", { name: /переглянути мої запити/i })).toBeVisible();
-    await expect(page.getByRole("button", { name: /на головну/i })).toBeVisible();
+    await expect(page.getByText("View My Requests")).toBeVisible();
+    await expect(page.getByText("Go to Home")).toBeVisible();
 
     console.log("✅ Order form test passed!");
   });
@@ -57,23 +58,24 @@ test.describe("Employee Requests - Form Submission", () => {
     await expect(page).toHaveURL(/.*requests\/new.*type=problem/);
 
     // 3. Fill in the form
-    const whatInput = page.locator("input").filter({ hasText: "" }).first();
-    await page.getByPlaceholder(/напрклад: кондиціонер/i).fill("Принтер");
+    await page.getByPlaceholder(/air conditioner or printer/i).fill("Printer");
 
-    const descriptionInput = page.getByPlaceholder(/опишіть детальніше/i);
-    await descriptionInput.fill("Принтер не друкує, світлодіод червоний");
+    const descriptionInput = page.getByPlaceholder(/describe in detail/i);
+    await descriptionInput.fill("Printer is not printing, LED is red");
 
     // 4. Select low priority
     await page
-      .getByRole("button", { name: /низький/i })
+      .getByRole("button", { name: /low/i })
       .first()
       .click();
 
     // 5. Submit form
-    await page.getByRole("button", { name: /надіслати запит/i }).click();
+    const submitBtn = page.getByRole("button", { name: /submit request/i });
+    await expect(submitBtn).toBeEnabled({ timeout: 3000 });
+    await submitBtn.click();
 
     // 6. Verify success
-    await expect(page.getByText("Запит надіслано!")).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText("Request Submitted!")).toBeVisible({ timeout: 10000 });
     await expect(page.getByText(/#\d{4}-\d{3}/)).toBeVisible();
 
     console.log("✅ Problem form test passed!");
@@ -89,20 +91,22 @@ test.describe("Employee Requests - Form Submission", () => {
     await expect(page).toHaveURL(/.*requests\/new.*type=question/);
 
     // 3. Fill in the question
-    const questionInput = page.getByPlaceholder(/напишіть своє питання/i);
-    await questionInput.fill("Як взяти вихідний день?");
+    const questionInput = page.getByPlaceholder(/write your question here/i);
+    await questionInput.fill("How do I take a day off?");
 
     // 4. Select high priority
     await page
-      .getByRole("button", { name: /високий/i })
+      .getByRole("button", { name: /high/i })
       .first()
       .click();
 
     // 5. Submit form
-    await page.getByRole("button", { name: /надіслати запит/i }).click();
+    const submitBtnQ = page.getByRole("button", { name: /submit request/i });
+    await expect(submitBtnQ).toBeEnabled({ timeout: 3000 });
+    await submitBtnQ.click();
 
     // 6. Verify success
-    await expect(page.getByText("Запит надіслано!")).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText("Request Submitted!")).toBeVisible({ timeout: 10000 });
     await expect(page.getByText(/#\d{4}-\d{3}/)).toBeVisible();
 
     console.log("✅ Question form test passed!");
@@ -118,8 +122,8 @@ test.describe("Employee Requests - Form Submission", () => {
     await expect(page).toHaveURL(/.*requests\/new.*type=idea/);
 
     // 3. Fill in the idea
-    const ideaInput = page.getByPlaceholder(/поділіться своїми думками/i);
-    const ideaText = "Могли б купити кавоарку для офісу? Це зробило б роботу приємнішою!";
+    const ideaInput = page.getByPlaceholder(/share your thoughts/i);
+    const ideaText = "Could we get a coffee machine for the office? It would make work more enjoyable!";
     await ideaInput.fill(ideaText);
 
     // 4. Verify character counter
@@ -127,15 +131,17 @@ test.describe("Employee Requests - Form Submission", () => {
 
     // 5. Select medium priority
     await page
-      .getByRole("button", { name: /середній/i })
+      .getByRole("button", { name: /medium/i })
       .first()
       .click();
 
     // 6. Submit form
-    await page.getByRole("button", { name: /надіслати запит/i }).click();
+    const submitBtnI = page.getByRole("button", { name: /submit request/i });
+    await expect(submitBtnI).toBeEnabled({ timeout: 3000 });
+    await submitBtnI.click();
 
     // 7. Verify success
-    await expect(page.getByText("Запит надіслано!")).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText("Request Submitted!")).toBeVisible({ timeout: 10000 });
     await expect(page.getByText(/#\d{4}-\d{3}/)).toBeVisible();
 
     console.log("✅ Idea form test passed!");
@@ -150,7 +156,7 @@ test.describe("Employee Requests - Form Submission", () => {
     await page.goto("/employee/requests/new?type=order");
 
     // 3. Try to submit empty form
-    const submitButton = page.getByRole("button", { name: /надіслати запит/i });
+    const submitButton = page.getByRole("button", { name: /submit request/i });
 
     // Check if button is disabled when form is empty
     if (await submitButton.isDisabled()) {
@@ -158,7 +164,7 @@ test.describe("Employee Requests - Form Submission", () => {
     }
 
     // 4. Fill required field
-    await page.getByPlaceholder(/напрклад: маркери/i).fill("Маркери");
+    await page.getByPlaceholder(/whiteboard markers/i).fill("Markers");
 
     // 5. Button should now be enabled
     await expect(submitButton).toBeEnabled({ timeout: 2000 });

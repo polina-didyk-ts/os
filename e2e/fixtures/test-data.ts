@@ -23,7 +23,7 @@ export function createTestUser(index: number | string): TestUser {
   const random = Math.floor(Math.random() * 1000000);
   const uniqueId = `${timestamp}.${random}`;
   return {
-    email: `test.user.${uniqueId}@example.com`,
+    email: `test.user.${uniqueId}@tech-stack.io`,
     password: "TestPassword123!",
     name: `Test User ${uniqueId}`,
   };

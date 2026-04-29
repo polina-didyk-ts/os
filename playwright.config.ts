@@ -13,7 +13,7 @@ export default defineConfig({
   forbidOnly: isCI,
   // Retry failed tests in CI to handle transient failures
   retries: isCI ? 2 : 0,
-  workers: isCI ? 2 : 4,
+  workers: isCI ? 2 : 1,
   reporter: isCI
     ? [["html"], ["list"], ["github"], ["json", { outputFile: "playwright-report/results.json" }]]
     : [["html"], ["list"]],
