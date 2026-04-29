@@ -25,9 +25,9 @@ export default function EmployeeDashboard() {
         {/* Greeting Section */}
         <section className="px-4 py-6 bg-white border-b border-gray-200">
           <h1 className="text-3xl font-bold text-gray-900 mb-1">
-            Привіт, {userName.split(" ")[0]} 👋
+            Hey, {userName.split(" ")[0]} 👋
           </h1>
-          <p className="text-gray-600">Чим можемо допомогти сьогодні?</p>
+          <p className="text-gray-600">How can we help you today?</p>
         </section>
 
         {/* Request Types Grid */}
@@ -53,7 +53,7 @@ export default function EmployeeDashboard() {
           >
             <div className="flex items-center gap-3">
               <FileText className="w-6 h-6 text-gray-700" strokeWidth={1.5} />
-              <span className="text-gray-900 font-medium">Мої запити</span>
+              <span className="text-gray-900 font-medium">My Requests</span>
             </div>
             <ChevronRight className="w-5 h-5 text-blue-600" strokeWidth={1.5} />
           </Link>

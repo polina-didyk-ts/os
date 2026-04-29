@@ -16,8 +16,8 @@ function getInitials(name: string | null | undefined, email: string): string {
 }
 
 const COMING_SOON_ITEMS = [
-  { icon: Megaphone, label: "Додати оголошення" },
-  { icon: BarChart2, label: "Аналітика"         },
+  { icon: Megaphone, label: "Announcements" },
+  { icon: BarChart2, label: "Analytics"     },
 ];
 
 export function SideMenu() {
@@ -69,7 +69,7 @@ export function SideMenu() {
             </div>
           </div>
           <span className="inline-block px-3 py-1 rounded-full bg-purple-600 text-white text-xs font-semibold uppercase tracking-wide">
-            Офіс-менеджер
+            Office Manager
           </span>
         </div>
 
@@ -85,7 +85,7 @@ export function SideMenu() {
                 <span className="text-sm font-medium">{label}</span>
               </div>
               <span className="text-[10px] font-bold text-gray-400 border border-gray-200 rounded px-2 py-0.5 tracking-wide">
-                НЕЗАБАРОМ
+                SOON
               </span>
             </div>
           ))}
@@ -98,7 +98,7 @@ export function SideMenu() {
             className="flex items-center gap-3 text-red-500 hover:text-red-600 transition-colors"
           >
             <LogOut className="w-5 h-5" strokeWidth={1.5} />
-            <span className="text-sm font-medium">Вийти</span>
+            <span className="text-sm font-medium">Sign out</span>
           </button>
         </div>
       </aside>

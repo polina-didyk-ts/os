@@ -20,7 +20,7 @@ export function SuccessScreen({ ticketNumber }: SuccessScreenProps) {
 
       {/* Success Message */}
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900">Запит надіслано!</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Request Submitted!</h1>
         <p className="text-green-600 flex items-center justify-center gap-1">
           <span className="text-xl">✅</span>
         </p>
@@ -28,20 +28,20 @@ export function SuccessScreen({ ticketNumber }: SuccessScreenProps) {
 
       {/* Ticket Number */}
       <div className="space-y-1 text-center">
-        <p className="text-xs text-gray-600 uppercase font-semibold">Номер звернення</p>
+        <p className="text-xs text-gray-600 uppercase font-semibold">Request Number</p>
         <p className="text-2xl font-bold text-gray-900">#{ticketNumber}</p>
       </div>
 
       {/* Info Text */}
       <p className="text-gray-700 text-center max-w-sm">
-        Ми зв&apos;язуємось з тобою, як тільки статус змінитиме
+        We&apos;ll notify you as soon as the status changes
       </p>
 
       {/* What Next */}
       <div className="w-full max-w-md bg-gray-50 rounded-lg p-4 space-y-2">
-        <p className="text-xs font-semibold text-gray-900 uppercase">Що далі?</p>
+        <p className="text-xs font-semibold text-gray-900 uppercase">What&apos;s Next?</p>
         <p className="text-sm text-gray-600">
-          Зараз твій запит перевіряє адміністратор офісу. Впевнений відповідь прийде через 2 години у робочий час. Перевірений інформацію у профілі.
+          Your request is now being reviewed by the office manager. You&apos;ll typically receive a response within 2 business hours. Check updates in your profile.
         </p>
       </div>
 
@@ -49,12 +49,12 @@ export function SuccessScreen({ ticketNumber }: SuccessScreenProps) {
       <div className="w-full max-w-md space-y-3">
         <Link href="/employee/requests" className="block">
           <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition">
-            Переглянути мої запити
+            View My Requests
           </Button>
         </Link>
         <Link href="/employee" className="block">
           <Button variant="outline" className="w-full py-3 rounded-lg transition">
-            На головну
+            Go to Home
           </Button>
         </Link>
       </div>

@@ -67,11 +67,11 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
       {/* What */}
       <div>
         <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
-          Що замовити?
+          What to order?
         </label>
         <Input
           type="text"
-          placeholder="Напрклад: Маркери для дошки"
+          placeholder="E.g. Whiteboard markers"
           value={formData.what}
           onChange={(e) => setFormData({ ...formData, what: e.target.value })}
           required
@@ -82,7 +82,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
       {/* Quantity */}
       <div>
         <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
-          Кількість
+          Quantity
         </label>
         <Input
           type="number"
@@ -97,7 +97,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
       {/* Priority */}
       <div>
         <label className="block text-sm font-medium text-gray-900 uppercase mb-3">
-          Пріоритет
+          Priority
         </label>
         <div className="flex gap-2 flex-wrap">
           <button
@@ -110,7 +110,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
             }`}
           >
             <span className="inline-block w-3 h-3 rounded-full bg-green-500"></span>
-            Низький
+            Low
           </button>
 
           <button
@@ -123,7 +123,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
             }`}
           >
             <span className="inline-block w-3 h-3 rounded-full bg-yellow-500"></span>
-            Середній
+            Medium
           </button>
 
           <button
@@ -136,7 +136,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
             }`}
           >
             <span className="inline-block w-3 h-3 rounded-full bg-red-500"></span>
-            Високий
+            High
           </button>
         </div>
       </div>
@@ -144,10 +144,10 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
       {/* Comment */}
       <div>
         <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
-          Навіщо / Коментар
+          Reason / Comment
         </label>
         <Textarea
-          placeholder="Будь ласка, вважіть колір або конкретну модель, якщо це важливо..."
+          placeholder="Please specify color or model if relevant..."
           value={formData.comment}
           onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
           className="w-full bg-gray-50 border-gray-200 min-h-24"
@@ -160,7 +160,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
         disabled={loading || !formData.what}
         className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold text-lg transition"
       >
-        {loading ? "Надсилаю..." : "Надіслати запит →"}
+        {loading ? "Submitting..." : "Submit Request →"}
       </Button>
     </form>
   );

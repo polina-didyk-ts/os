@@ -55,7 +55,7 @@ export default function NewRequestPage() {
           >
             <ChevronLeft className="w-6 h-6 text-gray-700" strokeWidth={1.5} />
           </button>
-          <h1 className="text-lg font-semibold text-gray-900 flex-1 ml-2">Новий запит</h1>
+          <h1 className="text-lg font-semibold text-gray-900 flex-1 ml-2">New Request</h1>
           <span className="px-3 py-1 bg-blue-100 text-blue-600 text-xs font-medium rounded-full">
             {requestType.title.toUpperCase()}
           </span>
@@ -65,22 +65,22 @@ export default function NewRequestPage() {
         <section className="px-4 py-6 bg-white border-b border-gray-200">
           <div className="space-y-2">
             <h2 className="text-2xl font-bold text-gray-900">
-              {requestType.title === "Замовити"
-                ? "Створити запит"
-                : requestType.title === "Проблема"
-                  ? "Повідомити про проблему"
-                  : requestType.title === "Питання"
-                    ? "Запитати у офіс-менеджера"
-                    : "Ваша думка важлива"}
+              {requestType.title === "Order"
+                ? "What do you need?"
+                : requestType.title === "Problem"
+                  ? "Report a problem"
+                  : requestType.title === "Question"
+                    ? "Ask the office manager"
+                    : "Share your idea"}
             </h2>
             <p className="text-gray-600 text-sm">
-              {requestType.title === "Замовити"
-                ? "Залиште запит на все необхідне: від матеріалів до їжі чи напоїв. Вважіть деталі та пріоритет — менеджер опрацює ваш запит і організує все потрібне."
-                : requestType.title === "Проблема"
-                  ? "Повідомите про проблему в офісі — ми допоможемо вирішити її якнайшвидше. Опишіть, що сталося, та оберіть пріоритет."
-                  : requestType.title === "Питання"
-                    ? "Ми допоможемо вирішити ваші питання максимально швидко. Оберіть пріоритет та опишіть суть."
-                    : "Допоможіть нам зробити сервіс кращим. Ваші ідеї перетворюються на реальні зміни."}
+              {requestType.title === "Order"
+                ? "Leave a request for anything you need — supplies, food, equipment. Specify the details and priority."
+                : requestType.title === "Problem"
+                  ? "Let us know about a problem in the office — we'll fix it as soon as possible."
+                  : requestType.title === "Question"
+                    ? "We'll get back to you as soon as possible. Set a priority and describe your question."
+                    : "Help us improve. Your ideas turn into real changes."}
             </p>
           </div>
         </section>

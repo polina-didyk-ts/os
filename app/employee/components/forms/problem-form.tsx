@@ -67,11 +67,11 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
       {/* What */}
       <div>
         <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
-          Що зламалось?
+          What is broken?
         </label>
         <Input
           type="text"
-          placeholder="Напрклад: кондиціонер або принтер"
+          placeholder="E.g. air conditioner or printer"
           value={formData.what}
           onChange={(e) => setFormData({ ...formData, what: e.target.value })}
           required
@@ -82,10 +82,10 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
       {/* Description */}
       <div>
         <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
-          Опис проблеми
+          Problem Description
         </label>
         <Textarea
-          placeholder="Опишіть детальніше, що саме не працює..."
+          placeholder="Describe in detail what is not working..."
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           required
@@ -96,7 +96,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
       {/* Priority */}
       <div>
         <label className="block text-sm font-medium text-gray-900 uppercase mb-3">
-          Пріоритет
+          Priority
         </label>
         <div className="flex gap-2 flex-wrap">
           <button
@@ -109,7 +109,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
             }`}
           >
             <span className="inline-block w-3 h-3 rounded-full bg-green-500"></span>
-            Низький
+            Low
           </button>
 
           <button
@@ -122,7 +122,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
             }`}
           >
             <span className="inline-block w-3 h-3 rounded-full bg-yellow-500"></span>
-            Середній
+            Medium
           </button>
 
           <button
@@ -135,7 +135,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
             }`}
           >
             <span className="inline-block w-3 h-3 rounded-full bg-red-500"></span>
-            Високий
+            High
           </button>
         </div>
       </div>
@@ -143,10 +143,10 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
       {/* Comment */}
       <div>
         <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
-          Коментар <span className="text-gray-500 text-xs font-normal">опціонально</span>
+          Comment <span className="text-gray-500 text-xs font-normal">optional</span>
         </label>
         <Textarea
-          placeholder="Будь-яка додаткова інформація..."
+          placeholder="Any additional information..."
           value={formData.comment}
           onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
           className="w-full"
@@ -159,7 +159,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
         disabled={loading || !formData.what || !formData.description}
         className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold text-lg transition"
       >
-        {loading ? "Надсилаю..." : "Надіслати запит →"}
+        {loading ? "Submitting..." : "Submit Request →"}
       </Button>
     </form>
   );

@@ -60,11 +60,11 @@ export function IdeaForm({ onSuccess }: IdeaFormProps) {
       {/* Idea */}
       <div>
         <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
-          Ваша ідея або фідбек
+          Your idea or feedback
         </label>
         <div className="relative">
           <Textarea
-            placeholder="Поділіться своїми думками, пропозиціями або відгуком..."
+            placeholder="Share your thoughts, suggestions or feedback..."
             value={formData.idea}
             onChange={(e) => setFormData({ ...formData, idea: e.target.value.slice(0, 500) })}
             required
@@ -81,7 +81,7 @@ export function IdeaForm({ onSuccess }: IdeaFormProps) {
       {/* Priority */}
       <div>
         <label className="block text-sm font-medium text-gray-900 uppercase mb-3">
-          Пріоритет
+          Priority
         </label>
         <div className="flex gap-2 flex-wrap">
           <button
@@ -94,7 +94,7 @@ export function IdeaForm({ onSuccess }: IdeaFormProps) {
             }`}
           >
             <span className="inline-block w-3 h-3 rounded-full bg-green-500"></span>
-            Низький
+            Low
           </button>
 
           <button
@@ -107,7 +107,7 @@ export function IdeaForm({ onSuccess }: IdeaFormProps) {
             }`}
           >
             <span className="inline-block w-3 h-3 rounded-full bg-yellow-500"></span>
-            Середній
+            Medium
           </button>
 
           <button
@@ -120,7 +120,7 @@ export function IdeaForm({ onSuccess }: IdeaFormProps) {
             }`}
           >
             <span className="inline-block w-3 h-3 rounded-full bg-red-500"></span>
-            Високий
+            High
           </button>
         </div>
       </div>
@@ -131,7 +131,7 @@ export function IdeaForm({ onSuccess }: IdeaFormProps) {
         disabled={loading || !formData.idea}
         className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold text-lg transition"
       >
-        {loading ? "Надсилаю..." : "Надіслати запит →"}
+        {loading ? "Submitting..." : "Submit Request →"}
       </Button>
     </form>
   );

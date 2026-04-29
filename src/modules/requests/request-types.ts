@@ -2,26 +2,26 @@ export const REQUEST_TYPES = [
   {
     id: "order",
     icon: "ShoppingCart",
-    title: "Замовити",
-    description: "Канцелярія, їжа, обладнання",
+    title: "Order",
+    description: "Stationery, food, equipment",
   },
   {
     id: "problem",
     icon: "Search",
-    title: "Проблема",
-    description: "Зламалось або не працює",
+    title: "Problem",
+    description: "Something is broken or not working",
   },
   {
     id: "question",
     icon: "Mail",
-    title: "Питання",
-    description: "Уточнення до офіс-менеджера",
+    title: "Question",
+    description: "Ask the office manager",
   },
   {
     id: "idea",
     icon: "Lightbulb",
-    title: "Ідея / Фідбек",
-    description: "Ваші пропозиції",
+    title: "Idea / Feedback",
+    description: "Your suggestions",
   },
 ] as const;
 

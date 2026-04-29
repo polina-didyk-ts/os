@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Menu, FileText, Hourglass, CheckCircle2, Bell } from "lucide-react";
+import { Menu, FileText, Hourglass, CheckCircle2 } from "lucide-react";
 import { BottomNavigation, useSideMenu } from "../components";
 import { useSession } from "@/src/lib/client";
 
@@ -54,8 +54,6 @@ export default function EmployeeProfilePage() {
   const { toggle } = useSideMenu();
   const [stats, setStats] = useState<Stats | null>(null);
   const [statsLoading, setStatsLoading] = useState(true);
-  const [notificationsOn, setNotificationsOn] = useState(true);
-
   const fetchStats = useCallback(async () => {
     setStatsLoading(true);
     try {
@@ -88,12 +86,12 @@ export default function EmployeeProfilePage() {
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white sticky top-0 z-10">
         <div className="flex items-center gap-3">
-          <button onClick={toggle} className="p-2 hover:bg-gray-100 rounded-lg transition" aria-label="Відкрити меню">
+          <button onClick={toggle} className="p-2 hover:bg-gray-100 rounded-lg transition" aria-label="Open menu">
             <Menu className="w-6 h-6 text-gray-700" />
           </button>
-          <span className="text-lg font-semibold text-gray-900">Профіль</span>
+          <span className="text-lg font-semibold text-gray-900">Profile</span>
         </div>
-        <span className="text-lg font-semibold text-blue-600">Office System</span>
+        <span className="text-lg font-semibold text-blue-600">Digital Office</span>
       </header>
 
       <div className="flex-1 pb-28 px-4 py-4 flex flex-col gap-4">
@@ -115,7 +113,7 @@ export default function EmployeeProfilePage() {
 
           {/* Role badge */}
           <span className="mt-3 px-4 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-semibold uppercase tracking-wide">
-            Співробітник
+            Member
           </span>
         </div>
 
@@ -124,52 +122,23 @@ export default function EmployeeProfilePage() {
           <StatCard
             icon={<FileText className="w-5 h-5" />}
             iconClass="text-blue-600"
-            label="Всього"
+            label="Total"
             value={statsLoading ? "—" : (stats?.total ?? 0)}
           />
           <StatCard
             icon={<Hourglass className="w-5 h-5" />}
             iconClass="text-purple-600"
-            label="В роботі"
+            label="In Progress"
             value={statsLoading ? "—" : (stats?.inProgress ?? 0)}
           />
           <StatCard
             icon={<CheckCircle2 className="w-5 h-5" />}
             iconClass="text-green-500"
-            label="Виконано"
+            label="Done"
             value={statsLoading ? "—" : (stats?.completed ?? 0)}
           />
         </div>
 
-        {/* Settings */}
-        <div className="bg-white rounded-2xl px-4 shadow-sm">
-          <p className="text-base font-bold text-gray-900 pt-4 pb-3">
-            Налаштування
-          </p>
-          <div className="flex items-center justify-between py-4 border-t border-gray-100">
-            <div className="flex items-center gap-3">
-              <Bell className="w-5 h-5 text-gray-700" />
-              <span className="text-sm font-medium text-gray-800">
-                Сповіщення
-              </span>
-            </div>
-            {/* Toggle */}
-            <button
-              role="switch"
-              aria-checked={notificationsOn}
-              onClick={() => setNotificationsOn((v) => !v)}
-              className={`relative w-12 h-6 rounded-full transition-colors duration-200 ${
-                notificationsOn ? "bg-blue-600" : "bg-gray-300"
-              }`}
-            >
-              <span
-                className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200 ${
-                  notificationsOn ? "translate-x-6" : "translate-x-0"
-                }`}
-              />
-            </button>
-          </div>
-        </div>
       </div>
 
       <BottomNavigation />

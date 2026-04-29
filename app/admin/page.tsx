@@ -39,27 +39,27 @@ const TYPE_CONFIG: Record<
   AdminRequest["type"],
   { icon: React.ElementType; bgClass: string; iconClass: string; label: string }
 > = {
-  order:    { icon: ShoppingCart,  bgClass: "bg-purple-100", iconClass: "text-purple-600", label: "ЗАМОВЛЕННЯ" },
-  problem:  { icon: Wrench,        bgClass: "bg-pink-100",   iconClass: "text-pink-500",   label: "ПРОБЛЕМА"   },
-  question: { icon: MessageSquare, bgClass: "bg-blue-100",   iconClass: "text-blue-500",   label: "ПИТАННЯ"    },
-  idea:     { icon: Lightbulb,     bgClass: "bg-orange-100", iconClass: "text-orange-400", label: "ІДЕЯ"       },
+  order:    { icon: ShoppingCart,  bgClass: "bg-purple-100", iconClass: "text-purple-600", label: "ORDER"    },
+  problem:  { icon: Wrench,        bgClass: "bg-pink-100",   iconClass: "text-pink-500",   label: "PROBLEM"  },
+  question: { icon: MessageSquare, bgClass: "bg-blue-100",   iconClass: "text-blue-500",   label: "QUESTION" },
+  idea:     { icon: Lightbulb,     bgClass: "bg-orange-100", iconClass: "text-orange-400", label: "IDEA"     },
 };
 
 function getRequestTitle(req: AdminRequest): string {
   const m = req.metadata as Record<string, string>;
-  if (req.type === "order")    return m.what      ?? "Замовлення";
-  if (req.type === "problem")  return m.what      ?? "Проблема";
-  if (req.type === "question") return m.question  ?? "Питання";
-  if (req.type === "idea")     return m.idea      ?? "Ідея";
-  return "Запит";
+  if (req.type === "order")    return m.what      ?? "Order";
+  if (req.type === "problem")  return m.what      ?? "Problem";
+  if (req.type === "question") return m.question  ?? "Question";
+  if (req.type === "idea")     return m.idea      ?? "Idea";
+  return "Request";
 }
 
 function timeAgo(dateStr: string): string {
   const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
-  if (diff < 60)          return `${diff} с тому`;
-  if (diff < 3600)        return `${Math.floor(diff / 60)} хв тому`;
-  if (diff < 86400)       return `${Math.floor(diff / 3600)} год тому`;
-  return `${Math.floor(diff / 86400)} дн тому`;
+  if (diff < 60)          return `${diff}s ago`;
+  if (diff < 3600)        return `${Math.floor(diff / 60)} min ago`;
+  if (diff < 86400)       return `${Math.floor(diff / 3600)} hr ago`;
+  return `${Math.floor(diff / 86400)} d ago`;
 }
 
 // ── stat card ──────────────────────────────────────────────────────────────
@@ -108,7 +108,7 @@ export default function AdminDashboard() {
       const data = await res.json();
       setRequests(data.items);
     } catch {
-      setError("Не вдалося завантажити дані");
+      setError("Failed to load data");
     } finally {
       setLoading(false);
     }
@@ -135,10 +135,10 @@ export default function AdminDashboard() {
         {/* Welcome */}
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-gray-400">
-            Вітаємо назад
+            WELCOME BACK
           </p>
           <h1 className="text-2xl font-bold text-gray-900 mt-0.5">
-            Панель керування
+            Dashboard
           </h1>
         </div>
 
@@ -147,7 +147,7 @@ export default function AdminDashboard() {
           <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl px-4 py-3">
             {error}{" "}
             <button onClick={fetchRequests} className="underline font-medium">
-              Повторити
+              Retry
             </button>
           </div>
         )}
@@ -156,25 +156,25 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-2 gap-3">
           <StatCard
             icon={<BadgeCheck className="w-6 h-6 text-blue-600" />}
-            label="Нових"
+            label="NEW"
             value={stats.new}
             loading={loading}
           />
           <StatCard
             icon={<Clock className="w-6 h-6 text-yellow-500" />}
-            label="В роботі"
+            label="IN PROGRESS"
             value={stats.in_progress}
             loading={loading}
           />
           <StatCard
             icon={<CheckCircle2 className="w-6 h-6 text-green-500" />}
-            label="Виконано"
+            label="DONE"
             value={stats.completed}
             loading={loading}
           />
           <StatCard
             icon={<XCircle className="w-6 h-6 text-red-400" />}
-            label="Відхилено"
+            label="REJECTED"
             value={stats.rejected}
             loading={loading}
           />
@@ -183,12 +183,12 @@ export default function AdminDashboard() {
         {/* Recent requests */}
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-base font-bold text-gray-900">Останні запити</h2>
+            <h2 className="text-base font-bold text-gray-900">Recent Requests</h2>
             <Link
               href="/admin/requests"
               className="text-xs font-bold text-blue-600 uppercase tracking-wide"
             >
-              Архів
+              ARCHIVE
             </Link>
           </div>
 
@@ -205,7 +205,7 @@ export default function AdminDashboard() {
               ))
             ) : recent.length === 0 ? (
               <div className="bg-white rounded-2xl p-6 text-center text-sm text-gray-400">
-                Запитів ще немає
+                No requests yet
               </div>
             ) : (
               recent.map((req) => {

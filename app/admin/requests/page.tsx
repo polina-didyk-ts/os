@@ -37,10 +37,10 @@ const TYPE_CONFIG: Record<RequestType, {
   iconClass: string;
   label: string;
 }> = {
-  order:    { icon: ShoppingCart,  bgClass: "bg-purple-100", iconClass: "text-purple-600", label: "Замовити"     },
-  problem:  { icon: Wrench,        bgClass: "bg-pink-100",   iconClass: "text-pink-500",   label: "Проблема"     },
-  question: { icon: MessageSquare, bgClass: "bg-blue-100",   iconClass: "text-blue-500",   label: "Питання"      },
-  idea:     { icon: Lightbulb,     bgClass: "bg-orange-100", iconClass: "text-orange-400", label: "Ідея / Фідбек"},
+  order:    { icon: ShoppingCart,  bgClass: "bg-purple-100", iconClass: "text-purple-600", label: "ORDER"           },
+  problem:  { icon: Wrench,        bgClass: "bg-pink-100",   iconClass: "text-pink-500",   label: "PROBLEM"         },
+  question: { icon: MessageSquare, bgClass: "bg-blue-100",   iconClass: "text-blue-500",   label: "QUESTION"        },
+  idea:     { icon: Lightbulb,     bgClass: "bg-orange-100", iconClass: "text-orange-400", label: "IDEA / FEEDBACK" },
 };
 
 const STATUS_CONFIG: Record<RequestStatus, {
@@ -48,43 +48,43 @@ const STATUS_CONFIG: Record<RequestStatus, {
   badgeClass: string;
   dotClass: string;
 }> = {
-  new:         { label: "НОВИЙ",    badgeClass: "bg-blue-100 text-blue-700",   dotClass: "bg-blue-500"   },
-  in_progress: { label: "В РОБОТІ", badgeClass: "bg-yellow-100 text-yellow-700", dotClass: "bg-yellow-500" },
-  completed:   { label: "ВИКОНАНО", badgeClass: "bg-green-100 text-green-700", dotClass: "bg-green-500"  },
-  rejected:    { label: "ВІДХИЛЕНО",badgeClass: "bg-red-100 text-red-600",     dotClass: "bg-red-500"    },
+  new:         { label: "NEW",         badgeClass: "bg-blue-100 text-blue-700",     dotClass: "bg-blue-500"   },
+  in_progress: { label: "IN PROGRESS", badgeClass: "bg-yellow-100 text-yellow-700", dotClass: "bg-yellow-500" },
+  completed:   { label: "DONE",        badgeClass: "bg-green-100 text-green-700",   dotClass: "bg-green-500"  },
+  rejected:    { label: "REJECTED",    badgeClass: "bg-red-100 text-red-600",       dotClass: "bg-red-500"    },
 };
 
 const PRIORITY_CONFIG: Record<string, { label: string; dotClass: string }> = {
-  high:   { label: "ВИСОКИЙ", dotClass: "bg-red-500"    },
-  medium: { label: "СЕРЕДНІЙ",dotClass: "bg-yellow-500" },
-  low:    { label: "НИЗЬКИЙ", dotClass: "bg-green-500"  },
+  high:   { label: "HIGH",   dotClass: "bg-red-500"    },
+  medium: { label: "MEDIUM", dotClass: "bg-yellow-500" },
+  low:    { label: "LOW",    dotClass: "bg-green-500"  },
 };
 
 const TYPE_FILTERS = [
-  { id: "all",      label: "Всі"      },
-  { id: "order",    label: "Замовити" },
-  { id: "problem",  label: "Проблема" },
-  { id: "question", label: "Питання"  },
-  { id: "idea",     label: "Ідея"     },
+  { id: "all",      label: "All"      },
+  { id: "order",    label: "Order"    },
+  { id: "problem",  label: "Problem"  },
+  { id: "question", label: "Question" },
+  { id: "idea",     label: "Idea"     },
 ] as const;
 
 const STATUS_FILTERS = [
-  { id: "all",         label: "ВСІ"      },
-  { id: "new",         label: "НОВІ"     },
-  { id: "in_progress", label: "В РОБОТІ" },
-  { id: "completed",   label: "ВИКОНАНО" },
-  { id: "rejected",    label: "ВІДХИЛЕНО"},
+  { id: "all",         label: "ALL"         },
+  { id: "new",         label: "NEW"         },
+  { id: "in_progress", label: "IN PROGRESS" },
+  { id: "completed",   label: "DONE"        },
+  { id: "rejected",    label: "REJECTED"    },
 ] as const;
 
 // ── helpers ────────────────────────────────────────────────────────────────
 
 function getTitle(req: AdminRequest): string {
   const m = req.metadata as Record<string, string>;
-  if (req.type === "order")    return m.what     ?? "Замовлення";
-  if (req.type === "problem")  return m.what     ?? "Проблема";
-  if (req.type === "question") return m.question ?? "Питання";
-  if (req.type === "idea")     return m.idea     ?? "Ідея";
-  return "Запит";
+  if (req.type === "order")    return m.what     ?? "Order";
+  if (req.type === "problem")  return m.what     ?? "Problem";
+  if (req.type === "question") return m.question ?? "Question";
+  if (req.type === "idea")     return m.idea     ?? "Idea";
+  return "Request";
 }
 
 function getShortName(user: AdminRequest["user"]): string {
@@ -106,10 +106,10 @@ function formatDate(dateStr: string): string {
   const yesterday = new Date(today);
   yesterday.setDate(yesterday.getDate() - 1);
 
-  const time = d.toLocaleTimeString("uk-UA", { hour: "2-digit", minute: "2-digit" });
-  if (d.toDateString() === today.toDateString())     return `${time} • Сьогодні`;
-  if (d.toDateString() === yesterday.toDateString()) return `${time} • Вчора`;
-  return d.toLocaleDateString("uk-UA", { day: "numeric", month: "long" });
+  const time = d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+  if (d.toDateString() === today.toDateString())     return `${time} • Today`;
+  if (d.toDateString() === yesterday.toDateString()) return `${time} • Yesterday`;
+  return d.toLocaleDateString("en-US", { day: "numeric", month: "long" });
 }
 
 // ── skeleton ───────────────────────────────────────────────────────────────
@@ -159,7 +159,7 @@ export default function AdminRequestsPage() {
       const data = await res.json();
       setRequests(data.items);
     } catch {
-      setError("Не вдалося завантажити запити");
+      setError("Failed to load requests");
     } finally {
       setLoading(false);
     }
@@ -172,10 +172,10 @@ export default function AdminRequestsPage() {
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-white sticky top-0 z-10">
         <div className="flex items-center gap-3">
-          <button onClick={toggle} className="p-2 hover:bg-gray-100 rounded-lg transition" aria-label="Меню">
+          <button onClick={toggle} className="p-2 hover:bg-gray-100 rounded-lg transition" aria-label="Menu">
             <Menu className="w-6 h-6 text-gray-700" />
           </button>
-          <span className="text-lg font-bold text-gray-900">Всі запити</span>
+          <span className="text-lg font-bold text-gray-900">All Requests</span>
         </div>
         <button className="p-2 hover:bg-gray-100 rounded-lg transition">
           <SlidersHorizontal className="w-5 h-5 text-gray-700" />
@@ -225,7 +225,7 @@ export default function AdminRequestsPage() {
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl px-4 py-3 mb-4">
             {error}{" "}
-            <button onClick={fetchRequests} className="underline font-medium">Повторити</button>
+            <button onClick={fetchRequests} className="underline font-medium">Retry</button>
           </div>
         )}
 
@@ -235,8 +235,8 @@ export default function AdminRequestsPage() {
           </div>
         ) : requests.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <p className="text-gray-800 font-semibold">Нічого не знайдено</p>
-            <p className="text-gray-400 text-sm mt-1">Спробуйте змінити фільтри</p>
+            <p className="text-gray-800 font-semibold">No results found</p>
+            <p className="text-gray-400 text-sm mt-1">Try changing the filters</p>
           </div>
         ) : (
           <div className="flex flex-col gap-3">

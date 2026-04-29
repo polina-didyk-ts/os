@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   ChevronRight,
-  SlidersHorizontal,
   Plus,
   ShoppingCart,
   Wrench,
@@ -32,10 +31,10 @@ interface Request {
 
 const STATUS_FILTERS = [
   { id: "all" as const, label: "All" },
-  { id: "new" as const, label: "Новий" },
-  { id: "in_progress" as const, label: "В роботі" },
-  { id: "completed" as const, label: "Виконано" },
-  { id: "rejected" as const, label: "Відхилено" },
+  { id: "new" as const, label: "New" },
+  { id: "in_progress" as const, label: "In Progress" },
+  { id: "completed" as const, label: "Done" },
+  { id: "rejected" as const, label: "Rejected" },
 ];
 
 type FilterId = "all" | RequestStatus;
@@ -45,22 +44,22 @@ const STATUS_CONFIG: Record<
   { label: string; dotColor: string; badgeClass: string }
 > = {
   new: {
-    label: "НОВИЙ",
+    label: "NEW",
     dotColor: "bg-blue-500",
     badgeClass: "bg-blue-100 text-blue-700",
   },
   in_progress: {
-    label: "В РОБОТІ!",
+    label: "IN PROGRESS",
     dotColor: "bg-yellow-500",
     badgeClass: "bg-yellow-100 text-yellow-700",
   },
   completed: {
-    label: "ВИКОНАНО",
+    label: "DONE",
     dotColor: "bg-green-100 text-green-700",
     badgeClass: "bg-green-100 text-green-700",
   },
   rejected: {
-    label: "ВІДХИЛЕНО",
+    label: "REJECTED",
     dotColor: "bg-red-500",
     badgeClass: "bg-red-100 text-red-600",
   },
@@ -94,11 +93,11 @@ const TYPE_CONFIG: Record<
 
 function getRequestTitle(request: Request): string {
   const meta = request.metadata as Record<string, string | number>;
-  if (request.type === "order") return (meta.what as string) ?? "Замовлення";
-  if (request.type === "problem") return (meta.what as string) ?? "Проблема";
-  if (request.type === "question") return (meta.question as string) ?? "Питання";
-  if (request.type === "idea") return (meta.idea as string) ?? "Ідея";
-  return "Запит";
+  if (request.type === "order") return (meta.what as string) ?? "Order";
+  if (request.type === "problem") return (meta.what as string) ?? "Problem";
+  if (request.type === "question") return (meta.question as string) ?? "Question";
+  if (request.type === "idea") return (meta.idea as string) ?? "Idea";
+  return "Request";
 }
 
 function formatDate(dateStr: string): string {
@@ -107,20 +106,20 @@ function formatDate(dateStr: string): string {
   const yesterday = new Date(today);
   yesterday.setDate(yesterday.getDate() - 1);
 
-  const timeStr = date.toLocaleTimeString("uk-UA", {
+  const timeStr = date.toLocaleTimeString("en-GB", {
     hour: "2-digit",
     minute: "2-digit",
   });
 
   if (date.toDateString() === today.toDateString()) {
-    return `Сьогодні, ${timeStr}`;
+    return `Today, ${timeStr}`;
   }
   if (date.toDateString() === yesterday.toDateString()) {
-    return `Вчора, ${timeStr}`;
+    return `Yesterday, ${timeStr}`;
   }
 
   return (
-    date.toLocaleDateString("uk-UA", { day: "numeric", month: "long" }) +
+    date.toLocaleDateString("en-US", { month: "long", day: "numeric" }) +
     `, ${timeStr}`
   );
 }
@@ -153,12 +152,12 @@ function EmptyState({ filtered }: { filtered: boolean }) {
         <MessageSquare className="w-7 h-7 text-gray-400" />
       </div>
       <p className="text-gray-800 font-semibold text-base">
-        {filtered ? "Нічого не знайдено" : "Запитів ще немає"}
+        {filtered ? "No results found" : "No requests yet"}
       </p>
       <p className="text-gray-500 text-sm mt-1">
         {filtered
-          ? "Спробуйте змінити фільтр"
-          : "Створіть свій перший запит до офісу"}
+          ? "Try changing the filter"
+          : "Create your first request"}
       </p>
       {!filtered && (
         <Link
@@ -166,7 +165,7 @@ function EmptyState({ filtered }: { filtered: boolean }) {
           className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl"
         >
           <Plus className="w-4 h-4" />
-          Створити запит
+          New Request
         </Link>
       )}
     </div>
@@ -186,11 +185,11 @@ export default function EmployeeRequestsPage() {
     setError(null);
     try {
       const res = await fetch("/api/requests");
-      if (!res.ok) throw new Error("Не вдалося завантажити запити");
+      if (!res.ok) throw new Error("Failed to load requests");
       const data = await res.json();
       setRequests(data);
     } catch {
-      setError("Не вдалося завантажити запити. Спробуйте ще раз.");
+      setError("Failed to load requests. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -212,18 +211,13 @@ export default function EmployeeRequestsPage() {
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white sticky top-0 z-10">
         <div className="flex items-center gap-3">
-          <button onClick={toggle} className="p-2 hover:bg-gray-100 rounded-lg transition" aria-label="Відкрити меню">
+          <button onClick={toggle} className="p-2 hover:bg-gray-100 rounded-lg transition" aria-label="Open menu">
             <Menu className="w-6 h-6 text-gray-700" />
           </button>
-          <span className="text-lg font-semibold text-gray-900">Мої запити</span>
+          <span className="text-lg font-semibold text-gray-900">My Requests</span>
         </div>
-        <div className="flex items-center gap-2">
-          <button className="p-2 hover:bg-gray-100 rounded-lg transition">
-            <SlidersHorizontal className="w-5 h-5 text-gray-700" />
-          </button>
-          <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-semibold">
-            {userInitial}
-          </div>
+        <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-semibold">
+          {userInitial}
         </div>
       </header>
 
@@ -268,7 +262,7 @@ export default function EmployeeRequestsPage() {
               onClick={fetchRequests}
               className="ml-2 underline font-medium"
             >
-              Повторити
+              Retry
             </button>
           </div>
         )}
@@ -322,7 +316,7 @@ export default function EmployeeRequestsPage() {
                   <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100 pb-4">
                     <div>
                       <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400">
-                        Створено
+                        Created
                       </p>
                       <p className="text-sm text-gray-700 mt-0.5">
                         {formatDate(request.createdAt)}

@@ -34,7 +34,7 @@ export default function EmployeeSignInPage() {
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center shadow-lg">
             <Grid2X2 className="w-8 h-8 text-white" strokeWidth={1.5} />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">Office System</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Digital Office</h1>
         </div>
 
         {/* Icon Container */}
@@ -47,7 +47,7 @@ export default function EmployeeSignInPage() {
         {/* Subtitle */}
         <div className="text-center space-y-2">
           <p className="text-lg font-semibold text-gray-900">
-            Уайдіть, щоб надіслати запит або перевірити статус
+            Sign in to submit a request or check its status
           </p>
         </div>
 
@@ -104,19 +104,19 @@ export default function EmployeeSignInPage() {
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              Уійти через Google
+              Sign in with Google
             </span>
           )}
         </Button>
 
         {/* Footer Note */}
         <p className="text-center text-xs text-gray-600 font-medium">
-          ТІЛЬКИ для співробітників TECHSTACK
+          For Techstack members only
         </p>
 
         {/* Additional Info */}
         <p className="text-center text-xs text-gray-500">
-          Ваш дані захищені. Анонімні запити не видбуватись обробкв.
+          Your data is protected. Anonymous requests are not processed.
         </p>
       </div>
     </main>

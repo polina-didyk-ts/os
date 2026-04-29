@@ -22,11 +22,11 @@ export function EmployeeHeader() {
         <button
           onClick={toggle}
           className="p-2 hover:bg-gray-100 rounded-lg transition"
-          aria-label="Відкрити меню"
+          aria-label="Open menu"
         >
           <Menu className="w-6 h-6 text-gray-700" />
         </button>
-        <span className="text-lg font-semibold text-gray-800">Office System</span>
+        <span className="text-lg font-semibold text-gray-800">Digital Office</span>
       </div>
 
       <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold select-none">

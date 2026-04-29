@@ -60,10 +60,10 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
       {/* Question */}
       <div>
         <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
-          Ваше питання
+          Your question
         </label>
         <Textarea
-          placeholder="Напишіть своє питання тут..."
+          placeholder="Write your question here..."
           value={formData.question}
           onChange={(e) => setFormData({ ...formData, question: e.target.value })}
           required
@@ -75,7 +75,7 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
       {/* Priority */}
       <div>
         <label className="block text-sm font-medium text-gray-900 uppercase mb-3">
-          Пріоритет
+          Priority
         </label>
         <div className="flex gap-2 flex-wrap">
           <button
@@ -88,7 +88,7 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
             }`}
           >
             <span className="inline-block w-3 h-3 rounded-full bg-green-500"></span>
-            Низький
+            Low
           </button>
 
           <button
@@ -101,7 +101,7 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
             }`}
           >
             <span className="inline-block w-3 h-3 rounded-full bg-yellow-500"></span>
-            Середній
+            Medium
           </button>
 
           <button
@@ -114,14 +114,14 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
             }`}
           >
             <span className="inline-block w-3 h-3 rounded-full bg-red-500"></span>
-            Високий
+            High
           </button>
         </div>
       </div>
 
       {/* Note About Response Time */}
       <p className="text-xs text-gray-600 uppercase tracking-wide font-medium">
-        зазвичай відповідаємо протягом 24 годин
+        We usually respond within 24 hours
       </p>
 
       {/* Submit */}
@@ -130,7 +130,7 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
         disabled={loading || !formData.question}
         className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold text-lg transition"
       >
-        {loading ? "Надсилаю..." : "Надіслати запит →"}
+        {loading ? "Submitting..." : "Submit Request →"}
       </Button>
     </form>
   );

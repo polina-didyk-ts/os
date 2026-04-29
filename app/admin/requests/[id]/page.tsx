@@ -31,41 +31,41 @@ interface Comment {
 // ── config ─────────────────────────────────────────────────────────────────
 
 const TYPE_LABEL: Record<RequestType, string> = {
-  order:    "ЗАМОВЛЕННЯ",
-  problem:  "ПРОБЛЕМА",
-  question: "ПИТАННЯ",
-  idea:     "ІДЕЯ / ФІДБЕК",
+  order:    "ORDER",
+  problem:  "PROBLEM",
+  question: "QUESTION",
+  idea:     "IDEA / FEEDBACK",
 };
 
 const STATUS_CONFIG: Record<RequestStatus, { label: string; badgeClass: string }> = {
-  new:         { label: "НОВИЙ",    badgeClass: "bg-blue-100 text-blue-700"      },
-  in_progress: { label: "В РОБОТІ", badgeClass: "bg-yellow-100 text-yellow-700"  },
-  completed:   { label: "ВИКОНАНО", badgeClass: "bg-green-100 text-green-700"    },
-  rejected:    { label: "ВІДХИЛЕНО",badgeClass: "bg-red-100 text-red-600"        },
+  new:         { label: "NEW",         badgeClass: "bg-blue-100 text-blue-700"      },
+  in_progress: { label: "IN PROGRESS", badgeClass: "bg-yellow-100 text-yellow-700"  },
+  completed:   { label: "DONE",        badgeClass: "bg-green-100 text-green-700"    },
+  rejected:    { label: "REJECTED",    badgeClass: "bg-red-100 text-red-600"        },
 };
 
 const PRIORITY_CONFIG: Record<string, { label: string; bgClass: string; textClass: string; icon: React.ElementType }> = {
-  high:   { label: "ВИСОКИЙ ПРІОРИТЕТ",  bgClass: "bg-red-50",    textClass: "text-red-600",    icon: AlertTriangle },
-  medium: { label: "СЕРЕДНІЙ ПРІОРИТЕТ", bgClass: "bg-yellow-50", textClass: "text-yellow-600", icon: AlertTriangle },
-  low:    { label: "НИЗЬКИЙ ПРІОРИТЕТ",  bgClass: "bg-green-50",  textClass: "text-green-600",  icon: AlertTriangle },
+  high:   { label: "HIGH PRIORITY",   bgClass: "bg-red-50",    textClass: "text-red-600",    icon: AlertTriangle },
+  medium: { label: "MEDIUM PRIORITY", bgClass: "bg-yellow-50", textClass: "text-yellow-600", icon: AlertTriangle },
+  low:    { label: "LOW PRIORITY",    bgClass: "bg-green-50",  textClass: "text-green-600",  icon: AlertTriangle },
 };
 
 // Stepper: new → in_progress → completed  (rejected is terminal off-track)
 const STEPPER_STEPS: { status: RequestStatus; label: string }[] = [
-  { status: "new",         label: "Новий"   },
-  { status: "in_progress", label: "В роботі"},
-  { status: "completed",   label: "Виконано"},
+  { status: "new",         label: "New"         },
+  { status: "in_progress", label: "In Progress" },
+  { status: "completed",   label: "Done"        },
 ];
 
 // ── helpers ────────────────────────────────────────────────────────────────
 
 function getTitle(req: AdminRequest): string {
   const m = req.metadata as Record<string, string>;
-  if (req.type === "order")    return m.what     ?? "Замовлення";
-  if (req.type === "problem")  return m.what     ?? "Проблема";
-  if (req.type === "question") return m.question ?? "Питання";
-  if (req.type === "idea")     return m.idea     ?? "Ідея";
-  return "Запит";
+  if (req.type === "order")    return m.what     ?? "Order";
+  if (req.type === "problem")  return m.what     ?? "Problem";
+  if (req.type === "question") return m.question ?? "Question";
+  if (req.type === "idea")     return m.idea     ?? "Idea";
+  return "Request";
 }
 
 function getDescription(req: AdminRequest): string | null {
@@ -92,13 +92,13 @@ function getInitials(user: AdminRequest["user"]): string {
 
 function formatDateTime(dateStr: string): string {
   const d = new Date(dateStr);
-  const time = d.toLocaleTimeString("uk-UA", { hour: "2-digit", minute: "2-digit" });
-  const date = d.toLocaleDateString("uk-UA", { day: "numeric", month: "long" });
+  const time = d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+  const date = d.toLocaleDateString("en-US", { day: "numeric", month: "long" });
   return `${time} • ${date}`;
 }
 
 function formatDateShort(dateStr: string): string {
-  return new Date(dateStr).toLocaleTimeString("uk-UA", { hour: "2-digit", minute: "2-digit" });
+  return new Date(dateStr).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
 }
 
 function getStepperIndex(status: RequestStatus): number {
@@ -163,7 +163,7 @@ function Stepper({ status }: { status: RequestStatus }) {
             <div className="w-9 h-9 rounded-full flex items-center justify-center border-2 bg-red-500 border-red-500">
               <XCircle className="w-4 h-4 text-white" />
             </div>
-            <span className="text-[10px] font-medium text-red-500">Відхилено</span>
+            <span className="text-[10px] font-medium text-red-500">Rejected</span>
           </div>
         </div>
       )}
@@ -176,16 +176,16 @@ function Stepper({ status }: { status: RequestStatus }) {
 function ActivityLog({ req }: { req: AdminRequest }) {
   const events: { text: string; sub: string }[] = [
     {
-      text: `${getShortName(req.user)} створив запит`,
-      sub:  `${formatDateShort(req.createdAt)} • Через мобільний додаток`,
+      text: `${getShortName(req.user)} submitted a request`,
+      sub:  `${formatDateShort(req.createdAt)} • Via mobile app`,
     },
   ];
 
   if (req.status !== "new") {
     const statusLabel = STATUS_CONFIG[req.status]?.label ?? req.status;
     events.push({
-      text: `Ви змінили статус на "${statusLabel}"`,
-      sub:  `${formatDateShort(req.updatedAt)} • Очікується завершення`,
+      text: `Status changed to "${statusLabel}"`,
+      sub:  `${formatDateShort(req.updatedAt)} • Completion expected`,
     });
   }
 
@@ -215,7 +215,7 @@ function ActionButtons({
   if (status === "completed" || status === "rejected") {
     return (
       <div className="px-4 py-3 bg-gray-50 rounded-2xl text-center text-sm text-gray-400 font-medium">
-        Запит закрито
+        Request closed
       </div>
     );
   }
@@ -229,7 +229,7 @@ function ActionButtons({
           className="w-full py-4 rounded-2xl bg-blue-600 text-white font-semibold flex items-center justify-center gap-2 disabled:opacity-60 transition"
         >
           <Clock className="w-5 h-5" />
-          Взяти в роботу
+          Take in progress
         </button>
       )}
 
@@ -240,7 +240,7 @@ function ActionButtons({
           className="w-full py-4 rounded-2xl bg-blue-600 text-white font-semibold flex items-center justify-center gap-2 disabled:opacity-60 transition"
         >
           <CheckCircle2 className="w-5 h-5" />
-          Позначити виконаним
+          Mark as done
         </button>
       )}
 
@@ -250,7 +250,7 @@ function ActionButtons({
         className="w-full py-3 rounded-2xl border border-gray-200 text-gray-600 font-semibold flex items-center justify-center gap-2 disabled:opacity-60 transition hover:bg-gray-50"
       >
         <XCircle className="w-5 h-5 text-red-400" />
-        Відхилити
+        Reject
       </button>
     </div>
   );
@@ -283,7 +283,7 @@ export default function AdminRequestDetailPage() {
       if (!found) throw new Error("not found");
       setRequest(found);
     } catch {
-      setError("Не вдалося завантажити запит");
+      setError("Failed to load request");
     } finally {
       setLoading(false);
     }
@@ -317,7 +317,7 @@ export default function AdminRequestDetailPage() {
       const updated = await res.json();
       setRequest((prev) => prev ? { ...prev, status: updated.status, updatedAt: updated.updatedAt } : prev);
     } catch {
-      setError("Не вдалося змінити статус");
+      setError("Failed to update status");
     } finally {
       setActionLoading(false);
     }
@@ -338,7 +338,7 @@ export default function AdminRequestDetailPage() {
       setComments((prev) => [...prev, newComment]);
       setCommentText("");
     } catch {
-      setCommentError("Не вдалося надіслати коментар");
+      setCommentError("Failed to send comment");
     } finally {
       setCommentLoading(false);
     }
@@ -355,8 +355,8 @@ export default function AdminRequestDetailPage() {
   if (error || !request) {
     return (
       <main className="min-h-screen bg-gray-50 flex flex-col items-center justify-center gap-4 px-4">
-        <p className="text-gray-600 text-sm">{error ?? "Запит не знайдено"}</p>
-        <button onClick={() => router.back()} className="text-blue-600 text-sm font-medium">← Назад</button>
+        <p className="text-gray-600 text-sm">{error ?? "Request not found"}</p>
+        <button onClick={() => router.back()} className="text-blue-600 text-sm font-medium">← Back</button>
       </main>
     );
   }
@@ -375,7 +375,7 @@ export default function AdminRequestDetailPage() {
           <button
             onClick={() => router.back()}
             className="p-2 hover:bg-gray-100 rounded-lg transition"
-            aria-label="Назад"
+            aria-label="Back"
           >
             <ArrowLeft className="w-5 h-5 text-gray-700" />
           </button>
@@ -423,7 +423,7 @@ export default function AdminRequestDetailPage() {
         {/* Status stepper */}
         <div className="bg-white rounded-2xl p-4">
           <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-4">
-            Статус виконання
+            Status
           </p>
           <Stepper status={request.status} />
         </div>
@@ -431,7 +431,7 @@ export default function AdminRequestDetailPage() {
         {/* Activity log */}
         <div>
           <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">
-            Історія активності
+            Activity Log
           </p>
           <ActivityLog req={request} />
         </div>
@@ -439,7 +439,7 @@ export default function AdminRequestDetailPage() {
         {/* Comments */}
         <div>
           <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">
-            Коментарі менеджера
+            Manager Comments
           </p>
 
           {/* Comment list */}
@@ -449,7 +449,7 @@ export default function AdminRequestDetailPage() {
                 <div key={c.id} className="bg-white rounded-xl px-4 py-3 border-l-4 border-purple-300">
                   <p className="text-sm text-gray-900">{c.text}</p>
                   <p className="text-xs text-gray-400 mt-1">
-                    {new Date(c.createdAt).toLocaleString("uk-UA", {
+                    {new Date(c.createdAt).toLocaleString("en-US", {
                       day: "numeric", month: "long", hour: "2-digit", minute: "2-digit",
                     })}
                   </p>
@@ -463,7 +463,7 @@ export default function AdminRequestDetailPage() {
             <textarea
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
-              placeholder="Напишіть коментар для співробітника..."
+              placeholder="Write a comment for the employee..."
               rows={3}
               className="w-full text-sm text-gray-900 placeholder-gray-400 resize-none outline-none"
             />
@@ -476,7 +476,7 @@ export default function AdminRequestDetailPage() {
               className="self-end flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-xl disabled:opacity-50 transition hover:bg-blue-700"
             >
               <Send className="w-4 h-4" />
-              {commentLoading ? "Надсилаю..." : "Надіслати"}
+              {commentLoading ? "Sending..." : "Send"}
             </button>
           </div>
         </div>

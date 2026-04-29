@@ -17,9 +17,9 @@ function getInitials(name: string | null | undefined, email: string): string {
 }
 
 const NAV_ITEMS = [
-  { href: "/employee", label: "Головна", icon: Home },
-  { href: "/employee/requests", label: "Мої запити", icon: FileText },
-  { href: "/employee/profile", label: "Профіль", icon: User },
+  { href: "/employee", label: "Home", icon: Home },
+  { href: "/employee/requests", label: "My Requests", icon: FileText },
+  { href: "/employee/profile", label: "Profile", icon: User },
 ];
 
 export function SideMenu() {
@@ -66,7 +66,7 @@ export function SideMenu() {
         className={`fixed top-0 left-0 h-full w-72 bg-gray-50 z-50 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
-        aria-label="Бокове меню"
+        aria-label="Side menu"
       >
         {/* User info */}
         <div className="px-5 pt-10 pb-5 border-b border-gray-200 bg-gray-50">
@@ -76,7 +76,7 @@ export function SideMenu() {
           <p className="text-base font-bold text-gray-900">{displayName}</p>
           <p className="text-sm text-gray-500 mt-0.5">{email}</p>
           <span className="mt-2 inline-block px-3 py-0.5 rounded-full bg-blue-50 text-blue-600 text-xs font-semibold uppercase tracking-wide">
-            Співробітник
+            Member
           </span>
         </div>
 
@@ -114,7 +114,7 @@ export function SideMenu() {
             className="flex items-center gap-3 text-red-500 hover:text-red-600 transition-colors"
           >
             <LogOut className="w-5 h-5" strokeWidth={1.5} />
-            <span className="text-sm font-medium">Вийти</span>
+            <span className="text-sm font-medium">Sign out</span>
           </button>
         </div>
       </aside>
