@@ -1,8 +1,4 @@
-# TypeScript Web Application
-
-[![CI - Checks](https://github.com/tech-stack-dev/ts-web-starter/actions/workflows/ci-checks.yml/badge.svg)](https://github.com/tech-stack-dev/ts-web-starter/actions/workflows/ci-checks.yml)
-[![CI - E2E](https://github.com/tech-stack-dev/ts-web-starter/actions/workflows/ci-e2e.yml/badge.svg)](https://github.com/tech-stack-dev/ts-web-starter/actions/workflows/ci-e2e.yml)
-[![CD](https://github.com/tech-stack-dev/ts-web-starter/actions/workflows/cd.yml/badge.svg)](https://github.com/tech-stack-dev/ts-web-starter/actions/workflows/cd.yml)
+# TS Digital Office
 
 ![Next.js](https://img.shields.io/badge/Next.js-16.1-black?logo=next.js)
 ![React](https://img.shields.io/badge/React-19.2-61DAFB?logo=react)
@@ -11,7 +7,24 @@
 ![Prisma](https://img.shields.io/badge/Prisma-7.2-2D3748?logo=prisma)
 ![Playwright](https://img.shields.io/badge/Playwright-1.57-45ba4b?logo=playwright)
 
-Full-stack TypeScript web application built with Next.js 16, PostgreSQL, and AWS infrastructure.
+Internal web application for managing office requests at Techstack. Employees open the app via QR code, sign in with their @tech-stack.io Google account and and submit requests — orders, problems, questions, or ideas. The office manager reviews and processes them through an admin panel. Full-stack TypeScript built with Next.js 16, PostgreSQL, and AWS infrastructure.
+
+Access is restricted to `@tech-stack.io` accounts. Sign in via Google OAuth or email/password.
+
+## How It Works
+
+- **Employees** sign in via Google OAuth, submit requests, and track their status
+- **Manager** reviews all requests, changes statuses, and leaves comments
+- Requests flow through statuses: `New → In Progress → Done / Rejected`
+
+## User Roles
+
+| Role       | How assigned                          | Access      |
+| ---------- | ------------------------------------- | ----------- |
+| `employee` | Default for all new users             | `/employee/*` |
+| `admin`    | Manually via DB or Prisma Studio      | `/admin/*`  |
+
+To assign admin role: open Prisma Studio (`yarn db:studio`), find the user in the `User` table and set `role` to `admin`.
 
 ## Tech Stack
 
@@ -24,7 +37,7 @@ Next.js 16 (App Router) | shadcn/ui | Tailwind CSS v4 | PostgreSQL + Prisma | Be
 yarn install
 
 # Configure environment
-cp .env.example .env
+cp .env.example .env.local
 
 # Start PostgreSQL
 yarn docker:up
@@ -36,7 +49,7 @@ yarn db:generate && yarn db:migrate
 yarn dev
 ```
 
-Visit http://localhost:3000
+Visit http://localhost:3000/employee/signin
 
 ## Commands
 
@@ -55,24 +68,29 @@ Visit http://localhost:3000
 ## Project Structure
 
 ```
-app/                  # Next.js app directory
-├── (public)/        # Public pages
-├── (auth)/          # Auth pages
-├── app/             # Protected pages
-├── api/             # API endpoints
-└── components/      # React components
-
+app/
+├── employee/        # Employee cabinet
+│   ├── (auth)/      # Sign in page
+│   ├── components/  # EmployeeHeader, SideMenu, forms, BottomNavigation
+│   ├── page.tsx     # Dashboard
+│   ├── requests/    # Requests list + details
+│   └── profile/     # Profile page
+├── admin/           # Manager cabinet
+│   ├── components/  # AdminHeader, SideMenu, BottomNavigation
+│   ├── page.tsx     # Dashboard with stats
+│   ├── requests/    # All requests + details
+│   └── profile/     # Profile page
+└── api/             # API endpoints
 src/
-├── lib/             # Shared utilities
-└── modules/         # Feature modules
-
+├── lib/             # Prisma, auth, logger, utils
+└── modules/         # Business logic (requests, comments, organizations)
 prisma/
 ├── schema.prisma    # Database schema
 └── migrations/      # Migration history
-
 e2e/
-├── tests/           # Playwright E2E tests
-└── pages/           # Page Object Models
+├── fixtures/        # auth.ts, test-data.ts
+├── pages/           # Page Object Models
+└── tests/           # Playwright E2E tests
 ```
 
 ## Documentation
