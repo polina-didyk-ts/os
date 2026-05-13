@@ -2,27 +2,6 @@ import { prisma, logger, Errors } from "@/src/lib/server";
 
 const log = logger.child({ module: "requests.service" });
 
-/**
- * Generate ticket number in format YYYY-NNN
- */
-async function generateTicketNumber(): Promise<string> {
-  const year = new Date().getFullYear();
-
-  // Get the count of requests created this year
-  const startOfYear = new Date(year, 0, 1);
-  const count = await prisma.request.count({
-    where: {
-      createdAt: {
-        gte: startOfYear,
-      },
-    },
-  });
-
-  // Format: YYYY-NNN (e.g., 2024-047)
-  const number = String(count + 1).padStart(3, "0");
-  return `${year}-${number}`;
-}
-
 export const requestsService = {
   async create(
     userId: string,
@@ -37,29 +16,40 @@ export const requestsService = {
       comment?: string;
     }
   ) {
-    const ticketNumber = await generateTicketNumber();
+    return prisma.$transaction(async (tx) => {
+      const year = new Date().getFullYear();
 
-    const request = await prisma.request.create({
-      data: {
-        ticketNumber,
-        type: data.type,
-        priority: data.priority,
-        status: "new",
-        userId,
-        metadata: {
-          what: data.what,
-          quantity: data.quantity,
-          description: data.description,
-          question: data.question,
-          idea: data.idea,
-          comment: data.comment,
+      // Serialize concurrent ticket generation for the same year at the DB level.
+      // Advisory lock is scoped to this transaction and released automatically on commit/rollback.
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(${year})`;
+
+      const count = await tx.request.count({
+        where: { createdAt: { gte: new Date(year, 0, 1) } },
+      });
+
+      const ticketNumber = `${year}-${String(count + 1).padStart(3, "0")}`;
+
+      const request = await tx.request.create({
+        data: {
+          ticketNumber,
+          type: data.type,
+          priority: data.priority,
+          status: "new",
+          userId,
+          metadata: {
+            what: data.what,
+            quantity: data.quantity,
+            description: data.description,
+            question: data.question,
+            idea: data.idea,
+            comment: data.comment,
+          },
         },
-      },
+      });
+
+      log.info({ requestId: request.id, userId, ticketNumber, type: data.type }, "Request created");
+      return request;
     });
-
-    log.info({ requestId: request.id, userId, ticketNumber, type: data.type }, "Request created");
-
-    return request;
   },
 
   async getByIdForUser(userId: string, id: string) {
