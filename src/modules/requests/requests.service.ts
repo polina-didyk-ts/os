@@ -77,6 +77,7 @@ export const requestsService = {
     });
   },
 
+  // No org-scoping by design — single-tenant product, all admins see all requests company-wide.
   async listAll(filters: { status?: string; type?: string } = {}, limit = 50, offset = 0) {
     const where: Record<string, unknown> = {};
     if (filters.status) where.status = filters.status;
