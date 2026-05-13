@@ -10,7 +10,6 @@ import {
   MessageSquare,
   Lightbulb,
   Menu,
-  ArrowUpDown,
 } from "lucide-react";
 import { BottomNavigation, useSideMenu } from "../components";
 import { useSession } from "@/src/lib/client";
@@ -32,12 +31,12 @@ interface Request {
 }
 
 const STATUS_FILTERS = [
-  { id: "all" as const, label: "All" },
-  { id: "new" as const, label: "New" },
-  { id: "in_progress" as const, label: "In Progress" },
-  { id: "completed" as const, label: "Done" },
-  { id: "rejected" as const, label: "Rejected" },
-];
+  { id: "all",         label: "ALL"         },
+  { id: "new",         label: "NEW"         },
+  { id: "in_progress", label: "IN PROGRESS" },
+  { id: "completed",   label: "DONE"        },
+  { id: "rejected",    label: "REJECTED"    },
+] as const;
 
 type FilterId = "all" | RequestStatus;
 type SortOption = "newest" | "oldest" | "updated" | "priority" | "status";
@@ -259,54 +258,46 @@ export default function EmployeeRequestsPage() {
           </button>
           <span className="text-lg font-semibold text-gray-900">My Requests</span>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white">
-            <ArrowUpDown className="w-3 h-3 text-gray-400 shrink-0" />
-            <span className="text-xs text-gray-400 font-medium whitespace-nowrap">Sort by</span>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="text-xs font-semibold text-[#141414] bg-transparent border-0 outline-none cursor-pointer appearance-none"
-              aria-label="Sort requests"
-            >
-              {SORT_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
-              ))}
-            </select>
-          </div>
-          <div className="w-9 h-9 rounded-full bg-[#141414] flex items-center justify-center text-white text-sm font-semibold">
-            {userInitial}
-          </div>
+        <div className="w-9 h-9 rounded-full bg-[#141414] flex items-center justify-center text-white text-sm font-semibold">
+          {userInitial}
         </div>
       </header>
 
-      {/* Status filter tabs */}
+      {/* Sort filter */}
       <div className="bg-white border-b border-gray-100 px-4 py-3">
         <div className="flex gap-2 overflow-x-auto scrollbar-none">
-          {STATUS_FILTERS.map((filter) => {
-            const isActive = activeFilter === filter.id;
-            const statusInfo =
-              filter.id !== "all"
-                ? STATUS_CONFIG[filter.id as RequestStatus]
-                : null;
+          {SORT_OPTIONS.map((opt) => (
+            <button
+              key={opt.value}
+              onClick={() => setSortBy(opt.value)}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition ${
+                sortBy === opt.value
+                  ? "bg-[#141414] text-white"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      </div>
 
-            return (
-              <button
-                key={filter.id}
-                onClick={() => setActiveFilter(filter.id)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition ${
-                  isActive
-                    ? "bg-[#141414] text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
-              >
-                {statusInfo && !isActive && (
-                  <span className={`w-2 h-2 rounded-full ${statusInfo.dotColor}`} />
-                )}
-                {filter.label}
-              </button>
-            );
-          })}
+      {/* Status filter */}
+      <div className="bg-white border-b border-gray-100 px-4 pb-3">
+        <div className="flex gap-1 overflow-x-auto scrollbar-none">
+          {STATUS_FILTERS.map((f) => (
+            <button
+              key={f.id}
+              onClick={() => setActiveFilter(f.id)}
+              className={`px-3 py-1.5 text-xs font-bold whitespace-nowrap transition border-b-2 ${
+                activeFilter === f.id
+                  ? "border-[#FFC600] text-[#141414]"
+                  : "border-transparent text-gray-400 hover:text-gray-600"
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
         </div>
       </div>
 
