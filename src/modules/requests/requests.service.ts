@@ -73,6 +73,9 @@ export const requestsService = {
       orderBy: { createdAt: "desc" },
       take: limit,
       skip: offset,
+      include: {
+        _count: { select: { comments: true } },
+      },
     });
   },
 

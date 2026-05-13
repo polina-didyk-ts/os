@@ -27,6 +27,7 @@ interface Request {
   metadata: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
+  _count?: { comments: number };
 }
 
 const STATUS_FILTERS = [
@@ -67,28 +68,38 @@ const STATUS_CONFIG: Record<
 
 const TYPE_CONFIG: Record<
   RequestType,
-  { icon: React.ElementType; bgClass: string; iconClass: string }
+  { icon: React.ElementType; bgClass: string; iconClass: string; label: string }
 > = {
   order: {
     icon: ShoppingCart,
-    bgClass: "bg-purple-100",
-    iconClass: "text-purple-600",
+    bgClass: "bg-[#FFC600]/15",
+    iconClass: "text-[#141414]",
+    label: "Order",
   },
   problem: {
     icon: Wrench,
     bgClass: "bg-gray-100",
     iconClass: "text-gray-600",
+    label: "Problem",
   },
   question: {
     icon: MessageSquare,
     bgClass: "bg-gray-100",
     iconClass: "text-gray-600",
+    label: "Question",
   },
   idea: {
     icon: Lightbulb,
     bgClass: "bg-orange-100",
     iconClass: "text-orange-500",
+    label: "Idea",
   },
+};
+
+const PRIORITY_CONFIG: Record<string, { label: string; className: string }> = {
+  high:   { label: "High",   className: "bg-red-50 text-red-600 border border-red-200"              },
+  medium: { label: "Medium", className: "bg-[#FFC600]/15 text-[#8B6914] border border-[#FFC600]/40" },
+  low:    { label: "Low",    className: "bg-green-50 text-green-700 border border-green-200"         },
 };
 
 function getRequestTitle(request: Request): string {
@@ -280,8 +291,10 @@ export default function EmployeeRequestsPage() {
             {filtered.map((request) => {
               const typeConf = TYPE_CONFIG[request.type];
               const statusConf = STATUS_CONFIG[request.status];
+              const priorityConf = PRIORITY_CONFIG[request.priority] ?? PRIORITY_CONFIG.low;
               const Icon = typeConf.icon;
               const title = getRequestTitle(request);
+              const hasComments = (request._count?.comments ?? 0) > 0;
 
               return (
                 <Link
@@ -301,15 +314,31 @@ export default function EmployeeRequestsPage() {
                         <p className="text-sm font-semibold text-gray-900 leading-snug line-clamp-2">
                           {title}
                         </p>
-                        <span
-                          className={`text-[11px] font-bold px-2 py-0.5 rounded-full shrink-0 ${statusConf.badgeClass}`}
-                        >
-                          {statusConf.label}
-                        </span>
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          {hasComments && (
+                            <div className="relative">
+                              <MessageSquare className="w-4 h-4 text-gray-400" />
+                              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-[#FFC600] rounded-full" />
+                            </div>
+                          )}
+                          <span
+                            className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${statusConf.badgeClass}`}
+                          >
+                            {statusConf.label}
+                          </span>
+                        </div>
                       </div>
                       <p className="text-xs text-gray-400 mt-0.5">
                         ID #{request.ticketNumber}
                       </p>
+                      <div className="flex items-center gap-1.5 mt-2">
+                        <span className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-gray-100 text-gray-500">
+                          {typeConf.label}
+                        </span>
+                        <span className={`text-[11px] font-medium px-2 py-0.5 rounded-md ${priorityConf.className}`}>
+                          {priorityConf.label}
+                        </span>
+                      </div>
                     </div>
                   </div>
 
