@@ -333,7 +333,7 @@ export default function EmployeeRequestsPage() {
 
       {/* FAB */}
       <Link
-        href="/employee/requests/new"
+        href="/employee"
         className="fixed bottom-24 right-4 w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center shadow-lg z-30 hover:bg-blue-700 transition"
         data-testid="create-request-fab"
       >

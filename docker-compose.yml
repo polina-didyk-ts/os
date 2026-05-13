@@ -4,7 +4,7 @@ services:
   # PostgreSQL database service
   postgres:
     image: postgres:16-alpine
-    container_name: ts-web-starter-db
+    container_name: ts-digital-office
     restart: unless-stopped
 
     # Use port 5433 to avoid conflicts with local PostgreSQL
@@ -15,7 +15,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: ts_web_starter_dev
+      POSTGRES_DB: ts_digital_office_dev
       # Performance tuning
       POSTGRES_INITDB_ARGS: "-E UTF8 --locale=en_US.UTF-8"
 
@@ -40,10 +40,10 @@ services:
 volumes:
   postgres_data:
     driver: local
-    name: ts-web-starter-postgres-data
+    name: ts-digital-office-postgres-data
 
 # Custom network
 networks:
   app_network:
     driver: bridge
-    name: ts-web-starter-network
+    name: ts-digital-office-network
