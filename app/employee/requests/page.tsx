@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
 import {
   ChevronRight,
@@ -10,6 +10,7 @@ import {
   MessageSquare,
   Lightbulb,
   Menu,
+  ArrowUpDown,
 } from "lucide-react";
 import { BottomNavigation, useSideMenu } from "../components";
 import { useSession } from "@/src/lib/client";
@@ -39,6 +40,20 @@ const STATUS_FILTERS = [
 ];
 
 type FilterId = "all" | RequestStatus;
+type SortOption = "newest" | "oldest" | "updated" | "priority" | "status";
+
+const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+  { value: "newest",   label: "Newest first"      },
+  { value: "oldest",   label: "Oldest first"       },
+  { value: "updated",  label: "Recently updated"   },
+  { value: "priority", label: "Priority"           },
+  { value: "status",   label: "Status"             },
+];
+
+const PRIORITY_ORDER: Record<string, number> = { high: 0, medium: 1, low: 2 };
+const STATUS_ORDER: Record<RequestStatus, number> = {
+  new: 0, in_progress: 1, completed: 2, rejected: 3,
+};
 
 const STATUS_CONFIG: Record<
   RequestStatus,
@@ -190,6 +205,7 @@ export default function EmployeeRequestsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState<FilterId>("all");
+  const [sortBy, setSortBy] = useState<SortOption>("newest");
 
   const fetchRequests = useCallback(async () => {
     setLoading(true);
@@ -215,6 +231,22 @@ export default function EmployeeRequestsPage() {
       ? requests
       : requests.filter((r) => r.status === activeFilter);
 
+  const sorted = useMemo(() => {
+    const arr = [...filtered];
+    switch (sortBy) {
+      case "oldest":
+        return arr.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+      case "updated":
+        return arr.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+      case "priority":
+        return arr.sort((a, b) => (PRIORITY_ORDER[a.priority] ?? 2) - (PRIORITY_ORDER[b.priority] ?? 2));
+      case "status":
+        return arr.sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
+      default:
+        return arr.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    }
+  }, [filtered, sortBy]);
+
   const userInitial = session?.user?.name?.[0]?.toUpperCase() ?? "?";
 
   return (
@@ -227,8 +259,24 @@ export default function EmployeeRequestsPage() {
           </button>
           <span className="text-lg font-semibold text-gray-900">My Requests</span>
         </div>
-        <div className="w-9 h-9 rounded-full bg-[#141414] flex items-center justify-center text-white text-sm font-semibold">
-          {userInitial}
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white">
+            <ArrowUpDown className="w-3 h-3 text-gray-400 shrink-0" />
+            <span className="text-xs text-gray-400 font-medium whitespace-nowrap">Sort by</span>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as SortOption)}
+              className="text-xs font-semibold text-[#141414] bg-transparent border-0 outline-none cursor-pointer appearance-none"
+              aria-label="Sort requests"
+            >
+              {SORT_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          </div>
+          <div className="w-9 h-9 rounded-full bg-[#141414] flex items-center justify-center text-white text-sm font-semibold">
+            {userInitial}
+          </div>
         </div>
       </header>
 
@@ -253,9 +301,7 @@ export default function EmployeeRequestsPage() {
                 }`}
               >
                 {statusInfo && !isActive && (
-                  <span
-                    className={`w-2 h-2 rounded-full ${statusInfo.dotColor}`}
-                  />
+                  <span className={`w-2 h-2 rounded-full ${statusInfo.dotColor}`} />
                 )}
                 {filter.label}
               </button>
@@ -284,11 +330,11 @@ export default function EmployeeRequestsPage() {
               <RequestCardSkeleton key={i} />
             ))}
           </div>
-        ) : filtered.length === 0 ? (
+        ) : sorted.length === 0 ? (
           <EmptyState filtered={activeFilter !== "all"} />
         ) : (
           <div className="flex flex-col gap-3">
-            {filtered.map((request) => {
+            {sorted.map((request) => {
               const typeConf = TYPE_CONFIG[request.type];
               const statusConf = STATUS_CONFIG[request.status];
               const priorityConf = PRIORITY_CONFIG[request.priority] ?? PRIORITY_CONFIG.low;
