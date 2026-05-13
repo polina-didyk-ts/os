@@ -62,10 +62,19 @@ export const requestsService = {
     return request;
   },
 
-  async getById(id: string) {
-    return prisma.request.findUnique({
+  async getByIdForUser(userId: string, id: string) {
+    const request = await prisma.request.findUnique({ where: { id } });
+    if (!request || request.userId !== userId) throw Errors.notFound("Request");
+    return request;
+  },
+
+  async getByIdForAdmin(id: string) {
+    const request = await prisma.request.findUnique({
       where: { id },
+      include: { user: { select: { id: true, name: true, email: true } } },
     });
+    if (!request) throw Errors.notFound("Request");
+    return request;
   },
 
   async listByUser(userId: string, limit = 20, offset = 0) {

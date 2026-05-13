@@ -124,7 +124,8 @@ describe("Requests API", () => {
     // Test ticket number generation (this would need a test database)
     // For now we just verify the service exports the method
     expect(typeof requestsService.create).toBe("function");
-    expect(typeof requestsService.getById).toBe("function");
+    expect(typeof requestsService.getByIdForUser).toBe("function");
+    expect(typeof requestsService.getByIdForAdmin).toBe("function");
     expect(typeof requestsService.listByUser).toBe("function");
 
     console.log("✅ Service methods exist");
