@@ -19,10 +19,10 @@ Access is restricted to `@tech-stack.io` accounts. Sign in via Google OAuth or e
 
 ## User Roles
 
-| Role       | How assigned                          | Access      |
-| ---------- | ------------------------------------- | ----------- |
-| `employee` | Default for all new users             | `/employee/*` |
-| `admin`    | Manually via DB or Prisma Studio      | `/admin/*`  |
+| Role       | How assigned                     | Access        |
+| ---------- | -------------------------------- | ------------- |
+| `employee` | Default for all new users        | `/employee/*` |
+| `admin`    | Manually via DB or Prisma Studio | `/admin/*`    |
 
 To assign admin role: open Prisma Studio (`yarn db:studio`), find the user in the `User` table and set `role` to `admin`.
 
