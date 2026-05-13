@@ -30,7 +30,7 @@ interface Comment {
 // ── config ─────────────────────────────────────────────────────────────────
 
 const STATUS_CONFIG: Record<RequestStatus, { label: string; badgeClass: string }> = {
-  new:         { label: "NEW",         badgeClass: "bg-blue-100 text-blue-700"      },
+  new:         { label: "NEW",         badgeClass: "bg-gray-100 text-gray-700"      },
   in_progress: { label: "IN PROGRESS", badgeClass: "bg-yellow-100 text-yellow-700"  },
   completed:   { label: "DONE",        badgeClass: "bg-green-100 text-green-700"    },
   rejected:    { label: "REJECTED",    badgeClass: "bg-red-100 text-red-600"        },
@@ -39,9 +39,9 @@ const STATUS_CONFIG: Record<RequestStatus, { label: string; badgeClass: string }
 const TYPE_CONFIG: Record<RequestType, {
   icon: React.ElementType; bgClass: string; iconClass: string; label: string;
 }> = {
-  order:    { icon: ShoppingCart,  bgClass: "bg-purple-100", iconClass: "text-purple-600", label: "ORDER"           },
+  order:    { icon: ShoppingCart,  bgClass: "bg-[#FFC600]/15", iconClass: "text-[#141414]", label: "ORDER"           },
   problem:  { icon: Wrench,        bgClass: "bg-pink-100",   iconClass: "text-pink-500",   label: "PROBLEM"         },
-  question: { icon: MessageSquare, bgClass: "bg-blue-100",   iconClass: "text-blue-500",   label: "QUESTION"        },
+  question: { icon: MessageSquare, bgClass: "bg-gray-100",   iconClass: "text-gray-600",   label: "QUESTION"        },
   idea:     { icon: Lightbulb,     bgClass: "bg-orange-100", iconClass: "text-orange-400", label: "IDEA / FEEDBACK" },
 };
 
@@ -113,7 +113,7 @@ export default function EmployeeRequestDetailPage() {
   if (loading) {
     return (
       <main className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-600 border-t-transparent" />
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#141414] border-t-transparent" />
       </main>
     );
   }
@@ -122,7 +122,7 @@ export default function EmployeeRequestDetailPage() {
     return (
       <main className="min-h-screen bg-gray-50 flex flex-col items-center justify-center gap-4 px-4">
         <p className="text-gray-600 text-sm">{error ?? "Request not found"}</p>
-        <button onClick={() => router.back()} className="text-blue-600 text-sm font-medium">← Back</button>
+        <button onClick={() => router.back()} className="text-[#141414] text-sm font-medium">← Back</button>
       </main>
     );
   }
@@ -194,12 +194,12 @@ export default function EmployeeRequestDetailPage() {
             Activity Log
           </p>
           <div className="flex flex-col gap-2">
-            <div className="bg-white rounded-xl px-4 py-3 border-l-4 border-blue-200">
+            <div className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60">
               <p className="text-sm font-medium text-gray-900">You submitted a request</p>
               <p className="text-xs text-gray-400 mt-0.5">{formatDateTime(request.createdAt)}</p>
             </div>
             {request.status !== "new" && (
-              <div className="bg-white rounded-xl px-4 py-3 border-l-4 border-blue-200">
+              <div className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60">
                 <p className="text-sm font-medium text-gray-900">
                   Status changed to &ldquo;{statusConf.label}&rdquo;
                 </p>
@@ -217,7 +217,7 @@ export default function EmployeeRequestDetailPage() {
             </p>
             <div className="flex flex-col gap-2">
               {comments.map((c) => (
-                <div key={c.id} className="bg-white rounded-xl px-4 py-3 border-l-4 border-purple-300">
+                <div key={c.id} className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60">
                   <p className="text-sm text-gray-900">{c.text}</p>
                   <p className="text-xs text-gray-400 mt-1">{formatDateTime(c.createdAt)}</p>
                 </div>

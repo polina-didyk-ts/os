@@ -29,7 +29,7 @@ export function EmployeeHeader() {
         <span className="text-lg font-semibold text-gray-800">Digital Office</span>
       </div>
 
-      <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold select-none">
+      <div className="w-10 h-10 rounded-full bg-[#141414] flex items-center justify-center text-white font-semibold select-none">
         {initial}
       </div>
     </header>

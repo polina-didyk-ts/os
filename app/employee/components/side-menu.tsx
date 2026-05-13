@@ -63,19 +63,19 @@ export function SideMenu() {
 
       {/* Drawer */}
       <aside
-        className={`fixed top-0 left-0 h-full w-72 bg-gray-50 z-50 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 h-full w-72 bg-white z-50 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         aria-label="Side menu"
       >
         {/* User info */}
-        <div className="px-5 pt-10 pb-5 border-b border-gray-200 bg-gray-50">
-          <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white text-base font-bold mb-3 select-none">
+        <div className="px-5 pt-10 pb-5 border-b border-gray-200 bg-white">
+          <div className="w-12 h-12 rounded-full bg-[#141414] flex items-center justify-center text-white text-base font-bold mb-3 select-none">
             {initials}
           </div>
           <p className="text-base font-bold text-gray-900">{displayName}</p>
           <p className="text-sm text-gray-500 mt-0.5">{email}</p>
-          <span className="mt-2 inline-block px-3 py-0.5 rounded-full bg-blue-50 text-blue-600 text-xs font-semibold uppercase tracking-wide">
+          <span className="mt-2 inline-block px-3 py-0.5 rounded-full bg-[#FFC600]/20 text-[#141414] text-xs font-semibold uppercase tracking-wide">
             Member
           </span>
         </div>
@@ -91,13 +91,13 @@ export function SideMenu() {
                 onClick={close}
                 className={`flex items-center justify-between px-5 py-4 transition-colors ${
                   active
-                    ? "bg-blue-50 border-l-4 border-blue-600 text-blue-600"
+                    ? "bg-[#FFC600]/15 border-l-4 border-[#FFC600] text-[#141414]"
                     : "border-l-4 border-transparent text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <Icon className="w-5 h-5" strokeWidth={1.5} />
-                  <span className={`text-sm font-medium ${active ? "text-blue-600" : ""}`}>
+                  <span className={`text-sm font-medium ${active ? "text-[#141414]" : ""}`}>
                     {label}
                   </span>
                 </div>

@@ -91,7 +91,7 @@ export default function EmployeeProfilePage() {
           </button>
           <span className="text-lg font-semibold text-gray-900">Profile</span>
         </div>
-        <span className="text-lg font-semibold text-blue-600">Digital Office</span>
+        <span className="text-lg font-semibold text-[#141414]">Digital Office</span>
       </header>
 
       <div className="flex-1 pb-28 px-4 py-4 flex flex-col gap-4">
@@ -99,10 +99,10 @@ export default function EmployeeProfilePage() {
         <div className="bg-white rounded-2xl px-6 py-8 flex flex-col items-center shadow-sm">
           {/* Avatar */}
           <div className="relative mb-4">
-            <div className="w-24 h-24 rounded-full bg-blue-600 flex items-center justify-center text-white text-2xl font-bold select-none">
+            <div className="w-24 h-24 rounded-full bg-[#141414] flex items-center justify-center text-white text-2xl font-bold select-none">
               {initials}
             </div>
-            <div className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-blue-600 border-2 border-white flex items-center justify-center">
+            <div className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-[#FFC600] border-2 border-white flex items-center justify-center">
               <CheckCircle2 className="w-4 h-4 text-white" />
             </div>
           </div>
@@ -112,7 +112,7 @@ export default function EmployeeProfilePage() {
           <p className="text-sm text-gray-500 mt-0.5">{email}</p>
 
           {/* Role badge */}
-          <span className="mt-3 px-4 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-semibold uppercase tracking-wide">
+          <span className="mt-3 px-4 py-1 rounded-full bg-[#F2F2F2] text-[#141414] text-xs font-semibold uppercase tracking-wide border border-gray-200">
             Member
           </span>
         </div>
@@ -121,13 +121,13 @@ export default function EmployeeProfilePage() {
         <div className="flex gap-3">
           <StatCard
             icon={<FileText className="w-5 h-5" />}
-            iconClass="text-blue-600"
+            iconClass="text-[#141414]"
             label="Total"
             value={statsLoading ? "—" : (stats?.total ?? 0)}
           />
           <StatCard
             icon={<Hourglass className="w-5 h-5" />}
-            iconClass="text-purple-600"
+            iconClass="text-[#141414]"
             label="In Progress"
             value={statsLoading ? "—" : (stats?.inProgress ?? 0)}
           />

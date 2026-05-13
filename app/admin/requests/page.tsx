@@ -37,9 +37,9 @@ const TYPE_CONFIG: Record<RequestType, {
   iconClass: string;
   label: string;
 }> = {
-  order:    { icon: ShoppingCart,  bgClass: "bg-purple-100", iconClass: "text-purple-600", label: "ORDER"           },
+  order:    { icon: ShoppingCart,  bgClass: "bg-[#FFC600]/15", iconClass: "text-[#141414]", label: "ORDER"           },
   problem:  { icon: Wrench,        bgClass: "bg-pink-100",   iconClass: "text-pink-500",   label: "PROBLEM"         },
-  question: { icon: MessageSquare, bgClass: "bg-blue-100",   iconClass: "text-blue-500",   label: "QUESTION"        },
+  question: { icon: MessageSquare, bgClass: "bg-gray-100",   iconClass: "text-gray-600",   label: "QUESTION"        },
   idea:     { icon: Lightbulb,     bgClass: "bg-orange-100", iconClass: "text-orange-400", label: "IDEA / FEEDBACK" },
 };
 
@@ -48,7 +48,7 @@ const STATUS_CONFIG: Record<RequestStatus, {
   badgeClass: string;
   dotClass: string;
 }> = {
-  new:         { label: "NEW",         badgeClass: "bg-blue-100 text-blue-700",     dotClass: "bg-blue-500"   },
+  new:         { label: "NEW",         badgeClass: "bg-gray-100 text-gray-700",     dotClass: "bg-gray-400"   },
   in_progress: { label: "IN PROGRESS", badgeClass: "bg-yellow-100 text-yellow-700", dotClass: "bg-yellow-500" },
   completed:   { label: "DONE",        badgeClass: "bg-green-100 text-green-700",   dotClass: "bg-green-500"  },
   rejected:    { label: "REJECTED",    badgeClass: "bg-red-100 text-red-600",       dotClass: "bg-red-500"    },
@@ -191,7 +191,7 @@ export default function AdminRequestsPage() {
               onClick={() => setTypeFilter(f.id)}
               className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition ${
                 typeFilter === f.id
-                  ? "bg-blue-600 text-white"
+                  ? "bg-[#141414] text-white"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             >
@@ -210,7 +210,7 @@ export default function AdminRequestsPage() {
               onClick={() => setStatusFilter(f.id)}
               className={`px-3 py-1.5 text-xs font-bold whitespace-nowrap transition border-b-2 ${
                 statusFilter === f.id
-                  ? "border-blue-600 text-blue-600"
+                  ? "border-[#FFC600] text-[#141414]"
                   : "border-transparent text-gray-400 hover:text-gray-600"
               }`}
             >
@@ -280,7 +280,7 @@ export default function AdminRequestsPage() {
 
                   <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100 pb-4">
                     <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white text-[10px] font-bold">
+                      <div className="w-6 h-6 rounded-full bg-[#141414] flex items-center justify-center text-white text-[10px] font-bold">
                         {getInitial(req.user)}
                       </div>
                       <span className="text-xs text-gray-500">{getShortName(req.user)}</span>

@@ -29,7 +29,7 @@ export function BottomNavigation() {
             href={path}
             className={`flex flex-col items-center gap-1 py-3 px-6 rounded-lg transition ${
               active
-                ? "text-blue-600 bg-blue-50"
+                ? "text-[#141414] bg-[#FFC600]/20"
                 : "text-gray-600 hover:text-gray-900"
             }`}
           >

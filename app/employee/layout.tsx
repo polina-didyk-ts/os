@@ -28,7 +28,7 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
     return (
       <main className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-10 w-10 border-2 border-blue-600 border-t-transparent mx-auto"></div>
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#141414] border-t-transparent mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading...</p>
         </div>
       </main>

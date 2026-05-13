@@ -13,7 +13,7 @@ export function SuccessScreen({ ticketNumber }: SuccessScreenProps) {
     <div className="flex flex-col items-center justify-center py-12 space-y-8">
       {/* Checkmark Circle */}
       <div className="relative w-24 h-24">
-        <div className="absolute inset-0 bg-blue-600 rounded-full flex items-center justify-center">
+        <div className="absolute inset-0 bg-[#141414] rounded-full flex items-center justify-center">
           <Check className="w-12 h-12 text-white" strokeWidth={3} />
         </div>
       </div>
@@ -48,7 +48,7 @@ export function SuccessScreen({ ticketNumber }: SuccessScreenProps) {
       {/* Buttons */}
       <div className="w-full max-w-md space-y-3">
         <Link href="/employee/requests" className="block">
-          <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition">
+          <Button className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg transition">
             View My Requests
           </Button>
         </Link>

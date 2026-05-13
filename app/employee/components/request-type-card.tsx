@@ -33,11 +33,11 @@ export function RequestTypeCard({
   return (
     <button
       onClick={onClick}
-      className="bg-white rounded-2xl p-6 border-l-4 border-blue-600 shadow-sm hover:shadow-md transition text-left"
+      className="bg-white rounded-2xl p-6 border-l-4 border-[#FFC600] shadow-sm hover:shadow-md transition text-left"
     >
       <div className="flex items-start justify-between mb-4">
-        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
-          {Icon && <Icon className="w-7 h-7 text-blue-600" strokeWidth={1.5} />}
+        <div className="w-12 h-12 rounded-xl bg-[#FFC600]/15 flex items-center justify-center">
+          {Icon && <Icon className="w-7 h-7 text-[#141414]" strokeWidth={1.5} />}
         </div>
       </div>
 

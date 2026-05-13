@@ -31,8 +31,8 @@ export default function EmployeeSignInPage() {
       <div className="w-full max-w-md space-y-8">
         {/* Header */}
         <div className="flex flex-col items-center space-y-4">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center shadow-lg">
-            <Grid2X2 className="w-8 h-8 text-white" strokeWidth={1.5} />
+          <div className="w-16 h-16 rounded-2xl bg-[#FFC600] flex items-center justify-center shadow-lg">
+            <Grid2X2 className="w-8 h-8 text-[#141414]" strokeWidth={1.5} />
           </div>
           <h1 className="text-3xl font-bold text-gray-900">Digital Office</h1>
         </div>
@@ -40,7 +40,7 @@ export default function EmployeeSignInPage() {
         {/* Icon Container */}
         <div className="flex justify-center">
           <div className="w-32 h-32 rounded-3xl bg-gray-100 flex items-center justify-center">
-            <Mail className="w-16 h-16 text-blue-500" strokeWidth={1.5} />
+            <Mail className="w-16 h-16 text-[#141414]" strokeWidth={1.5} />
           </div>
         </div>
 
@@ -62,7 +62,7 @@ export default function EmployeeSignInPage() {
         <Button
           onClick={handleGoogleSignIn}
           disabled={loading}
-          className="w-full h-12 text-base font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+          className="w-full h-12 text-base font-medium bg-[#141414] hover:bg-black text-white rounded-lg transition-colors"
           data-testid="employee-signin-google-button"
         >
           {loading ? (

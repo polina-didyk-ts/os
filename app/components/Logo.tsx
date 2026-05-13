@@ -1,14 +1,14 @@
 export function Logo() {
   return (
     <div className="inline-flex items-center gap-2 hover:opacity-80 transition">
-      <div className="w-8 h-8 bg-gradient-to-br from-brand-600 to-brand-700 rounded-lg flex items-center justify-center shadow-sm">
+      <div className="w-8 h-8 bg-[#FFC600] rounded-lg flex items-center justify-center shadow-sm">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={2}
           stroke="currentColor"
-          className="w-5 h-5 text-white"
+          className="w-5 h-5 text-[#141414]"
         >
           <path
             strokeLinecap="round"

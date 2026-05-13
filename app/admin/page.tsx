@@ -39,9 +39,9 @@ const TYPE_CONFIG: Record<
   AdminRequest["type"],
   { icon: React.ElementType; bgClass: string; iconClass: string; label: string }
 > = {
-  order:    { icon: ShoppingCart,  bgClass: "bg-purple-100", iconClass: "text-purple-600", label: "ORDER"    },
+  order:    { icon: ShoppingCart,  bgClass: "bg-[#FFC600]/15", iconClass: "text-[#141414]", label: "ORDER"    },
   problem:  { icon: Wrench,        bgClass: "bg-pink-100",   iconClass: "text-pink-500",   label: "PROBLEM"  },
-  question: { icon: MessageSquare, bgClass: "bg-blue-100",   iconClass: "text-blue-500",   label: "QUESTION" },
+  question: { icon: MessageSquare, bgClass: "bg-gray-100",   iconClass: "text-gray-600",   label: "QUESTION" },
   idea:     { icon: Lightbulb,     bgClass: "bg-orange-100", iconClass: "text-orange-400", label: "IDEA"     },
 };
 
@@ -155,7 +155,7 @@ export default function AdminDashboard() {
         {/* Stats 2×2 */}
         <div className="grid grid-cols-2 gap-3">
           <StatCard
-            icon={<BadgeCheck className="w-6 h-6 text-blue-600" />}
+            icon={<BadgeCheck className="w-6 h-6 text-[#141414]" />}
             label="NEW"
             value={stats.new}
             loading={loading}
@@ -186,7 +186,7 @@ export default function AdminDashboard() {
             <h2 className="text-base font-bold text-gray-900">Recent Requests</h2>
             <Link
               href="/admin/requests"
-              className="text-xs font-bold text-blue-600 uppercase tracking-wide"
+              className="text-xs font-bold text-[#141414] uppercase tracking-wide"
             >
               ARCHIVE
             </Link>

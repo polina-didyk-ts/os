@@ -2,70 +2,70 @@
 
 @layer base {
   :root {
-    /* Light theme - matching mobile app design */
-    --background: 0 0% 98%;
-    --foreground: 0 0% 5%;
+    /* Techstack Light Theme */
+    --background: 0 0% 95%;
+    --foreground: 0 0% 8%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 5%;
+    --card-foreground: 0 0% 8%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 5%;
-    --primary: 0 0% 5%;
+    --popover-foreground: 0 0% 8%;
+    --primary: 0 0% 8%;
     --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 5%;
-    --muted: 0 0% 96%;
+    --secondary: 0 0% 95%;
+    --secondary-foreground: 0 0% 8%;
+    --muted: 0 0% 95%;
     --muted-foreground: 0 0% 45%;
-    --accent: 142 76% 36%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 45 100% 50%;
+    --accent-foreground: 0 0% 8%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 90%;
-    --input: 0 0% 96%;
-    --ring: 0 0% 5%;
-    --chart-1: 142 76% 36%;
-    --chart-2: 220 70% 50%;
+    --border: 0 0% 88%;
+    --input: 0 0% 100%;
+    --ring: 45 100% 50%;
+    --chart-1: 45 100% 50%;
+    --chart-2: 142 76% 36%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --chart-5: 0 84% 60%;
     --radius: 0.75rem;
   }
 }
 
 @theme {
-  /* shadcn/ui semantic colors for Tailwind v4 - Light theme */
-  --color-background: hsl(0 0% 98%);
-  --color-foreground: hsl(0 0% 5%);
-  --color-card: hsl(0 0% 100%);
-  --color-card-foreground: hsl(0 0% 5%);
-  --color-popover: hsl(0 0% 100%);
-  --color-popover-foreground: hsl(0 0% 5%);
-  --color-primary: hsl(0 0% 5%);
-  --color-primary-foreground: hsl(0 0% 98%);
-  --color-secondary: hsl(0 0% 96%);
-  --color-secondary-foreground: hsl(0 0% 5%);
-  --color-muted: hsl(0 0% 96%);
+  /* shadcn/ui semantic colors for Tailwind v4 - Techstack Light Theme */
+  --color-background: #F2F2F2;
+  --color-foreground: #141414;
+  --color-card: #FFFFFF;
+  --color-card-foreground: #141414;
+  --color-popover: #FFFFFF;
+  --color-popover-foreground: #141414;
+  --color-primary: #141414;
+  --color-primary-foreground: #FFFFFF;
+  --color-secondary: #F2F2F2;
+  --color-secondary-foreground: #141414;
+  --color-muted: #F2F2F2;
   --color-muted-foreground: hsl(0 0% 45%);
-  --color-accent: hsl(142 76% 36%);
-  --color-accent-foreground: hsl(0 0% 98%);
+  --color-accent: #FFC600;
+  --color-accent-foreground: #141414;
   --color-destructive: hsl(0 84% 60%);
   --color-destructive-foreground: hsl(0 0% 98%);
-  --color-border: hsl(0 0% 90%);
-  --color-input: hsl(0 0% 96%);
-  --color-ring: hsl(0 0% 5%);
+  --color-border: #E0E0E0;
+  --color-input: #FFFFFF;
+  --color-ring: #FFC600;
 
-  /* Primary brand colors - Green */
-  --color-brand-50: #f0fdf4;
-  --color-brand-100: #dcfce7;
-  --color-brand-200: #bbf7d0;
-  --color-brand-300: #86efac;
-  --color-brand-400: #4ade80;
-  --color-brand-500: #22c55e;
-  --color-brand-600: #16a34a;
-  --color-brand-700: #15803d;
-  --color-brand-800: #166534;
-  --color-brand-900: #14532d;
+  /* Techstack brand colors - Yellow */
+  --color-brand-50: #fffbeb;
+  --color-brand-100: #fef3c7;
+  --color-brand-200: #fde68a;
+  --color-brand-300: #fcd34d;
+  --color-brand-400: #fbbf24;
+  --color-brand-500: #FFC600;
+  --color-brand-600: #FFC600;
+  --color-brand-700: #d97706;
+  --color-brand-800: #92400e;
+  --color-brand-900: #78350f;
 
-  /* Accent colors - Dark for contrast */
+  /* Accent palette - Slate for UI depth */
   --color-accent-50: #f8fafc;
   --color-accent-100: #f1f5f9;
   --color-accent-200: #e2e8f0;
@@ -77,7 +77,7 @@
   --color-accent-800: #1e293b;
   --color-accent-900: #0f172a;
 
-  /* Neutral grays - For dark theme */
+  /* Neutral grays */
   --color-neutral-50: #fafafa;
   --color-neutral-100: #f5f5f5;
   --color-neutral-200: #e5e5e5;
@@ -92,25 +92,25 @@
   /* Semantic colors */
   --color-success: #10b981;
   --color-error: #ef4444;
-  --color-warning: #f59e0b;
-  --color-info: #3b82f6;
+  --color-warning: #FFC600;
+  --color-info: #141414;
 
-  /* Border radius - Modern, slightly rounded */
+  /* Border radius */
   --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
 
-  /* Shadows - Subtle, modern */
+  /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.08);
 }
 
 @layer base {
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+    background-color: #F2F2F2;
+    color: #141414;
   }
 }

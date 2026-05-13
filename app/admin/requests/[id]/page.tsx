@@ -38,7 +38,7 @@ const TYPE_LABEL: Record<RequestType, string> = {
 };
 
 const STATUS_CONFIG: Record<RequestStatus, { label: string; badgeClass: string }> = {
-  new:         { label: "NEW",         badgeClass: "bg-blue-100 text-blue-700"      },
+  new:         { label: "NEW",         badgeClass: "bg-gray-100 text-gray-700"      },
   in_progress: { label: "IN PROGRESS", badgeClass: "bg-yellow-100 text-yellow-700"  },
   completed:   { label: "DONE",        badgeClass: "bg-green-100 text-green-700"    },
   rejected:    { label: "REJECTED",    badgeClass: "bg-red-100 text-red-600"        },
@@ -125,13 +125,13 @@ function Stepper({ status }: { status: RequestStatus }) {
           <div key={step.status} className="flex items-center">
             {/* connector before */}
             {idx > 0 && (
-              <div className={`h-0.5 w-8 ${filled ? "bg-blue-600" : "bg-gray-200"}`} />
+              <div className={`h-0.5 w-8 ${filled ? "bg-[#141414]" : "bg-gray-200"}`} />
             )}
             <div className="flex flex-col items-center gap-1">
               <div
                 className={`w-9 h-9 rounded-full flex items-center justify-center border-2 transition-colors ${
                   filled
-                    ? "bg-blue-600 border-blue-600"
+                    ? "bg-[#141414] border-[#141414]"
                     : "bg-white border-gray-200"
                 }`}
               >
@@ -147,7 +147,7 @@ function Stepper({ status }: { status: RequestStatus }) {
                   <CircleDot className="w-4 h-4 text-gray-300" />
                 )}
               </div>
-              <span className={`text-[10px] font-medium ${filled ? "text-blue-600" : "text-gray-400"}`}>
+              <span className={`text-[10px] font-medium ${filled ? "text-[#141414]" : "text-gray-400"}`}>
                 {step.label}
               </span>
             </div>
@@ -192,7 +192,7 @@ function ActivityLog({ req }: { req: AdminRequest }) {
   return (
     <div className="flex flex-col gap-2">
       {events.map((e, i) => (
-        <div key={i} className="bg-white rounded-xl px-4 py-3 border-l-4 border-blue-200">
+        <div key={i} className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60">
           <p className="text-sm font-medium text-gray-900">{e.text}</p>
           <p className="text-xs text-gray-400 mt-0.5">{e.sub}</p>
         </div>
@@ -226,7 +226,7 @@ function ActionButtons({
         <button
           onClick={() => onStatusChange("in_progress")}
           disabled={loading}
-          className="w-full py-4 rounded-2xl bg-blue-600 text-white font-semibold flex items-center justify-center gap-2 disabled:opacity-60 transition"
+          className="w-full py-4 rounded-2xl bg-[#141414] text-white font-semibold flex items-center justify-center gap-2 disabled:opacity-60 transition"
         >
           <Clock className="w-5 h-5" />
           Take in progress
@@ -237,7 +237,7 @@ function ActionButtons({
         <button
           onClick={() => onStatusChange("completed")}
           disabled={loading}
-          className="w-full py-4 rounded-2xl bg-blue-600 text-white font-semibold flex items-center justify-center gap-2 disabled:opacity-60 transition"
+          className="w-full py-4 rounded-2xl bg-[#141414] text-white font-semibold flex items-center justify-center gap-2 disabled:opacity-60 transition"
         >
           <CheckCircle2 className="w-5 h-5" />
           Mark as done
@@ -347,7 +347,7 @@ export default function AdminRequestDetailPage() {
   if (loading) {
     return (
       <main className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-600 border-t-transparent" />
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#141414] border-t-transparent" />
       </main>
     );
   }
@@ -356,7 +356,7 @@ export default function AdminRequestDetailPage() {
     return (
       <main className="min-h-screen bg-gray-50 flex flex-col items-center justify-center gap-4 px-4">
         <p className="text-gray-600 text-sm">{error ?? "Request not found"}</p>
-        <button onClick={() => router.back()} className="text-blue-600 text-sm font-medium">← Back</button>
+        <button onClick={() => router.back()} className="text-[#141414] text-sm font-medium">← Back</button>
       </main>
     );
   }
@@ -395,7 +395,7 @@ export default function AdminRequestDetailPage() {
           {/* User + priority */}
           <div className="flex items-start justify-between gap-3 mb-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-bold select-none shrink-0">
+              <div className="w-10 h-10 rounded-full bg-[#141414] flex items-center justify-center text-white text-sm font-bold select-none shrink-0">
                 {getInitials(request.user)}
               </div>
               <div>
@@ -446,7 +446,7 @@ export default function AdminRequestDetailPage() {
           {comments.length > 0 && (
             <div className="flex flex-col gap-2 mb-3">
               {comments.map((c) => (
-                <div key={c.id} className="bg-white rounded-xl px-4 py-3 border-l-4 border-purple-300">
+                <div key={c.id} className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60">
                   <p className="text-sm text-gray-900">{c.text}</p>
                   <p className="text-xs text-gray-400 mt-1">
                     {new Date(c.createdAt).toLocaleString("en-US", {
@@ -473,7 +473,7 @@ export default function AdminRequestDetailPage() {
             <button
               onClick={handleAddComment}
               disabled={commentLoading || !commentText.trim()}
-              className="self-end flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-xl disabled:opacity-50 transition hover:bg-blue-700"
+              className="self-end flex items-center gap-2 px-4 py-2 bg-[#141414] text-white text-sm font-semibold rounded-xl disabled:opacity-50 transition hover:bg-black"
             >
               <Send className="w-4 h-4" />
               {commentLoading ? "Sending..." : "Send"}

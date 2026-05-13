@@ -56,7 +56,7 @@ export default function NewRequestPage() {
             <ChevronLeft className="w-6 h-6 text-gray-700" strokeWidth={1.5} />
           </button>
           <h1 className="text-lg font-semibold text-gray-900 flex-1 ml-2">New Request</h1>
-          <span className="px-3 py-1 bg-blue-100 text-blue-600 text-xs font-medium rounded-full">
+          <span className="px-3 py-1 bg-[#FFC600]/20 text-[#141414] text-xs font-medium rounded-full">
             {requestType.title.toUpperCase()}
           </span>
         </section>

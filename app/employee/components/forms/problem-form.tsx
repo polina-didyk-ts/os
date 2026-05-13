@@ -157,7 +157,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
       <Button
         type="submit"
         disabled={loading || !formData.what || !formData.description}
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold text-lg transition"
+        className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-semibold text-lg transition"
       >
         {loading ? "Submitting..." : "Submit Request →"}
       </Button>

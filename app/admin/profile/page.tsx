@@ -39,7 +39,7 @@ export default function AdminProfilePage() {
           <button className="p-2 hover:bg-gray-100 rounded-lg transition" aria-label="Notifications">
             <Bell className="w-5 h-5 text-gray-700" />
           </button>
-          <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-bold select-none">
+          <div className="w-9 h-9 rounded-full bg-[#141414] flex items-center justify-center text-white text-sm font-bold select-none">
             {initials}
           </div>
         </div>
@@ -49,11 +49,11 @@ export default function AdminProfilePage() {
       <div className="flex-1 pb-28 flex flex-col items-center pt-16 px-4">
         {/* Avatar */}
         <div className="relative mb-5">
-          <div className="w-28 h-28 rounded-full bg-blue-600 flex items-center justify-center text-white text-3xl font-bold select-none ring-4 ring-purple-200">
+          <div className="w-28 h-28 rounded-full bg-[#141414] flex items-center justify-center text-white text-3xl font-bold select-none ring-4 ring-[#FFC600]/30">
             {initials}
           </div>
-          <div className="absolute bottom-0.5 right-0.5 w-7 h-7 rounded-full bg-blue-600 border-2 border-white flex items-center justify-center">
-            <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 20 20" fill="currentColor">
+          <div className="absolute bottom-0.5 right-0.5 w-7 h-7 rounded-full bg-[#FFC600] border-2 border-white flex items-center justify-center">
+            <svg className="w-3.5 h-3.5 text-[#141414]" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
             </svg>
           </div>
@@ -63,7 +63,7 @@ export default function AdminProfilePage() {
         <h1 className="text-xl font-bold text-gray-900">{displayName}</h1>
 
         {/* Role badge */}
-        <span className="mt-2 px-4 py-1 rounded-full bg-purple-50 text-purple-600 text-xs font-semibold uppercase tracking-wide">
+        <span className="mt-2 px-4 py-1 rounded-full bg-[#F2F2F2] text-[#141414] text-xs font-semibold uppercase tracking-wide border border-gray-200">
           Office Manager
         </span>
       </div>

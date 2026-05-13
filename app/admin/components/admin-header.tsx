@@ -16,7 +16,7 @@ export function AdminHeader() {
         >
           <Menu className="w-6 h-6 text-gray-700" />
         </button>
-        <span className="text-lg font-bold text-blue-600">Digital Office</span>
+        <span className="text-lg font-bold text-[#141414]">Digital Office</span>
         <span className="px-2 py-0.5 rounded-md bg-gray-100 text-gray-500 text-xs font-semibold tracking-wide">
           MANAGER
         </span>

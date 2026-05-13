@@ -45,8 +45,8 @@ const STATUS_CONFIG: Record<
 > = {
   new: {
     label: "NEW",
-    dotColor: "bg-blue-500",
-    badgeClass: "bg-blue-100 text-blue-700",
+    dotColor: "bg-gray-400",
+    badgeClass: "bg-gray-100 text-gray-700",
   },
   in_progress: {
     label: "IN PROGRESS",
@@ -81,8 +81,8 @@ const TYPE_CONFIG: Record<
   },
   question: {
     icon: MessageSquare,
-    bgClass: "bg-blue-100",
-    iconClass: "text-blue-600",
+    bgClass: "bg-gray-100",
+    iconClass: "text-gray-600",
   },
   idea: {
     icon: Lightbulb,
@@ -162,7 +162,7 @@ function EmptyState({ filtered }: { filtered: boolean }) {
       {!filtered && (
         <Link
           href="/employee/requests/new"
-          className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl"
+          className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-[#141414] text-white text-sm font-medium rounded-xl"
         >
           <Plus className="w-4 h-4" />
           New Request
@@ -216,7 +216,7 @@ export default function EmployeeRequestsPage() {
           </button>
           <span className="text-lg font-semibold text-gray-900">My Requests</span>
         </div>
-        <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-semibold">
+        <div className="w-9 h-9 rounded-full bg-[#141414] flex items-center justify-center text-white text-sm font-semibold">
           {userInitial}
         </div>
       </header>
@@ -237,7 +237,7 @@ export default function EmployeeRequestsPage() {
                 onClick={() => setActiveFilter(filter.id)}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition ${
                   isActive
-                    ? "bg-blue-600 text-white"
+                    ? "bg-[#141414] text-white"
                     : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                 }`}
               >
@@ -334,7 +334,7 @@ export default function EmployeeRequestsPage() {
       {/* FAB */}
       <Link
         href="/employee"
-        className="fixed bottom-24 right-4 w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center shadow-lg z-30 hover:bg-blue-700 transition"
+        className="fixed bottom-24 right-4 w-14 h-14 bg-[#141414] rounded-full flex items-center justify-center shadow-lg z-30 hover:bg-black transition"
         data-testid="create-request-fab"
       >
         <Plus className="w-7 h-7 text-white" />

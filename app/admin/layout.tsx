@@ -24,7 +24,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   if (isPending) {
     return (
       <main className="min-h-screen flex items-center justify-center bg-white">
-        <div className="animate-spin rounded-full h-10 w-10 border-2 border-blue-600 border-t-transparent" />
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#141414] border-t-transparent" />
       </main>
     );
   }

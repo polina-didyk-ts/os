@@ -60,7 +60,7 @@ export function SideMenu() {
         {/* User info */}
         <div className="px-5 pt-10 pb-5 border-b border-gray-100">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-11 h-11 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-bold select-none shrink-0">
+            <div className="w-11 h-11 rounded-full bg-[#141414] flex items-center justify-center text-white text-sm font-bold select-none shrink-0">
               {initials}
             </div>
             <div className="min-w-0">
@@ -68,7 +68,7 @@ export function SideMenu() {
               <p className="text-xs text-gray-500 truncate">{user?.email ?? ""}</p>
             </div>
           </div>
-          <span className="inline-block px-3 py-1 rounded-full bg-purple-600 text-white text-xs font-semibold uppercase tracking-wide">
+          <span className="inline-block px-3 py-1 rounded-full bg-[#141414] text-white text-xs font-semibold uppercase tracking-wide">
             Office Manager
           </span>
         </div>

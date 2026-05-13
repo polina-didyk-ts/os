@@ -55,7 +55,7 @@ export default function EmployeeDashboard() {
               <FileText className="w-6 h-6 text-gray-700" strokeWidth={1.5} />
               <span className="text-gray-900 font-medium">My Requests</span>
             </div>
-            <ChevronRight className="w-5 h-5 text-blue-600" strokeWidth={1.5} />
+            <ChevronRight className="w-5 h-5 text-gray-400" strokeWidth={1.5} />
           </Link>
         </section>
 
