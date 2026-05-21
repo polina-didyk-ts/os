@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
   output   = "./generated"
@@ -10,73 +7,65 @@ datasource db {
   provider = "postgresql"
 }
 
-// Example User model for Better Auth
-
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  role      String   @default("user")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  sessions    Session[]
-  accounts    Account[]
-  notes       Note[]
-  memberships Member[]
-  requests    Request[]
-  comments    Comment[]
-
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  role          String    @default("user")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  banExpires    DateTime?
+  banReason     String?
+  banned        Boolean?  @default(false)
   emailVerified Boolean   @default(false)
   image         String?
-  banned        Boolean?  @default(false)
-  banReason     String?
-  banExpires    DateTime?
+  accounts      Account[]
+  comments      Comment[]
+  memberships   Member[]
+  notes         Note[]
+  requests      Request[]
+  sessions      Session[]
 
   @@map("users")
 }
 
 model Session {
-  id        String   @id @default(cuid())
-  userId    String
-  expiresAt DateTime
-  token     String   @unique
-  ipAddress String?
-  userAgent String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  id                   String   @id @default(cuid())
+  userId               String
+  expiresAt            DateTime
+  token                String   @unique
+  ipAddress            String?
+  userAgent            String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
   impersonatedBy       String?
   activeOrganizationId String?
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("sessions")
   @@index([userId])
+  @@map("sessions")
 }
 
 model Account {
-  id           String    @id @default(cuid())
-  userId       String
-  accountId    String
-  providerId   String
-  accessToken  String?
-  refreshToken String?
-  idToken      String?
-  expiresAt    DateTime?
-  password     String?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  id                    String    @id @default(cuid())
+  userId                String
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  expiresAt             DateTime?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
   accessTokenExpiresAt  DateTime?
   refreshTokenExpiresAt DateTime?
   scope                 String?
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([providerId, accountId])
-  @@map("accounts")
   @@index([userId])
+  @@map("accounts")
 }
 
 model Verification {
@@ -92,16 +81,15 @@ model Verification {
 }
 
 model Note {
-  id             String   @id @default(cuid())
+  id             String       @id @default(cuid())
   title          String
   content        String?
   userId         String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
   organizationId String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([organizationId])
@@ -109,31 +97,29 @@ model Note {
 }
 
 model Organization {
-  id        String   @id @default(cuid())
-  name      String
-  slug      String?  @unique
-  logo      String?
-  metadata  Json?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  members     Member[]
+  id          String       @id @default(cuid())
+  name        String
+  slug        String?      @unique
+  logo        String?
+  metadata    Json?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   invitations Invitation[]
+  members     Member[]
   notes       Note[]
 
   @@map("organizations")
 }
 
 model Member {
-  id             String   @id @default(cuid())
+  id             String       @id @default(cuid())
   userId         String
   organizationId String
   role           String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, organizationId])
   @@index([userId])
@@ -142,17 +128,16 @@ model Member {
 }
 
 model Invitation {
-  id             String   @id @default(cuid())
+  id             String       @id @default(cuid())
   organizationId String
   email          String
   role           String
   status         String
   expiresAt      DateTime
   inviterId      String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@index([email])
   @@index([organizationId])
@@ -160,18 +145,17 @@ model Invitation {
 }
 
 model Request {
-  id           String   @id @default(cuid())
-  ticketNumber String   @unique
-  type         String   // "order" | "problem" | "question" | "idea"
-  priority     String   // "low" | "medium" | "high"
-  status       String   @default("new") // "new" | "in_progress" | "completed" | "rejected"
+  id           String    @id @default(cuid())
+  ticketNumber String    @unique
+  type         String
+  priority     String
+  status       String    @default("new")
   userId       String
-  metadata     Json?    // Stores type-specific fields (what, quantity, description, question, idea, comment)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  comments Comment[]
+  metadata     Json?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  comments     Comment[]
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([ticketNumber])
@@ -185,11 +169,9 @@ model Comment {
   authorId  String
   text      String
   createdAt DateTime @default(now())
-
-  request Request @relation(fields: [requestId], references: [id], onDelete: Cascade)
-  author  User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  request   Request  @relation(fields: [requestId], references: [id], onDelete: Cascade)
 
   @@index([requestId])
   @@map("comments")
 }
-
