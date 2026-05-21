@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, CheckCircle2, XCircle, Clock, CircleDot, AlertTriangle, Send } from "lucide-react";
+import { ArrowLeft, CheckCircle2, XCircle, Clock, CircleDot, AlertTriangle } from "lucide-react";
 
 // ── types ──────────────────────────────────────────────────────────────────
 
@@ -269,8 +269,6 @@ export default function AdminRequestDetailPage() {
 
   const [comments, setComments]           = useState<Comment[]>([]);
   const [commentText, setCommentText]     = useState("");
-  const [commentLoading, setCommentLoading] = useState(false);
-  const [commentError, setCommentError]   = useState<string | null>(null);
 
   const fetchRequest = useCallback(async () => {
     setLoading(true);
@@ -307,40 +305,24 @@ export default function AdminRequestDetailPage() {
   const handleStatusChange = async (newStatus: RequestStatus) => {
     if (!request) return;
     setActionLoading(true);
+    const comment = commentText.trim() || undefined;
     try {
       const res = await fetch(`/api/admin/requests/${request.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus }),
+        body: JSON.stringify({ status: newStatus, comment }),
       });
       if (!res.ok) throw new Error();
       const updated = await res.json();
       setRequest((prev) => prev ? { ...prev, status: updated.status, updatedAt: updated.updatedAt } : prev);
+      if (comment) {
+        setComments((prev) => [...prev, { id: Date.now().toString(), text: comment, createdAt: new Date().toISOString(), author: { id: "", name: "You", email: "" } }]);
+        setCommentText("");
+      }
     } catch {
       setError("Failed to update status");
     } finally {
       setActionLoading(false);
-    }
-  };
-
-  const handleAddComment = async () => {
-    if (!commentText.trim() || !request) return;
-    setCommentLoading(true);
-    setCommentError(null);
-    try {
-      const res = await fetch(`/api/requests/${request.id}/comments`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: commentText.trim() }),
-      });
-      if (!res.ok) throw new Error();
-      const newComment: Comment = await res.json();
-      setComments((prev) => [...prev, newComment]);
-      setCommentText("");
-    } catch {
-      setCommentError("Failed to send comment");
-    } finally {
-      setCommentLoading(false);
     }
   };
 
@@ -459,25 +441,14 @@ export default function AdminRequestDetailPage() {
           )}
 
           {/* Input */}
-          <div className="bg-white rounded-2xl p-4 flex flex-col gap-3">
+          <div className="bg-white rounded-2xl p-4">
             <textarea
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
-              placeholder="Write a comment for the employee..."
+              placeholder="Write a message to the employee (optional — sent with status change)..."
               rows={3}
               className="w-full text-sm text-gray-900 placeholder-gray-400 resize-none outline-none"
             />
-            {commentError && (
-              <p className="text-xs text-red-500">{commentError}</p>
-            )}
-            <button
-              onClick={handleAddComment}
-              disabled={commentLoading || !commentText.trim()}
-              className="self-end flex items-center gap-2 px-4 py-2 bg-[#141414] text-white text-sm font-semibold rounded-xl disabled:opacity-50 transition hover:bg-black"
-            >
-              <Send className="w-4 h-4" />
-              {commentLoading ? "Sending..." : "Send"}
-            </button>
           </div>
         </div>
 

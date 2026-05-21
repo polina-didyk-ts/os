@@ -12,3 +12,6 @@ export { auth, getSession, requireSession, getOrganizationContext, requireRole }
 
 // API utilities
 export { apiHandler } from "./api-handler";
+
+// Email
+export { sendRequestUpdateEmail } from "./email";
