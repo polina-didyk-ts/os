@@ -21,7 +21,7 @@ export function EmployeeHeader() {
       <div className="flex items-center gap-3">
         <button
           onClick={toggle}
-          className="p-2 hover:bg-gray-100 rounded-lg transition"
+          className="p-2 hover:bg-gray-100 rounded-lg transition cursor-pointer"
           aria-label="Open menu"
         >
           <Menu className="w-6 h-6 text-gray-700" />

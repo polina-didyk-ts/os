@@ -186,7 +186,7 @@ function EmptyState({ filtered }: { filtered: boolean }) {
       </p>
       {!filtered && (
         <Link
-          href="/employee/requests/new"
+          href="/employee"
           className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-[#141414] text-white text-sm font-medium rounded-xl"
         >
           <Plus className="w-4 h-4" />
@@ -253,7 +253,7 @@ export default function EmployeeRequestsPage() {
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white sticky top-0 z-10">
         <div className="flex items-center gap-3">
-          <button onClick={toggle} className="p-2 hover:bg-gray-100 rounded-lg transition" aria-label="Open menu">
+          <button onClick={toggle} className="p-2 hover:bg-gray-100 rounded-lg transition cursor-pointer" aria-label="Open menu">
             <Menu className="w-6 h-6 text-gray-700" />
           </button>
           <span className="text-lg font-semibold text-gray-900">My Requests</span>
@@ -270,7 +270,7 @@ export default function EmployeeRequestsPage() {
             <button
               key={opt.value}
               onClick={() => setSortBy(opt.value)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition ${
+              className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition cursor-pointer ${
                 sortBy === opt.value
                   ? "bg-[#141414] text-white"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
@@ -289,7 +289,7 @@ export default function EmployeeRequestsPage() {
             <button
               key={f.id}
               onClick={() => setActiveFilter(f.id)}
-              className={`px-3 py-1.5 text-xs font-bold whitespace-nowrap transition border-b-2 ${
+              className={`px-3 py-1.5 text-xs font-bold whitespace-nowrap transition border-b-2 cursor-pointer ${
                 activeFilter === f.id
                   ? "border-[#FFC600] text-[#141414]"
                   : "border-transparent text-gray-400 hover:text-gray-600"

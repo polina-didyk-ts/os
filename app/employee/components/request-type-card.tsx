@@ -33,7 +33,7 @@ export function RequestTypeCard({
   return (
     <button
       onClick={onClick}
-      className="bg-white rounded-2xl p-6 border-l-4 border-[#FFC600] shadow-sm hover:shadow-md transition text-left"
+      className="bg-white rounded-2xl p-6 border-l-4 border-[#FFC600] shadow-sm hover:shadow-md transition text-left cursor-pointer"
     >
       <div className="flex items-start justify-between mb-4">
         <div className="w-12 h-12 rounded-xl bg-[#FFC600]/15 flex items-center justify-center">
