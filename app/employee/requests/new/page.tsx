@@ -77,7 +77,7 @@ export default function NewRequestPage() {
               {requestType.title === "Order"
                 ? "Leave a request for anything you need — supplies, food, equipment. Specify the details and priority."
                 : requestType.title === "Problem"
-                  ? "Let us know about a problem in the office — we'll fix it as soon as possible."
+                  ? "Let us know about an issue — we'll look into it as soon as possible."
                   : requestType.title === "Question"
                     ? "We'll get back to you as soon as possible. Set a priority and describe your question."
                     : "Help us improve. Your ideas turn into real changes."}

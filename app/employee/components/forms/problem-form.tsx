@@ -67,11 +67,11 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
       {/* What */}
       <div>
         <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
-          What is broken?
+          What is the problem?
         </label>
         <Input
           type="text"
-          placeholder="E.g. air conditioner or printer"
+          placeholder="E.g. conditioner is not working"
           value={formData.what}
           onChange={(e) => setFormData({ ...formData, what: e.target.value })}
           required
@@ -85,7 +85,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
           Problem Description
         </label>
         <Textarea
-          placeholder="Describe in detail what is not working..."
+          placeholder="Describe in detail..."
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           required
