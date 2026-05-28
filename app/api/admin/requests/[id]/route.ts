@@ -20,12 +20,25 @@ export const PATCH = apiHandler(async (req, context) => {
     await commentsService.create(id, user.id, body.comment);
   }
 
+  const meta  = (updated.metadata ?? {}) as Record<string, unknown>;
+  const title =
+    updated.type === "order" || updated.type === "problem"
+      ? String(meta.what ?? "")
+      : updated.type === "question"
+      ? String(meta.question ?? "")
+      : String(meta.idea ?? "");
+
   await sendRequestUpdateEmail({
     to:           updated.user.email,
     userName:     updated.user.name ?? updated.user.email,
     ticketNumber: updated.ticketNumber,
     newStatus:    body.status,
     comment:      body.comment,
+    requestId:    updated.id,
+    requestType:  updated.type,
+    title,
+    priority:     updated.priority,
+    createdAt:    updated.createdAt,
   });
 
   return NextResponse.json(updated);

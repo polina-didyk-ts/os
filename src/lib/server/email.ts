@@ -15,6 +15,25 @@ const STATUS_COLORS: Record<string, string> = {
   rejected:    "#ef4444",
 };
 
+const TYPE_LABELS: Record<string, string> = {
+  order:    "Order",
+  problem:  "Problem",
+  question: "Question",
+  idea:     "Idea / Feedback",
+};
+
+const PRIORITY_LABELS: Record<string, string> = {
+  low:    "Low",
+  medium: "Medium",
+  high:   "High",
+};
+
+const PRIORITY_COLORS: Record<string, string> = {
+  low:    "#10b981",
+  medium: "#f59e0b",
+  high:   "#ef4444",
+};
+
 function createTransporter() {
   return nodemailer.createTransport({
     service: "gmail",
@@ -31,19 +50,34 @@ export interface RequestUpdateEmailOptions {
   ticketNumber: string;
   newStatus: string;
   comment?: string;
+  requestId: string;
+  requestType: string;
+  title: string;
+  priority: string;
+  createdAt: Date;
 }
 
 export async function sendRequestUpdateEmail(opts: RequestUpdateEmailOptions) {
-  const { to, userName, ticketNumber, newStatus, comment } = opts;
+  const { to, userName, ticketNumber, newStatus, comment, requestId, requestType, title, priority, createdAt } = opts;
 
   if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
     log.warn("Email not configured — skipping notification");
     return;
   }
 
-  const statusLabel = STATUS_LABELS[newStatus] ?? newStatus;
-  const statusColor = STATUS_COLORS[newStatus] ?? "#141414";
-  const firstName   = userName.split(" ")[0] || userName;
+  const statusLabel   = STATUS_LABELS[newStatus] ?? newStatus;
+  const statusColor   = STATUS_COLORS[newStatus] ?? "#141414";
+  const typeLabel     = TYPE_LABELS[requestType] ?? requestType;
+  const priorityLabel = PRIORITY_LABELS[priority] ?? priority;
+  const priorityColor = PRIORITY_COLORS[priority] ?? "#6b7280";
+  const firstName     = userName.split(" ")[0] || userName;
+  const appUrl        = process.env.NEXT_PUBLIC_BETTER_AUTH_URL ?? "";
+  const requestUrl    = `${appUrl}/employee/requests/${requestId}`;
+  const formattedDate = new Intl.DateTimeFormat("en-GB", {
+    day:   "numeric",
+    month: "long",
+    year:  "numeric",
+  }).format(createdAt);
 
   const commentBlock = comment
     ? `
@@ -71,14 +105,69 @@ export async function sendRequestUpdateEmail(opts: RequestUpdateEmailOptions) {
         <!-- Body -->
         <div style="padding:32px;">
           <p style="margin:0 0 8px;font-size:16px;color:#111827;">Hi, <strong>${firstName}</strong></p>
-          <p style="margin:0 0 24px;font-size:14px;color:#6b7280;">Your request <strong>#${ticketNumber}</strong> has been updated.</p>
+          <p style="margin:0 0 24px;font-size:14px;color:#6b7280;">Your request has been updated. Here are the details:</p>
+
+          <!-- Request details card -->
+          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:24px;">
+            <table style="width:100%;border-collapse:collapse;">
+              <tr>
+                <td style="padding:6px 0;vertical-align:top;">
+                  <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#9ca3af;">Ticket</span>
+                </td>
+                <td style="padding:6px 0;text-align:right;">
+                  <span style="font-size:13px;font-weight:700;color:#111827;">#${ticketNumber}</span>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:6px 0;vertical-align:top;">
+                  <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#9ca3af;">Type</span>
+                </td>
+                <td style="padding:6px 0;text-align:right;">
+                  <span style="font-size:13px;color:#374151;">${typeLabel}</span>
+                </td>
+              </tr>
+              ${title ? `
+              <tr>
+                <td style="padding:6px 0;vertical-align:top;">
+                  <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#9ca3af;">Subject</span>
+                </td>
+                <td style="padding:6px 0;text-align:right;">
+                  <span style="font-size:13px;color:#374151;">${title}</span>
+                </td>
+              </tr>` : ""}
+              <tr>
+                <td style="padding:6px 0;vertical-align:top;">
+                  <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#9ca3af;">Priority</span>
+                </td>
+                <td style="padding:6px 0;text-align:right;">
+                  <span style="font-size:12px;font-weight:700;color:${priorityColor};">${priorityLabel.toUpperCase()}</span>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:6px 0;vertical-align:top;">
+                  <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#9ca3af;">Created</span>
+                </td>
+                <td style="padding:6px 0;text-align:right;">
+                  <span style="font-size:13px;color:#374151;">${formattedDate}</span>
+                </td>
+              </tr>
+            </table>
+          </div>
 
           <!-- Status badge -->
+          <p style="margin:0 0 10px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#9ca3af;">Current status</p>
           <div style="display:inline-block;padding:8px 16px;background:${statusColor}20;border-radius:24px;border:1px solid ${statusColor}40;">
             <span style="font-size:13px;font-weight:700;color:${statusColor};">${statusLabel.toUpperCase()}</span>
           </div>
 
           ${commentBlock}
+
+          <!-- CTA button -->
+          <div style="margin-top:28px;">
+            <a href="${requestUrl}" style="display:inline-block;padding:12px 24px;background:#141414;color:#ffffff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600;">
+              View request →
+            </a>
+          </div>
 
           <hr style="margin:28px 0;border:none;border-top:1px solid #e5e7eb;" />
           <p style="margin:0;font-size:12px;color:#9ca3af;">
