@@ -12,6 +12,7 @@ interface QuestionFormProps {
 export function QuestionForm({ onSuccess }: QuestionFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState<{
     question: string;
     priority: string;
@@ -23,6 +24,13 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    const trimmedQuestion = formData.question.trim();
+    if (!trimmedQuestion) {
+      setFieldErrors({ question: "Please enter your question" });
+      return;
+    }
+    setFieldErrors({});
     setLoading(true);
 
     try {
@@ -31,7 +39,7 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type: "question",
-          question: formData.question,
+          question: trimmedQuestion,
           priority: formData.priority,
         }),
       });
@@ -65,11 +73,16 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
         <Textarea
           placeholder="Write your question here..."
           value={formData.question}
-          onChange={(e) => setFormData({ ...formData, question: e.target.value })}
-          required
+          onChange={(e) => {
+            setFormData({ ...formData, question: e.target.value });
+            if (fieldErrors.question) setFieldErrors({ ...fieldErrors, question: "" });
+          }}
           rows={8}
           className="w-full"
         />
+        {fieldErrors.question && (
+          <p className="text-red-500 text-xs mt-1">{fieldErrors.question}</p>
+        )}
       </div>
 
       {/* Priority */}
@@ -127,7 +140,7 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
       {/* Submit */}
       <Button
         type="submit"
-        disabled={loading || !formData.question}
+        disabled={loading || !formData.question.trim()}
         className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-semibold text-lg transition"
       >
         {loading ? "Submitting..." : "Submit Request →"}

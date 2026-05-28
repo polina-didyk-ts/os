@@ -12,6 +12,7 @@ interface IdeaFormProps {
 export function IdeaForm({ onSuccess }: IdeaFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState<{
     idea: string;
     priority: string;
@@ -23,6 +24,13 @@ export function IdeaForm({ onSuccess }: IdeaFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    const trimmedIdea = formData.idea.trim();
+    if (!trimmedIdea) {
+      setFieldErrors({ idea: "Please share your idea or feedback" });
+      return;
+    }
+    setFieldErrors({});
     setLoading(true);
 
     try {
@@ -31,7 +39,7 @@ export function IdeaForm({ onSuccess }: IdeaFormProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type: "idea",
-          idea: formData.idea,
+          idea: trimmedIdea,
           priority: formData.priority,
         }),
       });
@@ -66,8 +74,10 @@ export function IdeaForm({ onSuccess }: IdeaFormProps) {
           <Textarea
             placeholder="Share your thoughts, suggestions or feedback..."
             value={formData.idea}
-            onChange={(e) => setFormData({ ...formData, idea: e.target.value.slice(0, 500) })}
-            required
+            onChange={(e) => {
+              setFormData({ ...formData, idea: e.target.value.slice(0, 500) });
+              if (fieldErrors.idea) setFieldErrors({ ...fieldErrors, idea: "" });
+            }}
             rows={8}
             maxLength={500}
             className="w-full"
@@ -76,6 +86,9 @@ export function IdeaForm({ onSuccess }: IdeaFormProps) {
             {formData.idea.length} / 500
           </div>
         </div>
+        {fieldErrors.idea && (
+          <p className="text-red-500 text-xs mt-1">{fieldErrors.idea}</p>
+        )}
       </div>
 
       {/* Priority */}
@@ -128,7 +141,7 @@ export function IdeaForm({ onSuccess }: IdeaFormProps) {
       {/* Submit */}
       <Button
         type="submit"
-        disabled={loading || !formData.idea}
+        disabled={loading || !formData.idea.trim()}
         className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-semibold text-lg transition"
       >
         {loading ? "Submitting..." : "Submit Request →"}

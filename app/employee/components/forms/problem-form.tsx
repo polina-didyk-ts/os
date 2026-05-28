@@ -13,6 +13,7 @@ interface ProblemFormProps {
 export function ProblemForm({ onSuccess }: ProblemFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState<{
     what: string;
     description: string;
@@ -28,6 +29,17 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    const trimmedWhat        = formData.what.trim();
+    const trimmedDescription = formData.description.trim();
+    const errors: Record<string, string> = {};
+    if (!trimmedWhat)        errors.what        = "This field is required";
+    if (!trimmedDescription) errors.description = "Please describe the problem";
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+    setFieldErrors({});
     setLoading(true);
 
     try {
@@ -36,10 +48,10 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type: "problem",
-          what: formData.what,
-          description: formData.description,
+          what: trimmedWhat,
+          description: trimmedDescription,
           priority: formData.priority,
-          comment: formData.comment || undefined,
+          comment: formData.comment.trim() || undefined,
         }),
       });
 
@@ -73,10 +85,15 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
           type="text"
           placeholder="E.g. conditioner is not working"
           value={formData.what}
-          onChange={(e) => setFormData({ ...formData, what: e.target.value })}
-          required
+          onChange={(e) => {
+            setFormData({ ...formData, what: e.target.value });
+            if (fieldErrors.what) setFieldErrors({ ...fieldErrors, what: "" });
+          }}
           className="w-full"
         />
+        {fieldErrors.what && (
+          <p className="text-red-500 text-xs mt-1">{fieldErrors.what}</p>
+        )}
       </div>
 
       {/* Description */}
@@ -87,10 +104,15 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
         <Textarea
           placeholder="Describe in detail..."
           value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          required
+          onChange={(e) => {
+            setFormData({ ...formData, description: e.target.value });
+            if (fieldErrors.description) setFieldErrors({ ...fieldErrors, description: "" });
+          }}
           className="w-full"
         />
+        {fieldErrors.description && (
+          <p className="text-red-500 text-xs mt-1">{fieldErrors.description}</p>
+        )}
       </div>
 
       {/* Priority */}
@@ -156,7 +178,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
       {/* Submit */}
       <Button
         type="submit"
-        disabled={loading || !formData.what || !formData.description}
+        disabled={loading || !formData.what.trim() || !formData.description.trim()}
         className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-semibold text-lg transition"
       >
         {loading ? "Submitting..." : "Submit Request →"}

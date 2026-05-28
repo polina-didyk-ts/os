@@ -13,6 +13,7 @@ interface OrderFormProps {
 export function OrderForm({ onSuccess }: OrderFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState<{
     what: string;
     quantity: string;
@@ -28,6 +29,15 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    const trimmedWhat = formData.what.trim();
+    const errors: Record<string, string> = {};
+    if (!trimmedWhat) errors.what = "This field is required";
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+    setFieldErrors({});
     setLoading(true);
 
     try {
@@ -36,10 +46,10 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type: "order",
-          what: formData.what,
+          what: trimmedWhat,
           quantity: parseInt(formData.quantity, 10),
           priority: formData.priority,
-          comment: formData.comment || undefined,
+          comment: formData.comment.trim() || undefined,
         }),
       });
 
@@ -73,10 +83,15 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
           type="text"
           placeholder="E.g. Whiteboard markers"
           value={formData.what}
-          onChange={(e) => setFormData({ ...formData, what: e.target.value })}
-          required
+          onChange={(e) => {
+            setFormData({ ...formData, what: e.target.value });
+            if (fieldErrors.what) setFieldErrors({ ...fieldErrors, what: "" });
+          }}
           className="w-full bg-gray-50 border-gray-200"
         />
+        {fieldErrors.what && (
+          <p className="text-red-500 text-xs mt-1">{fieldErrors.what}</p>
+        )}
       </div>
 
       {/* Quantity */}
@@ -157,7 +172,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
       {/* Submit */}
       <Button
         type="submit"
-        disabled={loading || !formData.what}
+        disabled={loading || !formData.what.trim()}
         className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-semibold text-lg transition"
       >
         {loading ? "Submitting..." : "Submit Request →"}
