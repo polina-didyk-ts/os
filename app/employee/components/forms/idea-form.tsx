@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { AlertCircle } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
 import { Textarea } from "@/app/components/ui/textarea";
 import { PRIORITY_LEVELS } from "@/src/modules/requests/requests.dto";
@@ -46,13 +47,30 @@ export function IdeaForm({ onSuccess }: IdeaFormProps) {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to create request");
+        if (errorData.code === "VALIDATION_ERROR" && Array.isArray(errorData.details)) {
+          const MESSAGES: Record<string, string> = {
+            idea: "Please share your idea or feedback",
+          };
+          const mapped: Record<string, string> = {};
+          for (const d of errorData.details as { path: string; message: string }[]) {
+            if (d.path && MESSAGES[d.path]) mapped[d.path] = MESSAGES[d.path];
+          }
+          if (Object.keys(mapped).length > 0) {
+            setFieldErrors(mapped);
+          } else {
+            setError("Please check the highlighted fields");
+          }
+        } else {
+          setError(errorData.error || "Something went wrong. Please try again.");
+        }
+        setLoading(false);
+        return;
       }
 
       const data = await response.json();
       onSuccess(data.ticketNumber);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+    } catch {
+      setError("Something went wrong. Please try again.");
       setLoading(false);
     }
   };
@@ -60,8 +78,9 @@ export function IdeaForm({ onSuccess }: IdeaFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && (
-        <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
-          {error}
+        <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{error}</span>
         </div>
       )}
 
@@ -82,12 +101,15 @@ export function IdeaForm({ onSuccess }: IdeaFormProps) {
             maxLength={500}
             className="w-full"
           />
-          <div className="text-right text-xs text-gray-500 mt-1">
+          <div className={`text-right text-xs mt-1 ${formData.idea.length >= 500 ? "text-red-500 font-medium" : "text-gray-400"}`}>
             {formData.idea.length} / 500
           </div>
         </div>
         {fieldErrors.idea && (
-          <p className="text-red-500 text-xs mt-1">{fieldErrors.idea}</p>
+          <div className="flex items-center gap-1.5 mt-1.5">
+            <AlertCircle className="w-3.5 h-3.5 text-red-500 shrink-0" />
+            <span className="text-xs font-medium text-red-500">{fieldErrors.idea}</span>
+          </div>
         )}
       </div>
 

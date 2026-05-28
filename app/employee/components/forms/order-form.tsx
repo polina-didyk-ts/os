@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { AlertCircle } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Textarea } from "@/app/components/ui/textarea";
@@ -31,8 +32,24 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
     setError("");
 
     const trimmedWhat = formData.what.trim();
+    const rawQty      = formData.quantity;
+    const qty         = Number(rawQty);
     const errors: Record<string, string> = {};
+
     if (!trimmedWhat) errors.what = "This field is required";
+
+    if (!rawQty || rawQty.trim() === "") {
+      errors.quantity = "Please enter a quantity";
+    } else if (isNaN(qty)) {
+      errors.quantity = "Please enter a quantity";
+    } else if (!Number.isInteger(qty)) {
+      errors.quantity = "Quantity must be a whole number";
+    } else if (qty < 1) {
+      errors.quantity = "Quantity must be at least 1";
+    } else if (qty > 100) {
+      errors.quantity = "Quantity cannot be greater than 100";
+    }
+
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       return;
@@ -47,7 +64,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
         body: JSON.stringify({
           type: "order",
           what: trimmedWhat,
-          quantity: parseInt(formData.quantity, 10),
+          quantity: qty,
           priority: formData.priority,
           comment: formData.comment.trim() || undefined,
         }),
@@ -55,22 +72,42 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to create request");
+        if (errorData.code === "VALIDATION_ERROR" && Array.isArray(errorData.details)) {
+          const MESSAGES: Record<string, string> = {
+            what:     "This field is required",
+            quantity: "Please enter a valid quantity",
+            comment:  "Maximum 500 characters",
+          };
+          const mapped: Record<string, string> = {};
+          for (const d of errorData.details as { path: string; message: string }[]) {
+            if (d.path && MESSAGES[d.path]) mapped[d.path] = MESSAGES[d.path];
+          }
+          if (Object.keys(mapped).length > 0) {
+            setFieldErrors(mapped);
+          } else {
+            setError("Please check the highlighted fields");
+          }
+        } else {
+          setError(errorData.error || "Something went wrong. Please try again.");
+        }
+        setLoading(false);
+        return;
       }
 
       const data = await response.json();
       onSuccess(data.ticketNumber);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+    } catch {
+      setError("Something went wrong. Please try again.");
       setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} noValidate className="space-y-6">
       {error && (
-        <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
-          {error}
+        <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{error}</span>
         </div>
       )}
 
@@ -83,6 +120,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
           type="text"
           placeholder="E.g. Whiteboard markers"
           value={formData.what}
+          maxLength={255}
           onChange={(e) => {
             setFormData({ ...formData, what: e.target.value });
             if (fieldErrors.what) setFieldErrors({ ...fieldErrors, what: "" });
@@ -90,7 +128,10 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
           className="w-full bg-gray-50 border-gray-200"
         />
         {fieldErrors.what && (
-          <p className="text-red-500 text-xs mt-1">{fieldErrors.what}</p>
+          <div className="flex items-center gap-1.5 mt-1.5">
+            <AlertCircle className="w-3.5 h-3.5 text-red-500 shrink-0" />
+            <span className="text-xs font-medium text-red-500">{fieldErrors.what}</span>
+          </div>
         )}
       </div>
 
@@ -101,12 +142,19 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
         </label>
         <Input
           type="number"
-          min="1"
           value={formData.quantity}
-          onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-          required
-          className="w-full bg-gray-50 border-gray-200"
+          onChange={(e) => {
+            setFormData({ ...formData, quantity: e.target.value });
+            if (fieldErrors.quantity) setFieldErrors({ ...fieldErrors, quantity: "" });
+          }}
+          className={`w-full bg-gray-50 ${fieldErrors.quantity ? "border-red-400 focus-visible:ring-red-400" : "border-gray-200"}`}
         />
+        {fieldErrors.quantity && (
+          <div className="flex items-center gap-1.5 mt-1.5">
+            <AlertCircle className="w-3.5 h-3.5 text-red-500 shrink-0" />
+            <span className="text-xs font-medium text-red-500">{fieldErrors.quantity}</span>
+          </div>
+        )}
       </div>
 
       {/* Priority */}
@@ -164,15 +212,19 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
         <Textarea
           placeholder="Please specify color or model if relevant..."
           value={formData.comment}
-          onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
+          maxLength={500}
+          onChange={(e) => setFormData({ ...formData, comment: e.target.value.slice(0, 500) })}
           className="w-full bg-gray-50 border-gray-200 min-h-24"
         />
+        <div className={`text-right text-xs mt-1 ${formData.comment.length >= 500 ? "text-red-500 font-medium" : "text-gray-400"}`}>
+          {formData.comment.length} / 500
+        </div>
       </div>
 
       {/* Submit */}
       <Button
         type="submit"
-        disabled={loading || !formData.what.trim()}
+        disabled={loading || !formData.what.trim() || !formData.quantity}
         className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-semibold text-lg transition"
       >
         {loading ? "Submitting..." : "Submit Request →"}

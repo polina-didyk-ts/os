@@ -33,7 +33,7 @@ export type CreateOrderRequestDto = z.infer<typeof createOrderRequestSchema>;
 export const createProblemRequestSchema = baseRequestSchema.extend({
   type: z.literal("problem"),
   what: z.string().min(1, "Поле обов'язкове").max(255),
-  description: z.string().min(1, "Поле обов'язкове").max(1000),
+  description: z.string().max(1000).optional(),
   comment: z.string().max(500).optional(),
 });
 

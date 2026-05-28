@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { AlertCircle } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Textarea } from "@/app/components/ui/textarea";
@@ -33,8 +34,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
     const trimmedWhat        = formData.what.trim();
     const trimmedDescription = formData.description.trim();
     const errors: Record<string, string> = {};
-    if (!trimmedWhat)        errors.what        = "This field is required";
-    if (!trimmedDescription) errors.description = "Please describe the problem";
+    if (!trimmedWhat) errors.what = "This field is required";
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       return;
@@ -49,7 +49,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
         body: JSON.stringify({
           type: "problem",
           what: trimmedWhat,
-          description: trimmedDescription,
+          description: trimmedDescription || undefined,
           priority: formData.priority,
           comment: formData.comment.trim() || undefined,
         }),
@@ -57,13 +57,32 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to create request");
+        if (errorData.code === "VALIDATION_ERROR" && Array.isArray(errorData.details)) {
+          const MESSAGES: Record<string, string> = {
+            what:        "This field is required",
+            description: "Maximum 1000 characters",
+            comment:     "Maximum 500 characters",
+          };
+          const mapped: Record<string, string> = {};
+          for (const d of errorData.details as { path: string; message: string }[]) {
+            if (d.path && MESSAGES[d.path]) mapped[d.path] = MESSAGES[d.path];
+          }
+          if (Object.keys(mapped).length > 0) {
+            setFieldErrors(mapped);
+          } else {
+            setError("Please check the highlighted fields");
+          }
+        } else {
+          setError(errorData.error || "Something went wrong. Please try again.");
+        }
+        setLoading(false);
+        return;
       }
 
       const data = await response.json();
       onSuccess(data.ticketNumber);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+    } catch {
+      setError("Something went wrong. Please try again.");
       setLoading(false);
     }
   };
@@ -71,8 +90,9 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && (
-        <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
-          {error}
+        <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{error}</span>
         </div>
       )}
 
@@ -85,6 +105,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
           type="text"
           placeholder="E.g. conditioner is not working"
           value={formData.what}
+          maxLength={255}
           onChange={(e) => {
             setFormData({ ...formData, what: e.target.value });
             if (fieldErrors.what) setFieldErrors({ ...fieldErrors, what: "" });
@@ -92,7 +113,10 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
           className="w-full"
         />
         {fieldErrors.what && (
-          <p className="text-red-500 text-xs mt-1">{fieldErrors.what}</p>
+          <div className="flex items-center gap-1.5 mt-1.5">
+            <AlertCircle className="w-3.5 h-3.5 text-red-500 shrink-0" />
+            <span className="text-xs font-medium text-red-500">{fieldErrors.what}</span>
+          </div>
         )}
       </div>
 
@@ -104,14 +128,21 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
         <Textarea
           placeholder="Describe in detail..."
           value={formData.description}
+          maxLength={1000}
           onChange={(e) => {
-            setFormData({ ...formData, description: e.target.value });
+            setFormData({ ...formData, description: e.target.value.slice(0, 1000) });
             if (fieldErrors.description) setFieldErrors({ ...fieldErrors, description: "" });
           }}
           className="w-full"
         />
+        <div className={`text-right text-xs mt-1 ${formData.description.length >= 1000 ? "text-red-500 font-medium" : "text-gray-400"}`}>
+          {formData.description.length} / 1000
+        </div>
         {fieldErrors.description && (
-          <p className="text-red-500 text-xs mt-1">{fieldErrors.description}</p>
+          <div className="flex items-center gap-1.5 mt-1.5">
+            <AlertCircle className="w-3.5 h-3.5 text-red-500 shrink-0" />
+            <span className="text-xs font-medium text-red-500">{fieldErrors.description}</span>
+          </div>
         )}
       </div>
 
@@ -170,15 +201,19 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
         <Textarea
           placeholder="Any additional information..."
           value={formData.comment}
-          onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
+          maxLength={500}
+          onChange={(e) => setFormData({ ...formData, comment: e.target.value.slice(0, 500) })}
           className="w-full"
         />
+        <div className={`text-right text-xs mt-1 ${formData.comment.length >= 500 ? "text-red-500 font-medium" : "text-gray-400"}`}>
+          {formData.comment.length} / 500
+        </div>
       </div>
 
       {/* Submit */}
       <Button
         type="submit"
-        disabled={loading || !formData.what.trim() || !formData.description.trim()}
+        disabled={loading || !formData.what.trim()}
         className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-semibold text-lg transition"
       >
         {loading ? "Submitting..." : "Submit Request →"}
