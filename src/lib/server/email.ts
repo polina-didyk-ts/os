@@ -5,33 +5,33 @@ const log = logger.child({ module: "email" });
 
 const STATUS_LABELS: Record<string, string> = {
   in_progress: "In Progress",
-  completed:   "Done",
-  rejected:    "Rejected",
+  completed: "Done",
+  rejected: "Rejected",
 };
 
 const STATUS_COLORS: Record<string, string> = {
   in_progress: "#FFC600",
-  completed:   "#10b981",
-  rejected:    "#ef4444",
+  completed: "#10b981",
+  rejected: "#ef4444",
 };
 
 const TYPE_LABELS: Record<string, string> = {
-  order:    "Order",
-  problem:  "Problem",
+  order: "Order",
+  problem: "Problem",
   question: "Question",
-  idea:     "Idea / Feedback",
+  idea: "Idea / Feedback",
 };
 
 const PRIORITY_LABELS: Record<string, string> = {
-  low:    "Low",
+  low: "Low",
   medium: "Medium",
-  high:   "High",
+  high: "High",
 };
 
 const PRIORITY_COLORS: Record<string, string> = {
-  low:    "#10b981",
+  low: "#10b981",
   medium: "#f59e0b",
-  high:   "#ef4444",
+  high: "#ef4444",
 };
 
 function createTransporter() {
@@ -58,25 +58,36 @@ export interface RequestUpdateEmailOptions {
 }
 
 export async function sendRequestUpdateEmail(opts: RequestUpdateEmailOptions) {
-  const { to, userName, ticketNumber, newStatus, comment, requestId, requestType, title, priority, createdAt } = opts;
+  const {
+    to,
+    userName,
+    ticketNumber,
+    newStatus,
+    comment,
+    requestId,
+    requestType,
+    title,
+    priority,
+    createdAt,
+  } = opts;
 
   if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
     log.warn("Email not configured — skipping notification");
     return;
   }
 
-  const statusLabel   = STATUS_LABELS[newStatus] ?? newStatus;
-  const statusColor   = STATUS_COLORS[newStatus] ?? "#141414";
-  const typeLabel     = TYPE_LABELS[requestType] ?? requestType;
+  const statusLabel = STATUS_LABELS[newStatus] ?? newStatus;
+  const statusColor = STATUS_COLORS[newStatus] ?? "#141414";
+  const typeLabel = TYPE_LABELS[requestType] ?? requestType;
   const priorityLabel = PRIORITY_LABELS[priority] ?? priority;
   const priorityColor = PRIORITY_COLORS[priority] ?? "#6b7280";
-  const firstName     = userName.split(" ")[0] || userName;
-  const appUrl        = process.env.NEXT_PUBLIC_BETTER_AUTH_URL ?? "";
-  const requestUrl    = `${appUrl}/employee/requests/${requestId}`;
+  const firstName = userName.split(" ")[0] || userName;
+  const appUrl = process.env.NEXT_PUBLIC_BETTER_AUTH_URL ?? "";
+  const requestUrl = `${appUrl}/employee/requests/${requestId}`;
   const formattedDate = new Intl.DateTimeFormat("en-GB", {
-    day:   "numeric",
+    day: "numeric",
     month: "long",
-    year:  "numeric",
+    year: "numeric",
   }).format(createdAt);
 
   const commentBlock = comment
@@ -126,7 +137,9 @@ export async function sendRequestUpdateEmail(opts: RequestUpdateEmailOptions) {
                   <span style="font-size:13px;color:#374151;">${typeLabel}</span>
                 </td>
               </tr>
-              ${title ? `
+              ${
+                title
+                  ? `
               <tr>
                 <td style="padding:6px 0;vertical-align:top;">
                   <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#9ca3af;">Subject</span>
@@ -134,7 +147,9 @@ export async function sendRequestUpdateEmail(opts: RequestUpdateEmailOptions) {
                 <td style="padding:6px 0;text-align:right;">
                   <span style="font-size:13px;color:#374151;">${title}</span>
                 </td>
-              </tr>` : ""}
+              </tr>`
+                  : ""
+              }
               <tr>
                 <td style="padding:6px 0;vertical-align:top;">
                   <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#9ca3af;">Priority</span>
