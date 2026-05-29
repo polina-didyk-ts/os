@@ -212,9 +212,10 @@ export default function AdminDashboard() {
                 const conf = TYPE_CONFIG[req.type];
                 const Icon = conf.icon;
                 return (
-                  <div
+                  <Link
                     key={req.id}
-                    className="bg-white rounded-2xl px-4 py-3 flex items-center gap-3"
+                    href={`/admin/requests/${req.id}`}
+                    className="bg-white rounded-2xl px-4 py-3 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition"
                     data-testid="admin-request-card"
                   >
                     <div
@@ -236,7 +237,7 @@ export default function AdminDashboard() {
                       </p>
                     </div>
                     <ChevronRight className="w-4 h-4 text-gray-400 shrink-0" />
-                  </div>
+                  </Link>
                 );
               })
             )}

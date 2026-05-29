@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
-  SlidersHorizontal,
   Menu,
   ShoppingCart,
   Wrench,
@@ -177,9 +176,6 @@ export default function AdminRequestsPage() {
           </button>
           <span className="text-lg font-bold text-gray-900">All Requests</span>
         </div>
-        <button className="p-2 hover:bg-gray-100 rounded-lg transition">
-          <SlidersHorizontal className="w-5 h-5 text-gray-700" />
-        </button>
       </header>
 
       {/* Type filter */}
@@ -259,7 +255,7 @@ export default function AdminRequestsPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
-                        <div>
+                        <div className="min-w-0">
                           <div className="flex items-center gap-1.5 mb-0.5">
                             <span className={`w-2 h-2 rounded-full shrink-0 ${priorityConf.dotClass}`} />
                             <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">
