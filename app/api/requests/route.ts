@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { apiHandler, requireSession } from "@/src/lib/server";
+import { apiHandler, requireSession, sendNewRequestAdminEmail } from "@/src/lib/server";
 import { requestsService } from "@/src/modules/requests";
 import {
   createOrderRequestSchema,
@@ -29,6 +29,23 @@ export const POST = apiHandler(async (req) => {
   }
 
   const request = await requestsService.create(session.user.id, data);
+
+  const meta  = (request.metadata ?? {}) as Record<string, unknown>;
+  const title =
+    data.type === "order" || data.type === "problem"
+      ? String(meta.what ?? "")
+      : data.type === "question"
+      ? String(meta.question ?? "")
+      : String(meta.idea ?? "");
+
+  await sendNewRequestAdminEmail({
+    employeeName: session.user.name ?? session.user.email,
+    requestId:    request.id,
+    requestType:  request.type,
+    title,
+    priority:     request.priority,
+    ticketNumber: request.ticketNumber,
+  });
 
   return NextResponse.json(request, { status: 201 });
 });

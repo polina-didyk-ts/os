@@ -14,4 +14,4 @@ export { auth, getSession, requireSession, getOrganizationContext, requireRole }
 export { apiHandler } from "./api-handler";
 
 // Email
-export { sendRequestUpdateEmail } from "./email";
+export { sendRequestUpdateEmail, sendNewRequestAdminEmail } from "./email";
