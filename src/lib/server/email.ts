@@ -62,11 +62,11 @@ export async function sendNewRequestAdminEmail(opts: NewRequestAdminEmailOptions
     return;
   }
 
-  const typeLabel     = TYPE_LABELS[requestType] ?? requestType;
+  const typeLabel = TYPE_LABELS[requestType] ?? requestType;
   const priorityLabel = PRIORITY_LABELS[priority] ?? priority;
   const priorityColor = PRIORITY_COLORS[priority] ?? "#6b7280";
-  const firstName     = employeeName.split(" ")[0] || employeeName;
-  const requestUrl    = `${process.env.NEXT_PUBLIC_BETTER_AUTH_URL ?? ""}/employee/signin`;
+  const firstName = employeeName.split(" ")[0] || employeeName;
+  const requestUrl = `${process.env.NEXT_PUBLIC_BETTER_AUTH_URL ?? ""}/employee/signin`;
 
   const html = `
     <!DOCTYPE html>
@@ -115,7 +115,9 @@ export async function sendNewRequestAdminEmail(opts: NewRequestAdminEmailOptions
                   <span style="font-size:13px;color:#374151;">${typeLabel}</span>
                 </td>
               </tr>
-              ${title ? `
+              ${
+                title
+                  ? `
               <tr>
                 <td style="padding:6px 0;vertical-align:top;">
                   <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#9ca3af;">Subject</span>
@@ -123,7 +125,9 @@ export async function sendNewRequestAdminEmail(opts: NewRequestAdminEmailOptions
                 <td style="padding:6px 0;text-align:right;">
                   <span style="font-size:13px;color:#374151;">${title}</span>
                 </td>
-              </tr>` : ""}
+              </tr>`
+                  : ""
+              }
               <tr>
                 <td style="padding:6px 0;vertical-align:top;">
                   <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#9ca3af;">Priority</span>
