@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { signIn, authClient } from "@/src/lib/client";
 import { Logo } from "@/app/components/Logo";
@@ -17,8 +17,10 @@ import {
   CardTitle,
 } from "@/app/components/ui/card";
 
-export default function SignInPage() {
+function SignInContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") ?? "/app";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -33,7 +35,7 @@ export default function SignInPage() {
       { email, password },
       {
         onSuccess: () => {
-          router.push("/app");
+          router.push(callbackUrl);
         },
         onError: (ctx) => {
           setError(ctx.error.message || "Sign in failed");
@@ -46,7 +48,7 @@ export default function SignInPage() {
   const handleGoogleSignIn = async () => {
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: "/app",
+      callbackURL: callbackUrl,
     });
   };
 
@@ -189,5 +191,13 @@ export default function SignInPage() {
         </Card>
       </div>
     </main>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense>
+      <SignInContent />
+    </Suspense>
   );
 }
