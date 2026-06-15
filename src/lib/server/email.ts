@@ -54,7 +54,7 @@ export interface NewRequestAdminEmailOptions {
 }
 
 export async function sendNewRequestAdminEmail(opts: NewRequestAdminEmailOptions) {
-  const { employeeName, requestType, title, priority, ticketNumber } = opts;
+  const { employeeName, requestId, requestType, title, priority, ticketNumber } = opts;
 
   const adminEmail = process.env.ADMIN_EMAIL;
   if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD || !adminEmail) {
@@ -66,6 +66,7 @@ export async function sendNewRequestAdminEmail(opts: NewRequestAdminEmailOptions
   const priorityLabel = PRIORITY_LABELS[priority] ?? priority;
   const priorityColor = PRIORITY_COLORS[priority] ?? "#6b7280";
   const firstName     = employeeName.split(" ")[0] || employeeName;
+  const requestUrl    = `${process.env.NEXT_PUBLIC_BETTER_AUTH_URL ?? ""}/admin/requests/${requestId}`;
 
   const html = `
     <!DOCTYPE html>
@@ -132,6 +133,13 @@ export async function sendNewRequestAdminEmail(opts: NewRequestAdminEmailOptions
                 </td>
               </tr>
             </table>
+          </div>
+
+          <!-- CTA button -->
+          <div style="margin-top:4px;margin-bottom:28px;">
+            <a href="${requestUrl}" style="display:inline-block;padding:12px 24px;background:#141414;color:#ffffff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600;">
+              View in admin →
+            </a>
           </div>
 
           <hr style="margin:28px 0;border:none;border-top:1px solid #e5e7eb;" />
