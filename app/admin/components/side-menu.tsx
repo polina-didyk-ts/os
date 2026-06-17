@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Megaphone, BarChart2, LogOut } from "lucide-react";
 import { useSession, signOut } from "@/src/lib/client";
 import { useSideMenu } from "./side-menu-context";
@@ -16,8 +17,7 @@ function getInitials(name: string | null | undefined, email: string): string {
 }
 
 const COMING_SOON_ITEMS = [
-  { icon: Megaphone, label: "Announcements" },
-  { icon: BarChart2, label: "Analytics"     },
+  { icon: BarChart2, label: "Analytics" },
 ];
 
 export function SideMenu() {
@@ -73,8 +73,19 @@ export function SideMenu() {
           </span>
         </div>
 
-        {/* Coming soon items */}
+        {/* Nav items */}
         <nav className="flex-1 py-4 px-5">
+          {/* Announcements */}
+          <Link
+            href="/admin/announcements"
+            onClick={close}
+            className="flex items-center gap-3 py-4 border-b border-gray-100 text-gray-700 hover:text-gray-900 transition"
+          >
+            <Megaphone className="w-5 h-5" strokeWidth={1.5} />
+            <span className="text-sm font-medium">Announcements</span>
+          </Link>
+
+          {/* Coming soon items */}
           {COMING_SOON_ITEMS.map(({ icon: Icon, label }) => (
             <div
               key={label}

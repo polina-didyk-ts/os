@@ -1,0 +1,326 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import { AlertCircle, Megaphone } from "lucide-react";
+import { Button } from "@/app/components/ui/button";
+import { Input } from "@/app/components/ui/input";
+import { Textarea } from "@/app/components/ui/textarea";
+import { AdminHeader, BottomNavigation } from "../components";
+
+interface Employee {
+  id: string;
+  name: string | null;
+  email: string;
+}
+
+function parseManualEmails(raw: string): string[] {
+  return raw
+    .split(/[\n,]+/)
+    .map((s) => s.trim().toLowerCase())
+    .filter((s) => s.length > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s));
+}
+
+export default function AnnouncementsPage() {
+  const [employees, setEmployees]         = useState<Employee[]>([]);
+  const [loadingUsers, setLoadingUsers]   = useState(true);
+  const [selected, setSelected]           = useState<Set<string>>(new Set());
+  const [subject, setSubject]             = useState("");
+  const [message, setMessage]             = useState("");
+  const [manualEmails, setManualEmails]   = useState("");
+  const [loading, setLoading]             = useState(false);
+  const [error, setError]                 = useState("");
+  const [fieldErrors, setFieldErrors]     = useState<Record<string, string>>({});
+  const [successCount, setSuccessCount]   = useState<number | null>(null);
+
+  const fetchEmployees = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/users");
+      if (!res.ok) throw new Error();
+      setEmployees(await res.json());
+    } catch {
+      setError("Failed to load employees");
+    } finally {
+      setLoadingUsers(false);
+    }
+  }, []);
+
+  useEffect(() => { fetchEmployees(); }, [fetchEmployees]);
+
+  const toggleEmployee = (email: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      next.has(email) ? next.delete(email) : next.add(email);
+      return next;
+    });
+  };
+
+  const toggleAll = () => {
+    if (selected.size === employees.length) {
+      setSelected(new Set());
+    } else {
+      setSelected(new Set(employees.map((e) => e.email)));
+    }
+  };
+
+  const parsedManual  = parseManualEmails(manualEmails);
+  const combined      = Array.from(new Set([...selected, ...parsedManual]));
+  const recipientCount = combined.length;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setSuccessCount(null);
+
+    const errors: Record<string, string> = {};
+    if (!subject.trim())  errors.subject = "Subject is required";
+    if (!message.trim())  errors.message = "Message is required";
+    if (recipientCount === 0) errors.recipients = "Add at least one recipient";
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+    setFieldErrors({});
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/admin/announcements", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subject: subject.trim(),
+          message: message.trim(),
+          recipientEmails: combined,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        setError(data.error || "Something went wrong. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      const data = await res.json();
+      setSuccessCount(data.sent);
+      setSubject("");
+      setMessage("");
+      setManualEmails("");
+      setSelected(new Set());
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <main className="min-h-screen bg-gray-50 flex flex-col">
+      <AdminHeader />
+
+      <div className="flex-1 pb-28 px-4 py-5 flex flex-col gap-5 max-w-xl mx-auto w-full">
+        {/* Title */}
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400">
+            ADMIN
+          </p>
+          <h1 className="text-2xl font-bold text-gray-900 mt-0.5 flex items-center gap-2">
+            <Megaphone className="w-6 h-6" strokeWidth={1.5} />
+            Announcements
+          </h1>
+        </div>
+
+        {/* Success */}
+        {successCount !== null && (
+          <div className="flex items-center gap-2 p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm font-medium">
+            ✓ Sent to {successCount} recipient{successCount !== 1 ? "s" : ""}
+          </div>
+        )}
+
+        {/* Error */}
+        {error && (
+          <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>{error}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Subject */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
+              Subject
+            </label>
+            <Input
+              type="text"
+              placeholder="E.g. Office closed on Friday"
+              value={subject}
+              maxLength={100}
+              onChange={(e) => {
+                setSubject(e.target.value);
+                if (fieldErrors.subject) setFieldErrors({ ...fieldErrors, subject: "" });
+              }}
+              className="w-full"
+            />
+            <div className={`text-right text-xs mt-1 ${subject.length >= 100 ? "text-red-500 font-medium" : "text-gray-400"}`}>
+              {subject.length} / 100
+            </div>
+            {fieldErrors.subject && (
+              <div className="flex items-center gap-1.5 mt-1">
+                <AlertCircle className="w-3.5 h-3.5 text-red-500 shrink-0" />
+                <span className="text-xs font-medium text-red-500">{fieldErrors.subject}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Message */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
+              Message
+            </label>
+            <Textarea
+              placeholder="Write your announcement here..."
+              value={message}
+              maxLength={2000}
+              rows={8}
+              onChange={(e) => {
+                setMessage(e.target.value.slice(0, 2000));
+                if (fieldErrors.message) setFieldErrors({ ...fieldErrors, message: "" });
+              }}
+              className="w-full"
+            />
+            <div className={`text-right text-xs mt-1 ${message.length >= 2000 ? "text-red-500 font-medium" : "text-gray-400"}`}>
+              {message.length} / 2000
+            </div>
+            {fieldErrors.message && (
+              <div className="flex items-center gap-1.5 mt-1">
+                <AlertCircle className="w-3.5 h-3.5 text-red-500 shrink-0" />
+                <span className="text-xs font-medium text-red-500">{fieldErrors.message}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Recipients */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900 uppercase mb-3">
+              Recipients
+            </label>
+
+            {/* Employee multiselect */}
+            <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-3">
+              {loadingUsers ? (
+                <div className="p-4 space-y-2">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="h-4 bg-gray-100 rounded animate-pulse" />
+                  ))}
+                </div>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={toggleAll}
+                    className="w-full flex items-center gap-3 px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition text-left"
+                  >
+                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${
+                      selected.size === employees.length && employees.length > 0
+                        ? "bg-[#141414] border-[#141414]"
+                        : "border-gray-300"
+                    }`}>
+                      {selected.size === employees.length && employees.length > 0 && (
+                        <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 10 8">
+                          <path d="M1 4l3 3 5-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      )}
+                    </div>
+                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                      Select all ({employees.length})
+                    </span>
+                  </button>
+
+                  <div className="max-h-48 overflow-y-auto">
+                    {employees.map((emp) => (
+                      <button
+                        key={emp.id}
+                        type="button"
+                        onClick={() => {
+                          toggleEmployee(emp.email);
+                          if (fieldErrors.recipients) setFieldErrors({ ...fieldErrors, recipients: "" });
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-3 border-b border-gray-50 last:border-0 hover:bg-gray-50 transition text-left"
+                      >
+                        <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${
+                          selected.has(emp.email)
+                            ? "bg-[#141414] border-[#141414]"
+                            : "border-gray-300"
+                        }`}>
+                          {selected.has(emp.email) && (
+                            <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 10 8">
+                              <path d="M1 4l3 3 5-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium text-gray-900 truncate">
+                            {emp.name ?? emp.email}
+                          </p>
+                          {emp.name && (
+                            <p className="text-xs text-gray-400 truncate">{emp.email}</p>
+                          )}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Manual emails */}
+            <label className="block text-xs font-medium text-gray-500 uppercase mb-2">
+              Or add emails manually
+            </label>
+            <Textarea
+              placeholder={"john@example.com, jane@example.com\nor one per line"}
+              value={manualEmails}
+              rows={3}
+              onChange={(e) => {
+                setManualEmails(e.target.value);
+                if (fieldErrors.recipients) setFieldErrors({ ...fieldErrors, recipients: "" });
+              }}
+              className="w-full text-sm"
+            />
+            {parsedManual.length > 0 && (
+              <p className="text-xs text-gray-400 mt-1">{parsedManual.length} valid email{parsedManual.length !== 1 ? "s" : ""} detected</p>
+            )}
+
+            {fieldErrors.recipients && (
+              <div className="flex items-center gap-1.5 mt-2">
+                <AlertCircle className="w-3.5 h-3.5 text-red-500 shrink-0" />
+                <span className="text-xs font-medium text-red-500">{fieldErrors.recipients}</span>
+              </div>
+            )}
+
+            {/* Recipient count */}
+            {recipientCount > 0 && (
+              <div className="mt-3 px-3 py-2 bg-[#141414]/5 rounded-lg">
+                <p className="text-xs font-semibold text-[#141414]">
+                  {recipientCount} recipient{recipientCount !== 1 ? "s" : ""} selected
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Submit */}
+          <Button
+            type="submit"
+            disabled={loading || recipientCount === 0 || !subject.trim() || !message.trim()}
+            className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-semibold text-lg transition"
+          >
+            {loading ? "Sending..." : `Send Announcement${recipientCount > 0 ? ` → ${recipientCount}` : ""}`}
+          </Button>
+        </form>
+      </div>
+
+      <BottomNavigation />
+    </main>
+  );
+}
