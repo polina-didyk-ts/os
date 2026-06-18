@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Menu, Bell } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useSession } from "@/src/lib/client";
 import { useSideMenu } from "./side-menu-context";
 
@@ -14,14 +15,25 @@ function getInitial(name: string | null | undefined, email: string): string {
 export function EmployeeHeader() {
   const { toggle } = useSideMenu();
   const { data: session } = useSession();
+  const pathname = usePathname();
   const [unreadCount, setUnreadCount] = useState(0);
 
-  useEffect(() => {
+  const fetchUnread = useCallback(() => {
     fetch("/api/employee/announcements/unread-count")
       .then((r) => r.json())
       .then((data) => setUnreadCount(data.count ?? 0))
       .catch(() => {});
   }, []);
+
+  useEffect(() => {
+    fetchUnread();
+  }, [fetchUnread, pathname]);
+
+  useEffect(() => {
+    const onVisible = () => { if (document.visibilityState === "visible") fetchUnread(); };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
+  }, [fetchUnread]);
 
   const user = session?.user;
   const initial = getInitial(user?.name, user?.email ?? "");
