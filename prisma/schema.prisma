@@ -19,12 +19,13 @@ model User {
   banned        Boolean?  @default(false)
   emailVerified Boolean   @default(false)
   image         String?
-  accounts      Account[]
-  comments      Comment[]
-  memberships   Member[]
-  notes         Note[]
-  requests      Request[]
-  sessions      Session[]
+  accounts               Account[]
+  comments               Comment[]
+  memberships            Member[]
+  notes                  Note[]
+  requests               Request[]
+  sessions               Session[]
+  announcementRecipients AnnouncementRecipient[]
 
   @@map("users")
 }
@@ -174,4 +175,27 @@ model Comment {
 
   @@index([requestId])
   @@map("comments")
+}
+
+model Announcement {
+  id         String                    @id @default(cuid())
+  subject    String
+  message    String
+  createdAt  DateTime                  @default(now())
+  recipients AnnouncementRecipient[]
+
+  @@map("announcements")
+}
+
+model AnnouncementRecipient {
+  id             String       @id @default(cuid())
+  announcementId String
+  userId         String
+  readAt         DateTime?
+  announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([announcementId, userId])
+  @@index([userId])
+  @@map("announcement_recipients")
 }
