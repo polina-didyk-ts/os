@@ -1,5 +1,7 @@
 # AI Agent Instructions
 
+> For product/business context (features, email flows, env vars, operational notes) see [docs/CONTEXT.md](docs/CONTEXT.md).
+
 ## Architecture Stack
 
 | Layer            | Technology            | Location                   |
