@@ -140,6 +140,55 @@ Active testing phase:
 - Office/Location filtering for multi-office support
 - Location field on request form (Office / Remote)
 
+## Design System
+
+### Color Palette
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `primary` / foreground | `#141414` | Text, buttons, icons, avatar bg |
+| `accent` / brand | `#FFC600` | Highlights, focus rings, badges, CTAs on dark bg |
+| `background` | `#F2F2F2` | Page background |
+| `card` | `#FFFFFF` | Cards, drawers, modals, inputs |
+| `border` | `#E0E0E0` | Dividers, input borders |
+| `muted-foreground` | `hsl(0 0% 45%)` | Secondary text, placeholders |
+| `success` | `#10B981` | Success states |
+| `destructive` | `#EF4444` | Errors, delete actions |
+| `warning` | `#FFC600` | Warnings (same as accent) |
+
+Brand yellow scale: `brand-50` (#fffbeb) → `brand-500/600` (#FFC600) → `brand-900` (#78350f)
+
+### Border Radius
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `radius-sm` | 0.375rem | Small elements (badges, chips) |
+| `radius-md` | 0.5rem | Inputs |
+| `radius-lg` | 0.75rem | Default — cards, buttons |
+| `radius-xl` | 1rem | Large cards, modals |
+
+### Shadows
+Subtle, low-opacity shadows (`rgb(0 0 0 / 0.08)` base):
+`shadow-sm` → `shadow-md` → `shadow-lg` → `shadow-xl`
+
+### Design Principles
+- **Mobile-first** — bottom navigation, full-width buttons, thumb-friendly tap targets
+- **Minimalist** — #141414 on #F2F2F2, yellow only for accent/highlight, no decorative elements
+- **No dark mode** — single light theme only
+- **Consistent rounding** — `rounded-xl` (1rem) for cards/panels, `rounded-lg` (0.75rem) for buttons/inputs
+- **Typography** — no custom fonts, Tailwind defaults; `font-bold` for headings, `text-sm` for body, `text-xs uppercase tracking-widest` for labels/captions
+- **Email branding** — dark header `#141414`, yellow accent `#FFC600`, white body
+
+### Key UI Patterns
+- Page background: `bg-gray-50` (`#F2F2F2`)
+- Cards: `bg-white` with `border border-gray-200 rounded-xl`
+- Primary button: `bg-[#141414] text-white hover:bg-black rounded-lg`
+- Section labels: `text-xs font-semibold uppercase tracking-widest text-gray-400`
+- Status badges: colored dot + text, no filled background
+- Admin role badge: `bg-[#141414] text-white rounded-full px-3 py-1 text-xs uppercase`
+- Error inline: `AlertCircle` icon + red text, no toast
+- Success inline: green bg block (`bg-green-50 border-green-200`) inside the form
+
 ## Important Commands
 ```bash
 yarn docker:up          # start PostgreSQL
