@@ -282,6 +282,8 @@ export async function sendRequestUpdateEmail(opts: RequestUpdateEmailOptions) {
     year: "numeric",
   }).format(createdAt);
 
+  const titleDisplay = title.length > 80 ? title.slice(0, 80) + "…" : title;
+
   const commentBlock = comment
     ? `
       <div style="margin-top:24px;padding:16px;background:#f9fafb;border-left:4px solid #FFC600;border-radius:0 8px 8px 0;">
@@ -330,14 +332,14 @@ export async function sendRequestUpdateEmail(opts: RequestUpdateEmailOptions) {
                 </td>
               </tr>
               ${
-                title
+                titleDisplay
                   ? `
               <tr>
                 <td style="padding:6px 0;vertical-align:top;">
                   <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#9ca3af;">Subject</span>
                 </td>
                 <td style="padding:6px 0;text-align:right;">
-                  <span style="font-size:13px;color:#374151;">${title}</span>
+                  <span style="font-size:13px;color:#374151;">${titleDisplay}</span>
                 </td>
               </tr>`
                   : ""
@@ -368,6 +370,13 @@ export async function sendRequestUpdateEmail(opts: RequestUpdateEmailOptions) {
           </div>
 
           ${commentBlock}
+
+          <!-- CTA button -->
+          <div style="margin-top:28px;margin-bottom:4px;">
+            <a href="${process.env.NEXT_PUBLIC_BETTER_AUTH_URL ?? ""}/employee/requests/${requestId}" style="display:inline-block;padding:12px 24px;background:#141414;color:#ffffff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600;">
+              View request →
+            </a>
+          </div>
 
           <hr style="margin:28px 0;border:none;border-top:1px solid #e5e7eb;" />
           <p style="margin:0;font-size:12px;color:#9ca3af;">
