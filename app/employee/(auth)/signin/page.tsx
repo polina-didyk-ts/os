@@ -1,23 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { authClient } from "@/src/lib/client";
 import { Button } from "@/app/components/ui/button";
 import { Alert, AlertDescription } from "@/app/components/ui/alert";
 import { Mail, Grid2X2 } from "lucide-react";
 
-export default function EmployeeSignInPage() {
+function SignInForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
 
   const handleGoogleSignIn = async () => {
     setError("");
     setLoading(true);
 
     try {
+      const callbackURL = redirect?.startsWith("/employee/")
+        ? `/auth/callback?redirect=${encodeURIComponent(redirect)}`
+        : "/auth/callback";
+
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/auth/callback",
+        callbackURL,
       });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Sign in failed";
@@ -120,5 +127,13 @@ export default function EmployeeSignInPage() {
         </p>
       </div>
     </main>
+  );
+}
+
+export default function EmployeeSignInPage() {
+  return (
+    <Suspense>
+      <SignInForm />
+    </Suspense>
   );
 }

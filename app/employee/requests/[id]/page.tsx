@@ -90,15 +90,12 @@ export default function EmployeeRequestDetailPage() {
     setError(null);
     try {
       const [reqRes, comRes] = await Promise.all([
-        fetch("/api/requests"),
+        fetch(`/api/requests/${id}`),
         fetch(`/api/requests/${id}/comments`),
       ]);
 
-      if (!reqRes.ok) throw new Error();
-      const all: Request[] = await reqRes.json();
-      const found = all.find((r) => r.id === id);
-      if (!found) throw new Error("not found");
-      setRequest(found);
+      if (!reqRes.ok) throw new Error("not found");
+      setRequest(await reqRes.json());
 
       if (comRes.ok) setComments(await comRes.json());
     } catch {

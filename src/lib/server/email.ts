@@ -373,7 +373,7 @@ export async function sendRequestUpdateEmail(opts: RequestUpdateEmailOptions) {
 
           <!-- CTA button -->
           <div style="margin-top:28px;margin-bottom:4px;">
-            <a href="${process.env.NEXT_PUBLIC_BETTER_AUTH_URL ?? ""}/employee/requests/${requestId}" style="display:inline-block;padding:12px 24px;background:#141414;color:#ffffff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600;">
+            <a href="${process.env.NEXT_PUBLIC_BETTER_AUTH_URL ?? ""}/employee/signin?redirect=%2Femployee%2Frequests%2F${requestId}" style="display:inline-block;padding:12px 24px;background:#141414;color:#ffffff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600;">
               View request →
             </a>
           </div>

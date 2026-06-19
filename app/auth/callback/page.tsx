@@ -1,12 +1,22 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "@/src/lib/client";
 
-export default function AuthCallbackPage() {
+function Spinner() {
+  return (
+    <main className="min-h-screen flex items-center justify-center bg-white">
+      <div className="animate-spin rounded-full h-10 w-10 border-2 border-blue-600 border-t-transparent" />
+    </main>
+  );
+}
+
+function AuthCallbackInner() {
   const { data: session, isPending } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
 
   useEffect(() => {
     if (isPending) return;
@@ -17,13 +27,17 @@ export default function AuthCallbackPage() {
     if (session.user.role === "admin") {
       router.replace("/admin");
     } else {
-      router.replace("/employee");
+      router.replace(redirect?.startsWith("/employee/") ? redirect : "/employee");
     }
-  }, [session, isPending, router]);
+  }, [session, isPending, router, redirect]);
 
+  return <Spinner />;
+}
+
+export default function AuthCallbackPage() {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-white">
-      <div className="animate-spin rounded-full h-10 w-10 border-2 border-blue-600 border-t-transparent" />
-    </main>
+    <Suspense fallback={<Spinner />}>
+      <AuthCallbackInner />
+    </Suspense>
   );
 }
