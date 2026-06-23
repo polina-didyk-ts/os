@@ -2,10 +2,11 @@
 
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Lottie from "lottie-react";
+import mascotAnimation from "@/public/mascot.json";
 import { authClient } from "@/src/lib/client";
 import { Button } from "@/app/components/ui/button";
 import { Alert, AlertDescription } from "@/app/components/ui/alert";
-import { Mail, Grid2X2 } from "lucide-react";
 
 function SignInForm() {
   const [error, setError] = useState("");
@@ -36,19 +37,14 @@ function SignInForm() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-white">
       <div className="w-full max-w-md space-y-8">
-        {/* Header */}
-        <div className="flex flex-col items-center space-y-4">
-          <div className="w-16 h-16 rounded-2xl bg-[#FFC600] flex items-center justify-center shadow-lg">
-            <Grid2X2 className="w-8 h-8 text-[#141414]" strokeWidth={1.5} />
-          </div>
+        {/* Mascot + Title */}
+        <div className="flex flex-col items-center space-y-3">
+          <Lottie
+            animationData={mascotAnimation}
+            loop
+            className="w-48 h-48"
+          />
           <h1 className="text-3xl font-bold text-gray-900">Digital Office</h1>
-        </div>
-
-        {/* Icon Container */}
-        <div className="flex justify-center">
-          <div className="w-32 h-32 rounded-3xl bg-gray-100 flex items-center justify-center">
-            <Mail className="w-16 h-16 text-[#141414]" strokeWidth={1.5} />
-          </div>
         </div>
 
         {/* Subtitle */}
