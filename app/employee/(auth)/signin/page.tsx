@@ -44,12 +44,20 @@ function SignInForm() {
             loop
             className="w-48 h-48"
           />
-          <h1 className="text-3xl font-bold text-gray-900">Digital Office</h1>
+          <h1
+            className="text-3xl font-bold text-gray-900"
+            style={{ fontFamily: "var(--font-grotesk)" }}
+          >
+            Digital Office
+          </h1>
         </div>
 
         {/* Subtitle */}
         <div className="text-center space-y-2">
-          <p className="text-lg font-semibold text-gray-900">
+          <p
+            className="text-lg text-gray-900"
+            style={{ fontFamily: "var(--font-techstack)" }}
+          >
             Sign in to submit a request or check its status
           </p>
         </div>
