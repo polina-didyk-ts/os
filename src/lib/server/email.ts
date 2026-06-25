@@ -193,114 +193,37 @@ export async function sendAnnouncementEmail(opts: AnnouncementEmailOptions) {
     .replace(/>/g, "&gt;")
     .replace(/\n/g, "<br>");
 
-  const appUrl = process.env.NEXT_PUBLIC_BETTER_AUTH_URL ?? "";
-  const mascotUrl = `${appUrl}/mascot-head.png`;
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="utf-8" /></head>
+    <body style="margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+      <div style="max-width:520px;margin:40px auto;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.1);">
 
-  const html = `<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /></head>
-<body style="margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+        <!-- Header -->
+        <div style="background:#141414;padding:24px 32px;">
+          <div style="display:inline-block;background:#FFC600;border-radius:8px;padding:6px 10px;margin-bottom:12px;">
+            <span style="font-size:13px;font-weight:700;color:#141414;">Digital Office</span>
+          </div>
+          <p style="margin:0;font-size:13px;color:#9ca3af;">Announcement from Digital Office</p>
+        </div>
 
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f3f4f6;">
-    <tr>
-      <td align="center" style="padding:40px 16px;">
+        <!-- Body -->
+        <div style="padding:32px;">
+          <p style="margin:0 0 24px;font-size:16px;font-weight:700;color:#111827;">${subject}</p>
+          <p style="margin:0;font-size:14px;color:#374151;line-height:1.7;">${messageHtml}</p>
 
-        <!-- Card -->
-        <table width="560" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.10);">
+          <hr style="margin:28px 0;border:none;border-top:1px solid #e5e7eb;" />
+          <p style="margin:0;font-size:12px;color:#9ca3af;">
+            This is an announcement from Techstack Digital Office.<br/>
+            Please do not reply to this email.
+          </p>
+        </div>
 
-          <!-- HEADER -->
-          <tr>
-            <td colspan="2" style="background:#141414;padding:0;">
-              <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <!-- Left: branding -->
-                  <td style="padding:28px 0 24px 28px;" valign="middle">
-                    <!-- Techstack logo -->
-                    <table cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
-                      <tr>
-                        <td valign="middle" style="padding-right:9px;">
-                          <table cellpadding="0" cellspacing="0" border="0">
-                            <tr><td style="background:#ffffff;height:3px;width:22px;border-radius:2px;font-size:0;line-height:0;">&nbsp;</td></tr>
-                            <tr><td style="height:3px;font-size:0;line-height:0;"></td></tr>
-                            <tr><td style="background:#ffffff;height:3px;width:22px;border-radius:2px;font-size:0;line-height:0;">&nbsp;</td></tr>
-                            <tr><td style="height:3px;font-size:0;line-height:0;"></td></tr>
-                            <tr><td style="background:#ffffff;height:3px;width:22px;border-radius:2px;font-size:0;line-height:0;">&nbsp;</td></tr>
-                          </table>
-                        </td>
-                        <td valign="middle">
-                          <span style="color:#ffffff;font-size:16px;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">Techstack</span>
-                        </td>
-                      </tr>
-                    </table>
-                    <!-- Badge -->
-                    <div style="margin-bottom:10px;">
-                      <span style="display:inline-block;background:#FFC600;border-radius:8px;padding:5px 13px;font-size:13px;font-weight:700;color:#141414;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">Digital Office</span>
-                    </div>
-                    <!-- Subtitle -->
-                    <p style="margin:0;font-size:13px;color:#9ca3af;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">Announcement from Techstack Digital Office</p>
-                  </td>
-                  <!-- Right: mascot -->
-                  <td style="background:#141414;padding:0;" valign="bottom" align="right" width="170">
-                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-                      <tr>
-                        <td align="right" style="padding-right:16px;padding-bottom:6px;">
-                          <span style="font-size:11px;color:#d1d5db;font-style:italic;font-family:Georgia,'Times New Roman',serif;">Stacky says hi!</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td align="right" valign="bottom">
-                          <img src="${mascotUrl}" alt="Stacky" width="150" style="display:block;max-height:130px;width:auto;" />
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- BODY: yellow left border cell + content -->
-          <tr>
-            <td style="background:#FFC600;width:4px;padding:0;" valign="top">&nbsp;</td>
-            <td style="padding:32px 32px 32px 28px;">
-              <h1 style="margin:0 0 20px;font-size:22px;font-weight:800;color:#111827;line-height:1.3;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">${subject}</h1>
-              <p style="margin:0 0 14px;font-size:14px;color:#374151;line-height:1.7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">Hello everyone,</p>
-              <p style="margin:0;font-size:14px;color:#374151;line-height:1.7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">${messageHtml}</p>
-            </td>
-          </tr>
-
-          <!-- FOOTER -->
-          <tr>
-            <td colspan="2" style="border-top:1px solid #e5e7eb;padding:20px 28px;">
-              <table cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td valign="top" style="padding-right:12px;padding-top:2px;">
-                    <table cellpadding="0" cellspacing="0" border="0">
-                      <tr><td style="background:#d1d5db;height:2px;width:18px;border-radius:2px;font-size:0;line-height:0;">&nbsp;</td></tr>
-                      <tr><td style="height:3px;font-size:0;line-height:0;"></td></tr>
-                      <tr><td style="background:#d1d5db;height:2px;width:18px;border-radius:2px;font-size:0;line-height:0;">&nbsp;</td></tr>
-                      <tr><td style="height:3px;font-size:0;line-height:0;"></td></tr>
-                      <tr><td style="background:#d1d5db;height:2px;width:18px;border-radius:2px;font-size:0;line-height:0;">&nbsp;</td></tr>
-                    </table>
-                  </td>
-                  <td valign="middle">
-                    <p style="margin:0;font-size:12px;color:#9ca3af;line-height:1.6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-                      This is an announcement from Techstack Digital Office.<br/>
-                      Please do not reply to this email.
-                    </p>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-        </table>
-      </td>
-    </tr>
-  </table>
-
-</body>
-</html>`;
+      </div>
+    </body>
+    </html>
+  `;
 
   try {
     await createTransporter().sendMail({
