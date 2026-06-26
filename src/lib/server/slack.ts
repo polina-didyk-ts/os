@@ -40,7 +40,24 @@ export async function sendAnnouncementSlack(opts: {
 
     await client.chat.postMessage({
       channel: channelId,
-      text: `*${subject}*\n\n${message}`,
+      text: `${subject}: ${message}`,
+      blocks: [
+        {
+          type: "header",
+          text: { type: "plain_text", text: subject, emoji: true },
+        },
+        {
+          type: "section",
+          text: { type: "mrkdwn", text: message },
+        },
+        { type: "divider" },
+        {
+          type: "context",
+          elements: [
+            { type: "mrkdwn", text: ":mega: *Digital Office* · Announcement" },
+          ],
+        },
+      ],
     });
 
     log.info({ email: to }, "Slack DM sent");
