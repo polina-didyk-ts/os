@@ -176,10 +176,10 @@ function EmptyState({ filtered }: { filtered: boolean }) {
       <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
         <MessageSquare className="w-7 h-7 text-gray-400" />
       </div>
-      <p className="text-gray-800 font-semibold text-base">
+      <p className="text-gray-800 text-base font-grotesk">
         {filtered ? "No results found" : "No requests yet"}
       </p>
-      <p className="text-gray-500 text-sm mt-1">
+      <p className="text-gray-500 text-sm mt-1 font-techstack">
         {filtered
           ? "Try changing the filter"
           : "Create your first request"}
@@ -256,7 +256,7 @@ export default function EmployeeRequestsPage() {
           <button onClick={toggle} className="p-2 hover:bg-gray-100 rounded-lg transition cursor-pointer" aria-label="Open menu">
             <Menu className="w-6 h-6 text-gray-700" />
           </button>
-          <span className="text-lg font-semibold text-gray-900">My Requests</span>
+          <span className="text-lg text-gray-900 font-grotesk">My Requests</span>
         </div>
         <div className="w-9 h-9 rounded-full bg-[#141414] flex items-center justify-center text-white text-sm font-semibold">
           {userInitial}
@@ -270,7 +270,7 @@ export default function EmployeeRequestsPage() {
             <button
               key={opt.value}
               onClick={() => setSortBy(opt.value)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition cursor-pointer ${
+              className={`px-4 py-1.5 rounded-full text-sm font-grotesk whitespace-nowrap transition cursor-pointer ${
                 sortBy === opt.value
                   ? "bg-[#141414] text-white"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
@@ -289,7 +289,7 @@ export default function EmployeeRequestsPage() {
             <button
               key={f.id}
               onClick={() => setActiveFilter(f.id)}
-              className={`px-3 py-1.5 text-xs font-bold whitespace-nowrap transition border-b-2 cursor-pointer ${
+              className={`px-3 py-1.5 text-xs font-grotesk whitespace-nowrap transition border-b-2 cursor-pointer ${
                 activeFilter === f.id
                   ? "border-[#FFC600] text-[#141414]"
                   : "border-transparent text-gray-400 hover:text-gray-600"
@@ -348,7 +348,7 @@ export default function EmployeeRequestsPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
-                        <p className="text-sm font-semibold text-gray-900 leading-snug line-clamp-2">
+                        <p className="text-sm text-gray-900 leading-snug line-clamp-2 font-grotesk">
                           {title}
                         </p>
                         <div className="flex items-center gap-1.5 shrink-0">
@@ -365,7 +365,7 @@ export default function EmployeeRequestsPage() {
                           </span>
                         </div>
                       </div>
-                      <p className="text-xs text-gray-400 mt-0.5">
+                      <p className="text-xs text-gray-400 mt-0.5 font-techstack">
                         ID #{request.ticketNumber}
                       </p>
                       <div className="flex items-center gap-1.5 mt-2">
@@ -381,10 +381,10 @@ export default function EmployeeRequestsPage() {
 
                   <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100 pb-4">
                     <div>
-                      <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400">
+                      <p className="text-[10px] uppercase tracking-wide text-gray-400 font-grotesk">
                         Created
                       </p>
-                      <p className="text-sm text-gray-700 mt-0.5">
+                      <p className="text-sm text-gray-700 mt-0.5 font-techstack">
                         {formatDate(request.createdAt)}
                       </p>
                     </div>

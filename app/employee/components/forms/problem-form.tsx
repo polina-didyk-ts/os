@@ -98,7 +98,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
 
       {/* What */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
+        <label className="block text-sm text-gray-900 uppercase mb-2 font-grotesk">
           What is the problem?
         </label>
         <Input
@@ -122,7 +122,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
 
       {/* Description */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
+        <label className="block text-sm text-gray-900 uppercase mb-2 font-grotesk">
           Problem Description
         </label>
         <Textarea
@@ -148,7 +148,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
 
       {/* Priority */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 uppercase mb-3">
+        <label className="block text-sm text-gray-900 uppercase mb-3 font-grotesk">
           Priority
         </label>
         <div className="flex gap-2 flex-wrap">
@@ -195,7 +195,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
 
       {/* Comment */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
+        <label className="block text-sm text-gray-900 uppercase mb-2 font-grotesk">
           Comment <span className="text-gray-500 text-xs font-normal">optional</span>
         </label>
         <Textarea

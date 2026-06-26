@@ -113,7 +113,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
 
       {/* What */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
+        <label className="block text-sm text-gray-900 uppercase mb-2 font-grotesk">
           What to order?
         </label>
         <Input
@@ -137,7 +137,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
 
       {/* Quantity */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
+        <label className="block text-sm text-gray-900 uppercase mb-2 font-grotesk">
           Quantity
         </label>
         <Input
@@ -159,7 +159,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
 
       {/* Priority */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 uppercase mb-3">
+        <label className="block text-sm text-gray-900 uppercase mb-3 font-grotesk">
           Priority
         </label>
         <div className="flex gap-2 flex-wrap">
@@ -206,7 +206,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
 
       {/* Comment */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
+        <label className="block text-sm text-gray-900 uppercase mb-2 font-grotesk">
           Reason / Comment
         </label>
         <Textarea

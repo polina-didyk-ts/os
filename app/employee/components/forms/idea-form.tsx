@@ -86,7 +86,7 @@ export function IdeaForm({ onSuccess }: IdeaFormProps) {
 
       {/* Idea */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
+        <label className="block text-sm text-gray-900 uppercase mb-2 font-grotesk">
           Your idea or feedback
         </label>
         <div className="relative">
@@ -115,7 +115,7 @@ export function IdeaForm({ onSuccess }: IdeaFormProps) {
 
       {/* Priority */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 uppercase mb-3">
+        <label className="block text-sm text-gray-900 uppercase mb-3 font-grotesk">
           Priority
         </label>
         <div className="flex gap-2 flex-wrap">

@@ -86,7 +86,7 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
 
       {/* Question */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
+        <label className="block text-sm text-gray-900 uppercase mb-2 font-grotesk">
           Your question
         </label>
         <Textarea
@@ -113,7 +113,7 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
 
       {/* Priority */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 uppercase mb-3">
+        <label className="block text-sm text-gray-900 uppercase mb-3 font-grotesk">
           Priority
         </label>
         <div className="flex gap-2 flex-wrap">

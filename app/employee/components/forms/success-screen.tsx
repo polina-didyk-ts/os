@@ -20,7 +20,7 @@ export function SuccessScreen({ ticketNumber }: SuccessScreenProps) {
 
       {/* Success Message */}
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900">Request Submitted!</h1>
+        <h1 className="text-3xl text-gray-900 font-grotesk">Request Submitted!</h1>
         <p className="text-green-600 flex items-center justify-center gap-1">
           <span className="text-xl">✅</span>
         </p>
@@ -28,19 +28,19 @@ export function SuccessScreen({ ticketNumber }: SuccessScreenProps) {
 
       {/* Ticket Number */}
       <div className="space-y-1 text-center">
-        <p className="text-xs text-gray-600 uppercase font-semibold">Request Number</p>
-        <p className="text-2xl font-bold text-gray-900">#{ticketNumber}</p>
+        <p className="text-xs text-gray-600 uppercase font-grotesk">Request Number</p>
+        <p className="text-2xl text-gray-900 font-grotesk">#{ticketNumber}</p>
       </div>
 
       {/* Info Text */}
-      <p className="text-gray-700 text-center max-w-sm">
+      <p className="text-gray-700 text-center max-w-sm font-techstack">
         We&apos;ll notify you as soon as the status changes
       </p>
 
       {/* What Next */}
       <div className="w-full max-w-md bg-gray-50 rounded-lg p-4 space-y-2">
-        <p className="text-xs font-semibold text-gray-900 uppercase">What&apos;s Next?</p>
-        <p className="text-sm text-gray-600">
+        <p className="text-xs text-gray-900 uppercase font-grotesk">What&apos;s Next?</p>
+        <p className="text-sm text-gray-600 font-techstack">
           Your request is now being reviewed by the office manager. You&apos;ll typically receive a response within 2 business hours. Check updates in your profile.
         </p>
       </div>

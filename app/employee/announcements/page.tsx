@@ -51,10 +51,10 @@ export default function AnnouncementsPage() {
 
       <div className="flex-1 pb-28 px-4 py-5 flex flex-col gap-5 max-w-xl mx-auto w-full">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400">
+          <p className="text-xs uppercase tracking-widest text-gray-400 font-grotesk">
             News
           </p>
-          <h1 className="text-2xl font-bold text-gray-900 mt-0.5 flex items-center gap-2">
+          <h1 className="text-2xl text-gray-900 mt-0.5 flex items-center gap-2 font-grotesk">
             <Bell className="w-6 h-6" strokeWidth={1.5} />
             Announcements
           </h1>
@@ -81,8 +81,8 @@ export default function AnnouncementsPage() {
         {!loading && !error && items.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <Bell className="w-12 h-12 text-gray-200 mb-4" strokeWidth={1} />
-            <p className="text-gray-500 font-medium">No announcements yet</p>
-            <p className="text-gray-400 text-sm mt-1">
+            <p className="text-gray-500 font-grotesk">No announcements yet</p>
+            <p className="text-gray-400 text-sm mt-1 font-techstack">
               You'll see messages from your office manager here
             </p>
           </div>
@@ -96,17 +96,17 @@ export default function AnnouncementsPage() {
                 className="bg-white rounded-xl border border-gray-200 p-4"
               >
                 <div className="flex items-start justify-between gap-2 mb-2">
-                  <h2 className="text-sm font-bold text-gray-900 leading-snug">
+                  <h2 className="text-sm text-gray-900 leading-snug font-grotesk">
                     {item.subject}
                   </h2>
                   {!item.readAt && (
                     <span className="shrink-0 w-2 h-2 rounded-full bg-[#FFC600] mt-1.5" />
                   )}
                 </div>
-                <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">
+                <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed font-techstack">
                   {item.message}
                 </p>
-                <p className="text-xs text-gray-400 mt-3">{formatDate(item.createdAt)}</p>
+                <p className="text-xs text-gray-400 mt-3 font-techstack">{formatDate(item.createdAt)}</p>
               </div>
             ))}
           </div>

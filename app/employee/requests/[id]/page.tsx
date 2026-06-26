@@ -143,8 +143,8 @@ export default function EmployeeRequestDetailPage() {
             <ArrowLeft className="w-5 h-5 text-gray-700" />
           </button>
           <div>
-            <p className="text-sm font-bold text-gray-900">#{request.ticketNumber}</p>
-            <p className="text-[10px] text-gray-400 uppercase tracking-wide">{typeConf.label}</p>
+            <p className="text-sm text-gray-900 font-grotesk">#{request.ticketNumber}</p>
+            <p className="text-[10px] text-gray-400 uppercase tracking-wide font-grotesk">{typeConf.label}</p>
           </div>
         </div>
         <span className={`text-xs font-bold px-3 py-1 rounded-full ${statusConf.badgeClass}`}>
@@ -160,47 +160,47 @@ export default function EmployeeRequestDetailPage() {
               <Icon className={`w-5 h-5 ${typeConf.iconClass}`} />
             </div>
             <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wide font-semibold">{typeConf.label}</p>
+              <p className="text-xs text-gray-400 uppercase tracking-wide font-grotesk">{typeConf.label}</p>
               <p className="text-xs text-gray-400">{formatDateTime(request.createdAt)}</p>
             </div>
           </div>
 
-          <h1 className="text-lg font-bold text-gray-900 mb-2">{title}</h1>
+          <h1 className="text-lg text-gray-900 mb-2 font-grotesk">{title}</h1>
 
           {description && (
-            <p className="text-sm text-gray-600 leading-relaxed mb-3">{description}</p>
+            <p className="text-sm text-gray-600 leading-relaxed mb-3 font-techstack">{description}</p>
           )}
 
           <div className="flex items-center gap-4 pt-3 border-t border-gray-100">
             <div>
-              <p className="text-[10px] uppercase tracking-wide text-gray-400 font-semibold">Priority</p>
-              <p className="text-sm font-medium text-gray-800 mt-0.5">
+              <p className="text-[10px] uppercase tracking-wide text-gray-400 font-grotesk">Priority</p>
+              <p className="text-sm text-gray-800 mt-0.5 font-techstack">
                 {PRIORITY_LABEL[request.priority] ?? request.priority}
               </p>
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-wide text-gray-400 font-semibold">Updated</p>
-              <p className="text-sm font-medium text-gray-800 mt-0.5">{formatDateTime(request.updatedAt)}</p>
+              <p className="text-[10px] uppercase tracking-wide text-gray-400 font-grotesk">Updated</p>
+              <p className="text-sm text-gray-800 mt-0.5 font-techstack">{formatDateTime(request.updatedAt)}</p>
             </div>
           </div>
         </div>
 
         {/* Activity */}
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">
+          <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-3 font-grotesk">
             Activity Log
           </p>
           <div className="flex flex-col gap-2">
             <div className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60">
-              <p className="text-sm font-medium text-gray-900">You submitted a request</p>
-              <p className="text-xs text-gray-400 mt-0.5">{formatDateTime(request.createdAt)}</p>
+              <p className="text-sm text-gray-900 font-grotesk">You submitted a request</p>
+              <p className="text-xs text-gray-400 mt-0.5 font-techstack">{formatDateTime(request.createdAt)}</p>
             </div>
             {request.status !== "new" && (
               <div className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60">
-                <p className="text-sm font-medium text-gray-900">
+                <p className="text-sm text-gray-900 font-grotesk">
                   Status changed to &ldquo;{statusConf.label}&rdquo;
                 </p>
-                <p className="text-xs text-gray-400 mt-0.5">{formatDateTime(request.updatedAt)}</p>
+                <p className="text-xs text-gray-400 mt-0.5 font-techstack">{formatDateTime(request.updatedAt)}</p>
               </div>
             )}
           </div>
@@ -209,14 +209,14 @@ export default function EmployeeRequestDetailPage() {
         {/* Manager comments */}
         {comments.length > 0 && (
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">
+            <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-3 font-grotesk">
               Manager Comment
             </p>
             <div className="flex flex-col gap-2">
               {comments.map((c) => (
                 <div key={c.id} className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60">
-                  <p className="text-sm text-gray-900">{c.text}</p>
-                  <p className="text-xs text-gray-400 mt-1">{formatDateTime(c.createdAt)}</p>
+                  <p className="text-sm text-gray-900 font-techstack">{c.text}</p>
+                  <p className="text-xs text-gray-400 mt-1 font-techstack">{formatDateTime(c.createdAt)}</p>
                 </div>
               ))}
             </div>

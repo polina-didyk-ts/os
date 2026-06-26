@@ -41,10 +41,10 @@ function StatCard({
   return (
     <div className="flex-1 bg-white rounded-2xl py-4 flex flex-col items-center gap-1">
       <div className={iconClass}>{icon}</div>
-      <span className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 mt-1">
+      <span className="text-[10px] uppercase tracking-wide text-gray-400 mt-1 font-grotesk">
         {label}
       </span>
-      <span className="text-2xl font-bold text-gray-900">{value}</span>
+      <span className="text-2xl text-gray-900 font-grotesk">{value}</span>
     </div>
   );
 }
@@ -89,9 +89,9 @@ export default function EmployeeProfilePage() {
           <button onClick={toggle} className="p-2 hover:bg-gray-100 rounded-lg transition" aria-label="Open menu">
             <Menu className="w-6 h-6 text-gray-700" />
           </button>
-          <span className="text-lg font-semibold text-gray-900">Profile</span>
+          <span className="text-lg text-gray-900 font-grotesk">Profile</span>
         </div>
-        <span className="text-lg font-semibold text-[#141414]">Digital Office</span>
+        <span className="text-lg text-[#141414] font-grotesk">Digital Office</span>
       </header>
 
       <div className="flex-1 pb-28 px-4 py-4 flex flex-col gap-4">
@@ -108,11 +108,11 @@ export default function EmployeeProfilePage() {
           </div>
 
           {/* Name & email */}
-          <h2 className="text-xl font-bold text-gray-900">{displayName}</h2>
-          <p className="text-sm text-gray-500 mt-0.5">{email}</p>
+          <h2 className="text-xl text-gray-900 font-grotesk">{displayName}</h2>
+          <p className="text-sm text-gray-500 mt-0.5 font-techstack">{email}</p>
 
           {/* Role badge */}
-          <span className="mt-3 px-4 py-1 rounded-full bg-[#F2F2F2] text-[#141414] text-xs font-semibold uppercase tracking-wide border border-gray-200">
+          <span className="mt-3 px-4 py-1 rounded-full bg-[#F2F2F2] text-[#141414] text-xs uppercase tracking-wide border border-gray-200 font-grotesk">
             Member
           </span>
         </div>

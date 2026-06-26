@@ -55,7 +55,7 @@ export default function NewRequestPage() {
           >
             <ChevronLeft className="w-6 h-6 text-gray-700" strokeWidth={1.5} />
           </button>
-          <h1 className="text-lg font-semibold text-gray-900 flex-1 ml-2">New Request</h1>
+          <h1 className="text-lg text-gray-900 flex-1 ml-2 font-grotesk">New Request</h1>
           <span className="px-3 py-1 bg-[#FFC600]/20 text-[#141414] text-xs font-medium rounded-full">
             {requestType.title.toUpperCase()}
           </span>
@@ -64,7 +64,7 @@ export default function NewRequestPage() {
         {/* Title */}
         <section className="px-4 py-6 bg-white border-b border-gray-200">
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-2xl text-gray-900 font-grotesk">
               {requestType.title === "Order"
                 ? "What do you need?"
                 : requestType.title === "Problem"
@@ -73,7 +73,7 @@ export default function NewRequestPage() {
                     ? "Ask the office manager"
                     : "Share your idea"}
             </h2>
-            <p className="text-gray-600 text-sm">
+            <p className="text-gray-600 text-sm font-techstack">
               {requestType.title === "Order"
                 ? "Leave a request for anything you need — supplies, food, equipment. Specify the details and priority."
                 : requestType.title === "Problem"
