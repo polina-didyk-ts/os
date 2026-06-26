@@ -15,3 +15,6 @@ export { apiHandler } from "./api-handler";
 
 // Email
 export { sendRequestUpdateEmail, sendNewRequestAdminEmail, sendAnnouncementEmail } from "./email";
+
+// Slack
+export { sendAnnouncementSlack } from "./slack";

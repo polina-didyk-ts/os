@@ -5,7 +5,10 @@ import { AlertCircle, Megaphone } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Textarea } from "@/app/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/components/ui/select";
 import { AdminHeader, BottomNavigation } from "../components";
+
+type Channel = "email" | "slack" | "both";
 
 interface Employee {
   id: string;
@@ -27,10 +30,11 @@ export default function AnnouncementsPage() {
   const [subject, setSubject]             = useState("");
   const [message, setMessage]             = useState("");
   const [manualEmails, setManualEmails]   = useState("");
+  const [channel, setChannel]             = useState<Channel>("email");
   const [loading, setLoading]             = useState(false);
   const [error, setError]                 = useState("");
   const [fieldErrors, setFieldErrors]     = useState<Record<string, string>>({});
-  const [successCount, setSuccessCount]   = useState<number | null>(null);
+  const [sendResult, setSendResult]       = useState<{ sentEmail: number; sentSlack: number; slackErrors: string[] } | null>(null);
 
   const fetchEmployees = useCallback(async () => {
     try {
@@ -49,7 +53,7 @@ export default function AnnouncementsPage() {
   const toggleEmployee = (email: string) => {
     setSelected((prev) => {
       const next = new Set(prev);
-      next.has(email) ? next.delete(email) : next.add(email);
+      if (next.has(email)) { next.delete(email); } else { next.add(email); }
       return next;
     });
   };
@@ -69,7 +73,7 @@ export default function AnnouncementsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setSuccessCount(null);
+    setSendResult(null);
 
     const errors: Record<string, string> = {};
     if (!subject.trim())  errors.subject = "Subject is required";
@@ -91,6 +95,7 @@ export default function AnnouncementsPage() {
           subject: subject.trim(),
           message: message.trim(),
           recipientEmails: combined,
+          channel,
         }),
       });
 
@@ -102,7 +107,7 @@ export default function AnnouncementsPage() {
       }
 
       const data = await res.json();
-      setSuccessCount(data.sent);
+      setSendResult(data);
       setSubject("");
       setMessage("");
       setManualEmails("");
@@ -131,9 +136,13 @@ export default function AnnouncementsPage() {
         </div>
 
         {/* Success */}
-        {successCount !== null && (
-          <div className="flex items-center gap-2 p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm font-medium">
-            ✓ Sent to {successCount} recipient{successCount !== 1 ? "s" : ""}
+        {sendResult !== null && (
+          <div className="p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm font-medium space-y-0.5">
+            {sendResult.sentEmail > 0 && <p>✓ Email sent to {sendResult.sentEmail} recipient{sendResult.sentEmail !== 1 ? "s" : ""}</p>}
+            {sendResult.sentSlack > 0 && <p>✓ Slack DM sent to {sendResult.sentSlack} recipient{sendResult.sentSlack !== 1 ? "s" : ""}</p>}
+            {sendResult.slackErrors.length > 0 && (
+              <p className="text-yellow-700">⚠ {sendResult.slackErrors.length} Slack DM{sendResult.slackErrors.length !== 1 ? "s" : ""} skipped (user not in workspace)</p>
+            )}
           </div>
         )}
 
@@ -307,6 +316,23 @@ export default function AnnouncementsPage() {
                 </p>
               </div>
             )}
+          </div>
+
+          {/* Send via */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
+              Send via
+            </label>
+            <Select value={channel} onValueChange={(v) => setChannel(v as Channel)}>
+              <SelectTrigger className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="email">Email</SelectItem>
+                <SelectItem value="slack">Slack</SelectItem>
+                <SelectItem value="both">Email + Slack</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Submit */}
