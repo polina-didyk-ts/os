@@ -13,12 +13,12 @@ export async function sendAnnouncementSlack(opts: {
   to: string;
   subject: string;
   message: string;
-}): Promise<{ ok: boolean; error?: string }> {
+}): Promise<{ ok: boolean; email: string; error?: string }> {
   const { to, subject, message } = opts;
 
   if (!process.env.SLACK_BOT_TOKEN) {
     log.warn("SLACK_BOT_TOKEN not configured — skipping Slack DM");
-    return { ok: false, error: "not_configured" };
+    return { ok: false, email: to, error: "not_configured" };
   }
 
   const client = getClient();
@@ -27,15 +27,15 @@ export async function sendAnnouncementSlack(opts: {
     const userRes = await client.users.lookupByEmail({ email: to });
     const userId = userRes.user?.id;
     if (!userId) {
-      log.warn({ email: to }, "Slack user not found by email");
-      return { ok: false, error: "user_not_found" };
+      log.warn({ email: to }, "Slack user not found by email — skipping DM");
+      return { ok: false, email: to, error: "user_not_found" };
     }
 
     const dmRes = await client.conversations.open({ users: userId });
     const channelId = dmRes.channel?.id;
     if (!channelId) {
       log.warn({ email: to }, "Failed to open Slack DM channel");
-      return { ok: false, error: "dm_open_failed" };
+      return { ok: false, email: to, error: "dm_open_failed" };
     }
 
     await client.chat.postMessage({
@@ -44,10 +44,10 @@ export async function sendAnnouncementSlack(opts: {
     });
 
     log.info({ email: to }, "Slack DM sent");
-    return { ok: true };
+    return { ok: true, email: to };
   } catch (err) {
     const code = (err as { data?: { error?: string } })?.data?.error ?? "unknown";
     log.warn({ email: to, code }, "Slack DM failed");
-    return { ok: false, error: code };
+    return { ok: false, email: to, error: code };
   }
 }

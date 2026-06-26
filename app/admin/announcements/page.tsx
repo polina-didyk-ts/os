@@ -34,7 +34,7 @@ export default function AnnouncementsPage() {
   const [loading, setLoading]             = useState(false);
   const [error, setError]                 = useState("");
   const [fieldErrors, setFieldErrors]     = useState<Record<string, string>>({});
-  const [sendResult, setSendResult]       = useState<{ sentEmail: number; sentSlack: number; slackErrors: string[] } | null>(null);
+  const [sendResult, setSendResult]       = useState<{ sentEmail: number; sentSlack: number; slackErrors: string[]; skippedEmails: string[] } | null>(null);
 
   const fetchEmployees = useCallback(async () => {
     try {
@@ -140,8 +140,15 @@ export default function AnnouncementsPage() {
           <div className="p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm font-medium space-y-0.5">
             {sendResult.sentEmail > 0 && <p>✓ Email sent to {sendResult.sentEmail} recipient{sendResult.sentEmail !== 1 ? "s" : ""}</p>}
             {sendResult.sentSlack > 0 && <p>✓ Slack DM sent to {sendResult.sentSlack} recipient{sendResult.sentSlack !== 1 ? "s" : ""}</p>}
-            {sendResult.slackErrors.length > 0 && (
-              <p className="text-yellow-700">⚠ {sendResult.slackErrors.length} Slack DM{sendResult.slackErrors.length !== 1 ? "s" : ""} skipped (user not in workspace)</p>
+            {sendResult.skippedEmails.length > 0 && (
+              <div className="text-yellow-700">
+                <p>⚠ {sendResult.skippedEmails.length} Slack DM{sendResult.skippedEmails.length !== 1 ? "s" : ""} skipped — not found in workspace:</p>
+                <ul className="mt-1 ml-4 list-disc text-xs">
+                  {sendResult.skippedEmails.map((email) => (
+                    <li key={email}>{email}</li>
+                  ))}
+                </ul>
+              </div>
             )}
           </div>
         )}

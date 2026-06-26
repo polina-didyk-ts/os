@@ -21,12 +21,17 @@ export const POST = apiHandler(async (req) => {
     announcementsService.save(subject, message, recipientEmails),
   ]);
 
+  type SlackResult = { ok: boolean; email: string; error?: string };
+
   const sentEmail = (emailResults as { ok: boolean }[]).filter((r) => r.ok).length;
-  const sentSlack = (slackResults as { ok: boolean }[]).filter((r) => r.ok).length;
-  const slackErrors = (slackResults as { ok: boolean; error?: string }[])
+  const sentSlack = (slackResults as SlackResult[]).filter((r) => r.ok).length;
+  const skippedEmails = (slackResults as SlackResult[])
+    .filter((r) => !r.ok)
+    .map((r) => r.email);
+  const slackErrors = (slackResults as SlackResult[])
     .filter((r) => !r.ok)
     .map((r) => r.error)
     .filter(Boolean);
 
-  return NextResponse.json({ sentEmail, sentSlack, slackErrors });
+  return NextResponse.json({ sentEmail, sentSlack, slackErrors, skippedEmails });
 });
