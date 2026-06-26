@@ -45,7 +45,7 @@ function SignInForm() {
             className="w-48 h-48"
           />
           <h1
-            className="text-3xl font-bold text-gray-900"
+            className="text-3xl text-gray-900"
             style={{ fontFamily: "var(--font-grotesk)" }}
           >
             Digital Office
@@ -125,10 +125,6 @@ function SignInForm() {
           For Techstack members only
         </p>
 
-        {/* Additional Info */}
-        <p className="text-center text-xs text-gray-500">
-          Your data is protected. Anonymous requests are not processed.
-        </p>
       </div>
     </main>
   );

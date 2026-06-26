@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@utility font-grotesk {
+  font-family: var(--font-grotesk);
+}
+
+@utility font-techstack {
+  font-family: var(--font-techstack);
+}
+
 @layer base {
   :root {
     /* Techstack Light Theme */

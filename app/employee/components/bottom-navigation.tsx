@@ -34,7 +34,7 @@ export function BottomNavigation() {
             }`}
           >
             <Icon className="w-6 h-6" strokeWidth={1.5} />
-            <span className="text-xs font-semibold">{label}</span>
+            <span className="text-xs font-grotesk">{label}</span>
           </Link>
         );
       })}

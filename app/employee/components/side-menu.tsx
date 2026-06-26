@@ -73,9 +73,9 @@ export function SideMenu() {
           <div className="w-12 h-12 rounded-full bg-[#141414] flex items-center justify-center text-white text-base font-bold mb-3 select-none">
             {initials}
           </div>
-          <p className="text-base font-bold text-gray-900">{displayName}</p>
-          <p className="text-sm text-gray-500 mt-0.5">{email}</p>
-          <span className="mt-2 inline-block px-3 py-0.5 rounded-full bg-[#FFC600]/20 text-[#141414] text-xs font-semibold uppercase tracking-wide">
+          <p className="text-base text-gray-900 font-grotesk">{displayName}</p>
+          <p className="text-sm text-gray-500 mt-0.5 font-techstack">{email}</p>
+          <span className="mt-2 inline-block px-3 py-0.5 rounded-full bg-[#FFC600]/20 text-[#141414] text-xs uppercase tracking-wide font-grotesk">
             Member
           </span>
         </div>
@@ -97,7 +97,7 @@ export function SideMenu() {
               >
                 <div className="flex items-center gap-3">
                   <Icon className="w-5 h-5" strokeWidth={1.5} />
-                  <span className={`text-sm font-medium ${active ? "text-[#141414]" : ""}`}>
+                  <span className={`text-sm font-medium font-grotesk ${active ? "text-[#141414]" : ""}`}>
                     {label}
                   </span>
                 </div>
@@ -114,7 +114,7 @@ export function SideMenu() {
             className="flex items-center gap-3 text-red-500 hover:text-red-600 transition-colors"
           >
             <LogOut className="w-5 h-5" strokeWidth={1.5} />
-            <span className="text-sm font-medium">Sign out</span>
+            <span className="text-sm font-medium font-grotesk">Sign out</span>
           </button>
         </div>
       </aside>

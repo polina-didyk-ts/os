@@ -48,7 +48,7 @@ export function EmployeeHeader() {
         >
           <Menu className="w-6 h-6 text-gray-700" />
         </button>
-        <span className="text-lg font-semibold text-gray-800">Digital Office</span>
+        <span className="text-lg text-gray-800 font-grotesk">Digital Office</span>
       </div>
 
       <div className="flex items-center gap-2">

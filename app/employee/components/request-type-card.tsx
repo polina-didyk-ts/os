@@ -41,8 +41,8 @@ export function RequestTypeCard({
         </div>
       </div>
 
-      <h3 className="text-lg font-semibold text-gray-900 mb-1">{title}</h3>
-      <p className="text-sm text-gray-600">{description}</p>
+      <h3 className="text-lg text-gray-900 mb-1 font-grotesk">{title}</h3>
+      <p className="text-sm text-gray-600 font-techstack">{description}</p>
     </button>
   );
 }
