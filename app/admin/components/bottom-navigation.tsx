@@ -33,7 +33,7 @@ export function BottomNavigation() {
             }`}
           >
             <Icon className="w-5 h-5" strokeWidth={1.5} />
-            <span className="text-[10px] font-bold tracking-wide">{label}</span>
+            <span className="text-[10px] tracking-wide font-grotesk">{label}</span>
           </Link>
         );
       })}

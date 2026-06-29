@@ -33,7 +33,7 @@ export default function AdminProfilePage() {
           >
             <Menu className="w-6 h-6 text-gray-700" />
           </button>
-          <span className="text-lg font-bold text-gray-900">Digital Office</span>
+          <span className="text-lg font-grotesk text-gray-900">Digital Office</span>
         </div>
         <div className="flex items-center gap-2">
           <button className="p-2 hover:bg-gray-100 rounded-lg transition" aria-label="Notifications">
@@ -60,10 +60,10 @@ export default function AdminProfilePage() {
         </div>
 
         {/* Name */}
-        <h1 className="text-xl font-bold text-gray-900">{displayName}</h1>
+        <h1 className="text-xl font-grotesk text-gray-900">{displayName}</h1>
 
         {/* Role badge */}
-        <span className="mt-2 px-4 py-1 rounded-full bg-[#F2F2F2] text-[#141414] text-xs font-semibold uppercase tracking-wide border border-gray-200">
+        <span className="mt-2 px-4 py-1 rounded-full bg-[#F2F2F2] text-[#141414] text-xs font-grotesk uppercase tracking-wide border border-gray-200">
           Office Manager
         </span>
       </div>

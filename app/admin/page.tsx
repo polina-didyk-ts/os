@@ -79,14 +79,14 @@ function StatCard({
     <div className="bg-white rounded-2xl p-4 flex items-center justify-between">
       <div className="flex flex-col gap-1">
         {icon}
-        <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mt-1">
+        <span className="text-[10px] uppercase tracking-widest text-gray-400 mt-1 font-grotesk">
           {label}
         </span>
       </div>
       {loading ? (
         <div className="w-8 h-8 rounded bg-gray-100 animate-pulse" />
       ) : (
-        <span className="text-3xl font-bold text-gray-900">{value}</span>
+        <span className="text-3xl text-gray-900 font-grotesk">{value}</span>
       )}
     </div>
   );
@@ -134,10 +134,10 @@ export default function AdminDashboard() {
       <div className="flex-1 pb-28 px-4 py-5 flex flex-col gap-5">
         {/* Welcome */}
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400">
+          <p className="text-xs uppercase tracking-widest text-gray-400 font-grotesk">
             WELCOME BACK
           </p>
-          <h1 className="text-2xl font-bold text-gray-900 mt-0.5">
+          <h1 className="text-2xl text-gray-900 mt-0.5 font-grotesk">
             Dashboard
           </h1>
         </div>
@@ -183,10 +183,10 @@ export default function AdminDashboard() {
         {/* Recent requests */}
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-base font-bold text-gray-900">Recent Requests</h2>
+            <h2 className="text-base text-gray-900 font-grotesk">Recent Requests</h2>
             <Link
               href="/admin/requests"
-              className="text-xs font-bold text-[#141414] uppercase tracking-wide"
+              className="text-xs text-[#141414] uppercase tracking-wide font-grotesk"
             >
               ARCHIVE
             </Link>
@@ -225,14 +225,14 @@ export default function AdminDashboard() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-0.5">
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 uppercase tracking-wide">
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 uppercase tracking-wide font-grotesk">
                           {conf.label}
                         </span>
-                        <span className="text-[10px] text-gray-400">
+                        <span className="text-[10px] text-gray-400 font-techstack">
                           {timeAgo(req.createdAt)}
                         </span>
                       </div>
-                      <p className="text-sm font-medium text-gray-900 truncate">
+                      <p className="text-sm text-gray-900 truncate font-grotesk">
                         {getRequestTitle(req)}
                       </p>
                     </div>

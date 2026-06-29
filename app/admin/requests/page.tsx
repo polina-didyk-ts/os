@@ -174,7 +174,7 @@ export default function AdminRequestsPage() {
           <button onClick={toggle} className="p-2 hover:bg-gray-100 rounded-lg transition" aria-label="Menu">
             <Menu className="w-6 h-6 text-gray-700" />
           </button>
-          <span className="text-lg font-bold text-gray-900">All Requests</span>
+          <span className="text-lg text-gray-900 font-grotesk">All Requests</span>
         </div>
       </header>
 
@@ -185,7 +185,7 @@ export default function AdminRequestsPage() {
             <button
               key={f.id}
               onClick={() => setTypeFilter(f.id)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition ${
+              className={`px-4 py-1.5 rounded-full text-sm font-grotesk whitespace-nowrap transition ${
                 typeFilter === f.id
                   ? "bg-[#141414] text-white"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
@@ -204,7 +204,7 @@ export default function AdminRequestsPage() {
             <button
               key={f.id}
               onClick={() => setStatusFilter(f.id)}
-              className={`px-3 py-1.5 text-xs font-bold whitespace-nowrap transition border-b-2 ${
+              className={`px-3 py-1.5 text-xs font-grotesk whitespace-nowrap transition border-b-2 ${
                 statusFilter === f.id
                   ? "border-[#FFC600] text-[#141414]"
                   : "border-transparent text-gray-400 hover:text-gray-600"
@@ -231,8 +231,8 @@ export default function AdminRequestsPage() {
           </div>
         ) : requests.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <p className="text-gray-800 font-semibold">No results found</p>
-            <p className="text-gray-400 text-sm mt-1">Try changing the filters</p>
+            <p className="text-gray-800 font-grotesk">No results found</p>
+            <p className="text-gray-400 text-sm mt-1 font-techstack">Try changing the filters</p>
           </div>
         ) : (
           <div className="flex flex-col gap-3">
@@ -258,14 +258,14 @@ export default function AdminRequestsPage() {
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5 mb-0.5">
                             <span className={`w-2 h-2 rounded-full shrink-0 ${priorityConf.dotClass}`} />
-                            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">
+                            <span className="text-[10px] text-gray-500 uppercase tracking-wide font-grotesk">
                               {priorityConf.label}
                             </span>
                           </div>
-                          <p className="text-sm font-semibold text-gray-900 leading-snug line-clamp-2">
+                          <p className="text-sm text-gray-900 leading-snug line-clamp-2 font-grotesk">
                             {getTitle(req)}
                           </p>
-                          <p className="text-xs text-gray-400 mt-0.5">ID-{req.ticketNumber}</p>
+                          <p className="text-xs text-gray-400 mt-0.5 font-techstack">ID-{req.ticketNumber}</p>
                         </div>
                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ${statusConf.badgeClass}`}>
                           {statusConf.label}
@@ -279,10 +279,10 @@ export default function AdminRequestsPage() {
                       <div className="w-6 h-6 rounded-full bg-[#141414] flex items-center justify-center text-white text-[10px] font-bold">
                         {getInitial(req.user)}
                       </div>
-                      <span className="text-xs text-gray-500">{getShortName(req.user)}</span>
+                      <span className="text-xs text-gray-500 font-techstack">{getShortName(req.user)}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-400">{formatDate(req.createdAt)}</span>
+                      <span className="text-xs text-gray-400 font-techstack">{formatDate(req.createdAt)}</span>
                       <ChevronRight className="w-4 h-4 text-gray-300" />
                     </div>
                   </div>

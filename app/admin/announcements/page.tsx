@@ -126,10 +126,10 @@ export default function AnnouncementsPage() {
       <div className="flex-1 pb-28 px-4 py-5 flex flex-col gap-5 max-w-xl mx-auto w-full">
         {/* Title */}
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400">
+          <p className="text-xs font-grotesk uppercase tracking-widest text-gray-400">
             ADMIN
           </p>
-          <h1 className="text-2xl font-bold text-gray-900 mt-0.5 flex items-center gap-2">
+          <h1 className="text-2xl font-grotesk text-gray-900 mt-0.5 flex items-center gap-2">
             <Megaphone className="w-6 h-6" strokeWidth={1.5} />
             Announcements
           </h1>
@@ -137,9 +137,9 @@ export default function AnnouncementsPage() {
 
         {/* Success */}
         {sendResult !== null && (
-          <div className="p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm font-medium space-y-0.5">
-            {sendResult.sentEmail > 0 && <p>✓ Email sent to {sendResult.sentEmail} recipient{sendResult.sentEmail !== 1 ? "s" : ""}</p>}
-            {sendResult.sentSlack > 0 && <p>✓ Slack DM sent to {sendResult.sentSlack} recipient{sendResult.sentSlack !== 1 ? "s" : ""}</p>}
+          <div className="p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm space-y-0.5">
+            {sendResult.sentEmail > 0 && <p className="font-techstack">✓ Email sent to {sendResult.sentEmail} recipient{sendResult.sentEmail !== 1 ? "s" : ""}</p>}
+            {sendResult.sentSlack > 0 && <p className="font-techstack">✓ Slack DM sent to {sendResult.sentSlack} recipient{sendResult.sentSlack !== 1 ? "s" : ""}</p>}
             {sendResult.skippedEmails.length > 0 && (
               <div className="text-yellow-700">
                 <p>⚠ {sendResult.skippedEmails.length} Slack DM{sendResult.skippedEmails.length !== 1 ? "s" : ""} skipped — not found in workspace:</p>
@@ -164,7 +164,7 @@ export default function AnnouncementsPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Subject */}
           <div>
-            <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
+            <label className="block text-sm font-grotesk text-gray-900 uppercase mb-2">
               Subject
             </label>
             <Input
@@ -191,7 +191,7 @@ export default function AnnouncementsPage() {
 
           {/* Message */}
           <div>
-            <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
+            <label className="block text-sm font-grotesk text-gray-900 uppercase mb-2">
               Message
             </label>
             <Textarea
@@ -218,7 +218,7 @@ export default function AnnouncementsPage() {
 
           {/* Recipients */}
           <div>
-            <label className="block text-sm font-medium text-gray-900 uppercase mb-3">
+            <label className="block text-sm font-grotesk text-gray-900 uppercase mb-3">
               Recipients
             </label>
 
@@ -248,7 +248,7 @@ export default function AnnouncementsPage() {
                         </svg>
                       )}
                     </div>
-                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                    <span className="text-xs font-grotesk text-gray-500 uppercase tracking-wide">
                       Select all ({employees.length})
                     </span>
                   </button>
@@ -276,11 +276,11 @@ export default function AnnouncementsPage() {
                           )}
                         </div>
                         <div className="min-w-0">
-                          <p className="text-sm font-medium text-gray-900 truncate">
+                          <p className="text-sm font-grotesk text-gray-900 truncate">
                             {emp.name ?? emp.email}
                           </p>
                           {emp.name && (
-                            <p className="text-xs text-gray-400 truncate">{emp.email}</p>
+                            <p className="text-xs text-gray-400 truncate font-techstack">{emp.email}</p>
                           )}
                         </div>
                       </button>
@@ -291,7 +291,7 @@ export default function AnnouncementsPage() {
             </div>
 
             {/* Manual emails */}
-            <label className="block text-xs font-medium text-gray-500 uppercase mb-2">
+            <label className="block text-xs font-grotesk text-gray-500 uppercase mb-2">
               Or add emails manually
             </label>
             <Textarea
@@ -318,7 +318,7 @@ export default function AnnouncementsPage() {
             {/* Recipient count */}
             {recipientCount > 0 && (
               <div className="mt-3 px-3 py-2 bg-[#141414]/5 rounded-lg">
-                <p className="text-xs font-semibold text-[#141414]">
+                <p className="text-xs font-grotesk text-[#141414]">
                   {recipientCount} recipient{recipientCount !== 1 ? "s" : ""} selected
                 </p>
               </div>
@@ -327,7 +327,7 @@ export default function AnnouncementsPage() {
 
           {/* Send via */}
           <div>
-            <label className="block text-sm font-medium text-gray-900 uppercase mb-2">
+            <label className="block text-sm font-grotesk text-gray-900 uppercase mb-2">
               Send via
             </label>
             <Select value={channel} onValueChange={(v) => setChannel(v as Channel)}>
@@ -346,7 +346,7 @@ export default function AnnouncementsPage() {
           <Button
             type="submit"
             disabled={loading || recipientCount === 0 || !subject.trim() || !message.trim()}
-            className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-semibold text-lg transition"
+            className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-grotesk text-lg transition"
           >
             {loading ? "Sending..." : `Send Announcement${recipientCount > 0 ? ` → ${recipientCount}` : ""}`}
           </Button>

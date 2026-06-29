@@ -64,11 +64,11 @@ export function SideMenu() {
               {initials}
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-bold text-gray-900 truncate">{displayName}</p>
-              <p className="text-xs text-gray-500 truncate">{user?.email ?? ""}</p>
+              <p className="text-sm text-gray-900 truncate font-grotesk">{displayName}</p>
+              <p className="text-xs text-gray-500 truncate font-techstack">{user?.email ?? ""}</p>
             </div>
           </div>
-          <span className="inline-block px-3 py-1 rounded-full bg-[#141414] text-white text-xs font-semibold uppercase tracking-wide">
+          <span className="inline-block px-3 py-1 rounded-full bg-[#141414] text-white text-xs uppercase tracking-wide font-grotesk">
             Office Manager
           </span>
         </div>
@@ -82,7 +82,7 @@ export function SideMenu() {
             className="flex items-center gap-3 py-4 border-b border-gray-100 text-gray-700 hover:text-gray-900 transition"
           >
             <Megaphone className="w-5 h-5" strokeWidth={1.5} />
-            <span className="text-sm font-medium">Announcements</span>
+            <span className="text-sm font-grotesk">Announcements</span>
           </Link>
 
           {/* Coming soon items */}
@@ -93,9 +93,9 @@ export function SideMenu() {
             >
               <div className="flex items-center gap-3 text-gray-400">
                 <Icon className="w-5 h-5" strokeWidth={1.5} />
-                <span className="text-sm font-medium">{label}</span>
+                <span className="text-sm font-grotesk">{label}</span>
               </div>
-              <span className="text-[10px] font-bold text-gray-400 border border-gray-200 rounded px-2 py-0.5 tracking-wide">
+              <span className="text-[10px] text-gray-400 border border-gray-200 rounded px-2 py-0.5 tracking-wide font-grotesk">
                 SOON
               </span>
             </div>
@@ -109,7 +109,7 @@ export function SideMenu() {
             className="flex items-center gap-3 text-red-500 hover:text-red-600 transition-colors"
           >
             <LogOut className="w-5 h-5" strokeWidth={1.5} />
-            <span className="text-sm font-medium">Sign out</span>
+            <span className="text-sm font-grotesk">Sign out</span>
           </button>
         </div>
       </aside>

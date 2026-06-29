@@ -147,7 +147,7 @@ function Stepper({ status }: { status: RequestStatus }) {
                   <CircleDot className="w-4 h-4 text-gray-300" />
                 )}
               </div>
-              <span className={`text-[10px] font-medium ${filled ? "text-[#141414]" : "text-gray-400"}`}>
+              <span className={`text-[10px] font-grotesk ${filled ? "text-[#141414]" : "text-gray-400"}`}>
                 {step.label}
               </span>
             </div>
@@ -163,7 +163,7 @@ function Stepper({ status }: { status: RequestStatus }) {
             <div className="w-9 h-9 rounded-full flex items-center justify-center border-2 bg-red-500 border-red-500">
               <XCircle className="w-4 h-4 text-white" />
             </div>
-            <span className="text-[10px] font-medium text-red-500">Rejected</span>
+            <span className="text-[10px] font-grotesk text-red-500">Rejected</span>
           </div>
         </div>
       )}
@@ -193,8 +193,8 @@ function ActivityLog({ req }: { req: AdminRequest }) {
     <div className="flex flex-col gap-2">
       {events.map((e, i) => (
         <div key={i} className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60">
-          <p className="text-sm font-medium text-gray-900">{e.text}</p>
-          <p className="text-xs text-gray-400 mt-0.5">{e.sub}</p>
+          <p className="text-sm font-grotesk text-gray-900">{e.text}</p>
+          <p className="text-xs text-gray-400 mt-0.5 font-techstack">{e.sub}</p>
         </div>
       ))}
     </div>
@@ -214,7 +214,7 @@ function ActionButtons({
 }) {
   if (status === "completed" || status === "rejected") {
     return (
-      <div className="px-4 py-3 bg-gray-50 rounded-2xl text-center text-sm text-gray-400 font-medium">
+      <div className="px-4 py-3 bg-gray-50 rounded-2xl text-center text-sm text-gray-400 font-techstack">
         Request closed
       </div>
     );
@@ -226,7 +226,7 @@ function ActionButtons({
         <button
           onClick={() => onStatusChange("in_progress")}
           disabled={loading}
-          className="w-full py-4 rounded-2xl bg-[#141414] text-white font-semibold flex items-center justify-center gap-2 disabled:opacity-60 transition"
+          className="w-full py-4 rounded-2xl bg-[#141414] text-white font-grotesk flex items-center justify-center gap-2 disabled:opacity-60 transition"
         >
           <Clock className="w-5 h-5" />
           Take in progress
@@ -237,7 +237,7 @@ function ActionButtons({
         <button
           onClick={() => onStatusChange("completed")}
           disabled={loading}
-          className="w-full py-4 rounded-2xl bg-[#141414] text-white font-semibold flex items-center justify-center gap-2 disabled:opacity-60 transition"
+          className="w-full py-4 rounded-2xl bg-[#141414] text-white font-grotesk flex items-center justify-center gap-2 disabled:opacity-60 transition"
         >
           <CheckCircle2 className="w-5 h-5" />
           Mark as done
@@ -247,7 +247,7 @@ function ActionButtons({
       <button
         onClick={() => onStatusChange("rejected")}
         disabled={loading}
-        className="w-full py-3 rounded-2xl border border-gray-200 text-gray-600 font-semibold flex items-center justify-center gap-2 disabled:opacity-60 transition hover:bg-gray-50"
+        className="w-full py-3 rounded-2xl border border-gray-200 text-gray-600 font-grotesk flex items-center justify-center gap-2 disabled:opacity-60 transition hover:bg-gray-50"
       >
         <XCircle className="w-5 h-5 text-red-400" />
         Reject
@@ -362,8 +362,8 @@ export default function AdminRequestDetailPage() {
             <ArrowLeft className="w-5 h-5 text-gray-700" />
           </button>
           <div>
-            <p className="text-sm font-bold text-gray-900">#{request.ticketNumber}</p>
-            <p className="text-[10px] text-gray-400 uppercase tracking-wide">{TYPE_LABEL[request.type]}</p>
+            <p className="text-sm text-gray-900 font-grotesk">#{request.ticketNumber}</p>
+            <p className="text-[10px] text-gray-400 uppercase tracking-wide font-grotesk">{TYPE_LABEL[request.type]}</p>
           </div>
         </div>
         <span className={`text-xs font-bold px-3 py-1 rounded-full ${statusConf.badgeClass}`}>
@@ -381,30 +381,30 @@ export default function AdminRequestDetailPage() {
                 {getInitials(request.user)}
               </div>
               <div>
-                <p className="text-sm font-semibold text-gray-900">{getShortName(request.user)}</p>
-                <p className="text-xs text-gray-400">{formatDateTime(request.createdAt)}</p>
+                <p className="text-sm text-gray-900 font-grotesk">{getShortName(request.user)}</p>
+                <p className="text-xs text-gray-400 font-techstack">{formatDateTime(request.createdAt)}</p>
               </div>
             </div>
             <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg ${priorityConf.bgClass} shrink-0`}>
               <PriorityIcon className={`w-3.5 h-3.5 ${priorityConf.textClass}`} />
-              <span className={`text-[10px] font-bold uppercase tracking-wide ${priorityConf.textClass}`}>
+              <span className={`text-[10px] uppercase tracking-wide font-grotesk ${priorityConf.textClass}`}>
                 {priorityConf.label}
               </span>
             </div>
           </div>
 
           {/* Title */}
-          <h1 className="text-lg font-bold text-gray-900 mb-2">{title}</h1>
+          <h1 className="text-lg text-gray-900 mb-2 font-grotesk">{title}</h1>
 
           {/* Description */}
           {description && (
-            <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
+            <p className="text-sm text-gray-600 leading-relaxed font-techstack">{description}</p>
           )}
         </div>
 
         {/* Status stepper */}
         <div className="bg-white rounded-2xl p-4">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-4">
+          <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-4 font-grotesk">
             Status
           </p>
           <Stepper status={request.status} />
@@ -412,7 +412,7 @@ export default function AdminRequestDetailPage() {
 
         {/* Activity log */}
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">
+          <p className="text-[10px] font-grotesk uppercase tracking-widest text-gray-400 mb-3">
             Activity Log
           </p>
           <ActivityLog req={request} />
@@ -420,7 +420,7 @@ export default function AdminRequestDetailPage() {
 
         {/* Comments */}
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">
+          <p className="text-[10px] font-grotesk uppercase tracking-widest text-gray-400 mb-3">
             Manager Comments
           </p>
 
@@ -429,8 +429,8 @@ export default function AdminRequestDetailPage() {
             <div className="flex flex-col gap-2 mb-3">
               {comments.map((c) => (
                 <div key={c.id} className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60">
-                  <p className="text-sm text-gray-900">{c.text}</p>
-                  <p className="text-xs text-gray-400 mt-1">
+                  <p className="text-sm text-gray-900 font-techstack">{c.text}</p>
+                  <p className="text-xs text-gray-400 mt-1 font-techstack">
                     {new Date(c.createdAt).toLocaleString("en-US", {
                       day: "numeric", month: "long", hour: "2-digit", minute: "2-digit",
                     })}
