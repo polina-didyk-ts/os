@@ -3,7 +3,9 @@
     "allow": [
       "Bash(cat:*)",
       "Bash(npx prisma *)",
-      "Bash(vercel --prod)"
+      "Bash(vercel --prod)",
+      "Bash(kill 54487)",
+      "Bash(yarn lint *)"
     ]
   }
 }

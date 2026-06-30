@@ -120,7 +120,7 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
           <button
             type="button"
             onClick={() => setFormData({ ...formData, priority: PRIORITY_LEVELS.LOW })}
-            className={`px-4 py-2 rounded-full transition text-sm font-medium flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 ${
               formData.priority === PRIORITY_LEVELS.LOW
                 ? "bg-green-100 text-green-700 border-2 border-green-500"
                 : "bg-gray-100 text-gray-700 border-2 border-gray-200"
@@ -133,7 +133,7 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
           <button
             type="button"
             onClick={() => setFormData({ ...formData, priority: PRIORITY_LEVELS.MEDIUM })}
-            className={`px-4 py-2 rounded-full transition text-sm font-medium flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 ${
               formData.priority === PRIORITY_LEVELS.MEDIUM
                 ? "bg-yellow-100 text-yellow-700 border-2 border-yellow-500"
                 : "bg-gray-100 text-gray-700 border-2 border-gray-200"
@@ -146,7 +146,7 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
           <button
             type="button"
             onClick={() => setFormData({ ...formData, priority: PRIORITY_LEVELS.HIGH })}
-            className={`px-4 py-2 rounded-full transition text-sm font-medium flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 ${
               formData.priority === PRIORITY_LEVELS.HIGH
                 ? "bg-red-100 text-red-700 border-2 border-red-500"
                 : "bg-gray-100 text-gray-700 border-2 border-gray-200"
@@ -167,7 +167,7 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
       <Button
         type="submit"
         disabled={loading || !formData.question.trim()}
-        className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-semibold text-lg transition"
+        className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-grotesk font-normal text-lg cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(20,20,20,0.12),0_2px_6px_rgba(20,20,20,0.08)] disabled:translate-y-0 disabled:shadow-none"
       >
         {loading ? "Submitting..." : "Submit Request →"}
       </Button>

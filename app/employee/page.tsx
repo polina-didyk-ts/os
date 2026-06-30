@@ -18,7 +18,7 @@ export default function EmployeeDashboard() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 flex flex-col">
+    <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
       <EmployeeHeader />
 
       <div className="flex-1 pb-32 overflow-y-auto">
@@ -32,7 +32,7 @@ export default function EmployeeDashboard() {
 
         {/* Request Types Grid */}
         <section className="px-4 py-6">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 md:gap-6">
             {REQUEST_TYPES.map((type) => (
               <RequestTypeCard
                 key={type.id}

@@ -167,7 +167,7 @@ export default function AdminRequestsPage() {
   useEffect(() => { fetchRequests(); }, [fetchRequests]);
 
   return (
-    <main className="min-h-screen bg-gray-50 flex flex-col">
+    <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-white sticky top-0 z-10">
         <div className="flex items-center gap-3">
@@ -246,7 +246,7 @@ export default function AdminRequestsPage() {
                 <Link
                   key={req.id}
                   href={`/admin/requests/${req.id}`}
-                  className="bg-white rounded-2xl px-4 pt-4 pb-0 shadow-sm block"
+                  className="bg-white rounded-2xl px-4 pt-4 pb-0 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] block"
                   data-testid="admin-request-card"
                 >
                   <div className="flex items-start gap-3">

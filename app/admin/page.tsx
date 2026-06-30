@@ -76,7 +76,7 @@ function StatCard({
   loading: boolean;
 }) {
   return (
-    <div className="bg-white rounded-2xl p-4 flex items-center justify-between">
+    <div className="bg-white rounded-2xl p-4 flex items-center justify-between shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]">
       <div className="flex flex-col gap-1">
         {icon}
         <span className="text-[10px] uppercase tracking-widest text-gray-400 mt-1 font-grotesk">
@@ -128,7 +128,7 @@ export default function AdminDashboard() {
   const recent = requests.slice(0, 3);
 
   return (
-    <main className="min-h-screen bg-gray-50 flex flex-col">
+    <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
       <AdminHeader />
 
       <div className="flex-1 pb-28 px-4 py-5 flex flex-col gap-5">
@@ -195,7 +195,7 @@ export default function AdminDashboard() {
           <div className="flex flex-col gap-2">
             {loading ? (
               [1, 2, 3].map((i) => (
-                <div key={i} className="bg-white rounded-2xl p-4 flex items-center gap-3 animate-pulse">
+                <div key={i} className="bg-white rounded-2xl p-4 flex items-center gap-3 animate-pulse shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]">
                   <div className="w-10 h-10 rounded-full bg-gray-100 shrink-0" />
                   <div className="flex-1">
                     <div className="h-3 bg-gray-100 rounded w-1/2 mb-2" />
@@ -204,7 +204,7 @@ export default function AdminDashboard() {
                 </div>
               ))
             ) : recent.length === 0 ? (
-              <div className="bg-white rounded-2xl p-6 text-center text-sm text-gray-400">
+              <div className="bg-white rounded-2xl p-6 text-center text-sm text-gray-400 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]">
                 No requests yet
               </div>
             ) : (
@@ -215,7 +215,7 @@ export default function AdminDashboard() {
                   <Link
                     key={req.id}
                     href={`/admin/requests/${req.id}`}
-                    className="bg-white rounded-2xl px-4 py-3 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition"
+                    className="bg-white rounded-2xl px-4 py-3 flex items-center gap-3 cursor-pointer hover:bg-[#FAF8F5] transition shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]"
                     data-testid="admin-request-card"
                   >
                     <div

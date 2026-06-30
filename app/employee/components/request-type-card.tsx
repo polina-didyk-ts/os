@@ -22,6 +22,13 @@ const iconMap: Record<string, LucideIcon> = {
   Lightbulb,
 };
 
+const ICON_GRADIENTS: Record<string, string> = {
+  ShoppingCart: "linear-gradient(135deg, #FFC600, #FFB800)",
+  Search:       "linear-gradient(135deg, #FFC600, #FFB800)",
+  Mail:         "linear-gradient(135deg, #FFC600, #FFB800)",
+  Lightbulb:    "linear-gradient(135deg, #FFC600, #FFB800)",
+};
+
 export function RequestTypeCard({
   icon,
   title,
@@ -29,20 +36,26 @@ export function RequestTypeCard({
   onClick,
 }: RequestTypeCardProps) {
   const Icon = iconMap[icon];
+  const gradient = ICON_GRADIENTS[icon];
 
   return (
     <button
       onClick={onClick}
-      className="bg-white rounded-2xl p-6 border-l-4 border-[#FFC600] shadow-sm hover:shadow-md transition text-left cursor-pointer"
+      className="bg-white rounded-2xl p-4 flex flex-col gap-3 text-left cursor-pointer transition-all duration-200 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] hover:shadow-[0_8px_24px_rgba(20,20,20,0.12),0_2px_6px_rgba(20,20,20,0.08)] hover:-translate-y-0.5"
     >
-      <div className="flex items-start justify-between mb-4">
-        <div className="w-12 h-12 rounded-xl bg-[#FFC600]/15 flex items-center justify-center">
-          {Icon && <Icon className="w-7 h-7 text-[#141414]" strokeWidth={1.5} />}
-        </div>
+      <div
+        className="w-14 h-14 rounded-full flex items-center justify-center shrink-0"
+        style={{
+          background: gradient,
+          boxShadow: "inset 0 -2px 4px rgba(0,0,0,0.1)",
+        }}
+      >
+        {Icon && <Icon className="w-7 h-7 text-white" strokeWidth={1.5} />}
       </div>
-
-      <h3 className="text-lg text-gray-900 mb-1 font-grotesk">{title}</h3>
-      <p className="text-sm text-gray-600 font-techstack">{description}</p>
+      <div>
+        <h3 className="text-sm md:text-base text-gray-900 font-grotesk leading-tight">{title}</h3>
+        <p className="text-xs text-gray-500 font-techstack leading-tight mt-0.5">{description}</p>
+      </div>
     </button>
   );
 }

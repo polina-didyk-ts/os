@@ -192,7 +192,7 @@ function ActivityLog({ req }: { req: AdminRequest }) {
   return (
     <div className="flex flex-col gap-2">
       {events.map((e, i) => (
-        <div key={i} className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60">
+        <div key={i} className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60 shadow-[0_2px_8px_rgba(20,20,20,0.06)]">
           <p className="text-sm font-grotesk text-gray-900">{e.text}</p>
           <p className="text-xs text-gray-400 mt-0.5 font-techstack">{e.sub}</p>
         </div>
@@ -214,7 +214,7 @@ function ActionButtons({
 }) {
   if (status === "completed" || status === "rejected") {
     return (
-      <div className="px-4 py-3 bg-gray-50 rounded-2xl text-center text-sm text-gray-400 font-techstack">
+      <div className="px-4 py-3 bg-[#FAF8F5] rounded-2xl text-center text-sm text-gray-400 font-techstack">
         Request closed
       </div>
     );
@@ -247,7 +247,7 @@ function ActionButtons({
       <button
         onClick={() => onStatusChange("rejected")}
         disabled={loading}
-        className="w-full py-3 rounded-2xl border border-gray-200 text-gray-600 font-grotesk flex items-center justify-center gap-2 disabled:opacity-60 transition hover:bg-gray-50"
+        className="w-full py-3 rounded-2xl border border-gray-100 text-gray-600 font-grotesk flex items-center justify-center gap-2 disabled:opacity-60 transition hover:bg-[#FAF8F5]"
       >
         <XCircle className="w-5 h-5 text-red-400" />
         Reject
@@ -328,7 +328,7 @@ export default function AdminRequestDetailPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <main className="min-h-screen bg-[#FAF8F5] flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#141414] border-t-transparent" />
       </main>
     );
@@ -336,7 +336,7 @@ export default function AdminRequestDetailPage() {
 
   if (error || !request) {
     return (
-      <main className="min-h-screen bg-gray-50 flex flex-col items-center justify-center gap-4 px-4">
+      <main className="min-h-screen bg-[#FAF8F5] flex flex-col items-center justify-center gap-4 px-4">
         <p className="text-gray-600 text-sm">{error ?? "Request not found"}</p>
         <button onClick={() => router.back()} className="text-[#141414] text-sm font-medium">← Back</button>
       </main>
@@ -350,7 +350,7 @@ export default function AdminRequestDetailPage() {
   const description  = getDescription(request);
 
   return (
-    <main className="min-h-screen bg-gray-50 flex flex-col">
+    <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-white sticky top-0 z-10 border-b border-gray-100">
         <div className="flex items-center gap-3">
@@ -373,7 +373,7 @@ export default function AdminRequestDetailPage() {
 
       <div className="flex-1 pb-8 flex flex-col gap-4 px-4 pt-4">
         {/* Request card */}
-        <div className="bg-white rounded-2xl p-4">
+        <div className="bg-white rounded-2xl p-4 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]">
           {/* User + priority */}
           <div className="flex items-start justify-between gap-3 mb-4">
             <div className="flex items-center gap-3">
@@ -403,7 +403,7 @@ export default function AdminRequestDetailPage() {
         </div>
 
         {/* Status stepper */}
-        <div className="bg-white rounded-2xl p-4">
+        <div className="bg-white rounded-2xl p-4 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]">
           <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-4 font-grotesk">
             Status
           </p>
@@ -428,7 +428,7 @@ export default function AdminRequestDetailPage() {
           {comments.length > 0 && (
             <div className="flex flex-col gap-2 mb-3">
               {comments.map((c) => (
-                <div key={c.id} className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60">
+                <div key={c.id} className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60 shadow-[0_2px_8px_rgba(20,20,20,0.06)]">
                   <p className="text-sm text-gray-900 font-techstack">{c.text}</p>
                   <p className="text-xs text-gray-400 mt-1 font-techstack">
                     {new Date(c.createdAt).toLocaleString("en-US", {
@@ -441,7 +441,7 @@ export default function AdminRequestDetailPage() {
           )}
 
           {/* Input */}
-          <div className="bg-white rounded-2xl p-4">
+          <div className="bg-white rounded-2xl p-4 shadow-[0_2px_8px_rgba(20,20,20,0.06)]">
             <textarea
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}

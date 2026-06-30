@@ -46,7 +46,7 @@ export default function AnnouncementsPage() {
   useEffect(() => { load(); }, [load]);
 
   return (
-    <main className="min-h-screen bg-gray-50 flex flex-col">
+    <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
       <EmployeeHeader />
 
       <div className="flex-1 pb-28 px-4 py-5 flex flex-col gap-5 max-w-xl mx-auto w-full">
@@ -70,7 +70,7 @@ export default function AnnouncementsPage() {
         {loading && (
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white rounded-xl border border-gray-200 p-4 space-y-2 animate-pulse">
+              <div key={i} className="bg-white rounded-xl p-4 space-y-2 animate-pulse shadow-[0_2px_8px_rgba(20,20,20,0.06)]">
                 <div className="h-4 bg-gray-100 rounded w-3/4" />
                 <div className="h-3 bg-gray-100 rounded w-1/3" />
               </div>
@@ -83,7 +83,7 @@ export default function AnnouncementsPage() {
             <Bell className="w-12 h-12 text-gray-200 mb-4" strokeWidth={1} />
             <p className="text-gray-500 font-grotesk">No announcements yet</p>
             <p className="text-gray-400 text-sm mt-1 font-techstack">
-              You'll see messages from your office manager here
+              You&apos;ll see messages from your office manager here
             </p>
           </div>
         )}
@@ -93,7 +93,7 @@ export default function AnnouncementsPage() {
             {items.map((item) => (
               <div
                 key={item.id}
-                className="bg-white rounded-xl border border-gray-200 p-4"
+                className="bg-white rounded-xl p-4 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]"
               >
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <h2 className="text-sm text-gray-900 leading-snug font-grotesk">

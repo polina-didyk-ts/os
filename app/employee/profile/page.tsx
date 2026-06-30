@@ -39,7 +39,7 @@ function StatCard({
   iconClass: string;
 }) {
   return (
-    <div className="flex-1 bg-white rounded-2xl py-4 flex flex-col items-center gap-1">
+    <div className="flex-1 bg-white rounded-2xl py-4 flex flex-col items-center gap-1 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]">
       <div className={iconClass}>{icon}</div>
       <span className="text-[10px] uppercase tracking-wide text-gray-400 mt-1 font-grotesk">
         {label}
@@ -82,9 +82,9 @@ export default function EmployeeProfilePage() {
   const email = user?.email ?? "";
 
   return (
-    <main className="min-h-screen bg-gray-50 flex flex-col">
+    <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white sticky top-0 z-10">
+      <header className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white sticky top-0 z-10">
         <div className="flex items-center gap-3">
           <button onClick={toggle} className="p-2 hover:bg-gray-100 rounded-lg transition" aria-label="Open menu">
             <Menu className="w-6 h-6 text-gray-700" />
@@ -96,7 +96,7 @@ export default function EmployeeProfilePage() {
 
       <div className="flex-1 pb-28 px-4 py-4 flex flex-col gap-4">
         {/* Profile card */}
-        <div className="bg-white rounded-2xl px-6 py-8 flex flex-col items-center shadow-sm">
+        <div className="bg-white rounded-2xl px-6 py-8 flex flex-col items-center shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]">
           {/* Avatar */}
           <div className="relative mb-4">
             <div className="w-24 h-24 rounded-full bg-[#141414] flex items-center justify-center text-white text-2xl font-bold select-none">

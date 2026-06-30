@@ -109,7 +109,7 @@ export default function EmployeeRequestDetailPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <main className="min-h-screen bg-[#FAF8F5] flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#141414] border-t-transparent" />
       </main>
     );
@@ -117,7 +117,7 @@ export default function EmployeeRequestDetailPage() {
 
   if (error || !request) {
     return (
-      <main className="min-h-screen bg-gray-50 flex flex-col items-center justify-center gap-4 px-4">
+      <main className="min-h-screen bg-[#FAF8F5] flex flex-col items-center justify-center gap-4 px-4">
         <p className="text-gray-600 text-sm">{error ?? "Request not found"}</p>
         <button onClick={() => router.back()} className="text-[#141414] text-sm font-medium">← Back</button>
       </main>
@@ -131,7 +131,7 @@ export default function EmployeeRequestDetailPage() {
   const description = getDescription(request);
 
   return (
-    <main className="min-h-screen bg-gray-50 flex flex-col">
+    <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-white sticky top-0 z-10 border-b border-gray-100">
         <div className="flex items-center gap-3">
@@ -154,7 +154,7 @@ export default function EmployeeRequestDetailPage() {
 
       <div className="flex-1 pb-8 flex flex-col gap-4 px-4 pt-4">
         {/* Request card */}
-        <div className="bg-white rounded-2xl p-4">
+        <div className="bg-white rounded-2xl p-4 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]">
           <div className="flex items-center gap-3 mb-4">
             <div className={`w-10 h-10 rounded-xl ${typeConf.bgClass} flex items-center justify-center shrink-0`}>
               <Icon className={`w-5 h-5 ${typeConf.iconClass}`} />
@@ -191,12 +191,12 @@ export default function EmployeeRequestDetailPage() {
             Activity Log
           </p>
           <div className="flex flex-col gap-2">
-            <div className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60">
+            <div className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60 shadow-[0_2px_8px_rgba(20,20,20,0.06)]">
               <p className="text-sm text-gray-900 font-grotesk">You submitted a request</p>
               <p className="text-xs text-gray-400 mt-0.5 font-techstack">{formatDateTime(request.createdAt)}</p>
             </div>
             {request.status !== "new" && (
-              <div className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60">
+              <div className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60 shadow-[0_2px_8px_rgba(20,20,20,0.06)]">
                 <p className="text-sm text-gray-900 font-grotesk">
                   Status changed to &ldquo;{statusConf.label}&rdquo;
                 </p>

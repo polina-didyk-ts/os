@@ -120,7 +120,7 @@ export default function AnnouncementsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 flex flex-col">
+    <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
       <AdminHeader />
 
       <div className="flex-1 pb-28 px-4 py-5 flex flex-col gap-5 max-w-xl mx-auto w-full">
@@ -223,7 +223,7 @@ export default function AnnouncementsPage() {
             </label>
 
             {/* Employee multiselect */}
-            <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-3">
+            <div className="bg-white rounded-xl overflow-hidden mb-3 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]">
               {loadingUsers ? (
                 <div className="p-4 space-y-2">
                   {[1, 2, 3].map((i) => (
@@ -235,7 +235,7 @@ export default function AnnouncementsPage() {
                   <button
                     type="button"
                     onClick={toggleAll}
-                    className="w-full flex items-center gap-3 px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition text-left"
+                    className="w-full flex items-center gap-3 px-4 py-3 border-b border-gray-100 hover:bg-[#FAF8F5] transition text-left"
                   >
                     <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${
                       selected.size === employees.length && employees.length > 0
@@ -262,7 +262,7 @@ export default function AnnouncementsPage() {
                           toggleEmployee(emp.email);
                           if (fieldErrors.recipients) setFieldErrors({ ...fieldErrors, recipients: "" });
                         }}
-                        className="w-full flex items-center gap-3 px-4 py-3 border-b border-gray-50 last:border-0 hover:bg-gray-50 transition text-left"
+                        className="w-full flex items-center gap-3 px-4 py-3 border-b border-gray-50 last:border-0 hover:bg-[#FAF8F5] transition text-left"
                       >
                         <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${
                           selected.has(emp.email)
@@ -346,7 +346,7 @@ export default function AnnouncementsPage() {
           <Button
             type="submit"
             disabled={loading || recipientCount === 0 || !subject.trim() || !message.trim()}
-            className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-grotesk text-lg transition"
+            className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-grotesk font-normal text-lg cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(20,20,20,0.12),0_2px_6px_rgba(20,20,20,0.08)] disabled:translate-y-0 disabled:shadow-none"
           >
             {loading ? "Sending..." : `Send Announcement${recipientCount > 0 ? ` → ${recipientCount}` : ""}`}
           </Button>

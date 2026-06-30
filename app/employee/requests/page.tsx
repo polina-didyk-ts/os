@@ -249,16 +249,16 @@ export default function EmployeeRequestsPage() {
   const userInitial = session?.user?.name?.[0]?.toUpperCase() ?? "?";
 
   return (
-    <main className="min-h-screen bg-gray-50 flex flex-col">
+    <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white sticky top-0 z-10">
+      <header className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white sticky top-0 z-10">
         <div className="flex items-center gap-3">
           <button onClick={toggle} className="p-2 hover:bg-gray-100 rounded-lg transition cursor-pointer" aria-label="Open menu">
             <Menu className="w-6 h-6 text-gray-700" />
           </button>
           <span className="text-lg text-gray-900 font-grotesk">My Requests</span>
         </div>
-        <div className="w-9 h-9 rounded-full bg-[#141414] flex items-center justify-center text-white text-sm font-semibold">
+        <div className="w-9 h-9 rounded-full bg-[#141414] flex items-center justify-center text-white text-sm font-grotesk">
           {userInitial}
         </div>
       </header>
@@ -337,7 +337,7 @@ export default function EmployeeRequestsPage() {
                 <Link
                   key={request.id}
                   href={`/employee/requests/${request.id}`}
-                  className="bg-white rounded-2xl px-4 pt-4 pb-0 shadow-sm block"
+                  className="bg-white rounded-2xl px-4 pt-4 pb-0 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] block"
                   data-testid="request-card"
                 >
                   <div className="flex items-start gap-3">
@@ -369,10 +369,10 @@ export default function EmployeeRequestsPage() {
                         ID #{request.ticketNumber}
                       </p>
                       <div className="flex items-center gap-1.5 mt-2">
-                        <span className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-gray-100 text-gray-500">
+                        <span className="text-[11px] font-grotesk px-2 py-0.5 rounded-md bg-gray-100 text-gray-500">
                           {typeConf.label}
                         </span>
-                        <span className={`text-[11px] font-medium px-2 py-0.5 rounded-md ${priorityConf.className}`}>
+                        <span className={`text-[11px] font-grotesk px-2 py-0.5 rounded-md ${priorityConf.className}`}>
                           {priorityConf.label}
                         </span>
                       </div>

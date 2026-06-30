@@ -28,7 +28,6 @@ export function SideMenu() {
   const pathname = usePathname();
   const router = useRouter();
 
-  // Lock body scroll when open
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -63,14 +62,14 @@ export function SideMenu() {
 
       {/* Drawer */}
       <aside
-        className={`fixed top-0 left-0 h-full w-72 bg-white z-50 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 h-full w-72 bg-[#FAF8F5] z-50 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         aria-label="Side menu"
       >
-        {/* User info */}
-        <div className="px-5 pt-10 pb-5 border-b border-gray-200 bg-white">
-          <div className="w-12 h-12 rounded-full bg-[#141414] flex items-center justify-center text-white text-base font-bold mb-3 select-none">
+        {/* User info card */}
+        <div className="mx-4 mt-10 mb-3 bg-white rounded-2xl px-5 py-5 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]">
+          <div className="w-12 h-12 rounded-full bg-[#141414] flex items-center justify-center text-white text-base font-grotesk mb-3 select-none">
             {initials}
           </div>
           <p className="text-base text-gray-900 font-grotesk">{displayName}</p>
@@ -81,7 +80,7 @@ export function SideMenu() {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 py-4">
+        <nav className="flex-1 py-2 px-3">
           {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
             const active = isActive(href);
             return (
@@ -89,32 +88,36 @@ export function SideMenu() {
                 key={href}
                 href={href}
                 onClick={close}
-                className={`flex items-center justify-between px-5 py-4 transition-colors ${
+                className={`flex items-center justify-between px-4 py-3.5 rounded-xl mb-1 transition-all duration-150 ${
                   active
-                    ? "bg-[#FFC600]/15 border-l-4 border-[#FFC600] text-[#141414]"
-                    : "border-l-4 border-transparent text-gray-700 hover:bg-gray-100"
+                    ? "bg-white shadow-[0_2px_8px_rgba(20,20,20,0.06)] text-[#141414]"
+                    : "text-gray-600 hover:bg-white/60"
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <Icon className="w-5 h-5" strokeWidth={1.5} />
-                  <span className={`text-sm font-medium font-grotesk ${active ? "text-[#141414]" : ""}`}>
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                    active ? "bg-[#FFC600]/20" : "bg-transparent"
+                  }`}>
+                    <Icon className={`w-4 h-4 ${active ? "text-[#141414]" : "text-gray-500"}`} strokeWidth={1.5} />
+                  </div>
+                  <span className={`text-sm font-grotesk ${active ? "text-[#141414]" : "text-gray-600"}`}>
                     {label}
                   </span>
                 </div>
-                <ChevronRight className="w-4 h-4 opacity-40" />
+                <ChevronRight className={`w-4 h-4 transition-opacity ${active ? "opacity-60" : "opacity-20"}`} />
               </Link>
             );
           })}
         </nav>
 
         {/* Sign out */}
-        <div className="px-5 py-6 border-t border-gray-200">
+        <div className="px-5 py-6 border-t border-gray-100">
           <button
             onClick={handleSignOut}
-            className="flex items-center gap-3 text-red-500 hover:text-red-600 transition-colors"
+            className="flex items-center gap-3 text-red-500 hover:text-red-600 cursor-pointer transition-all duration-200 hover:-translate-y-0.5"
           >
             <LogOut className="w-5 h-5" strokeWidth={1.5} />
-            <span className="text-sm font-medium font-grotesk">Sign out</span>
+            <span className="text-sm font-grotesk">Sign out</span>
           </button>
         </div>
       </aside>

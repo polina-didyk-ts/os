@@ -53,22 +53,18 @@ export function SideMenu() {
 
       {/* Drawer */}
       <aside
-        className={`fixed top-0 left-0 h-full w-72 bg-white z-50 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 h-full w-72 bg-[#FAF8F5] z-50 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* User info */}
-        <div className="px-5 pt-10 pb-5 border-b border-gray-100">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-11 h-11 rounded-full bg-[#141414] flex items-center justify-center text-white text-sm font-bold select-none shrink-0">
-              {initials}
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm text-gray-900 truncate font-grotesk">{displayName}</p>
-              <p className="text-xs text-gray-500 truncate font-techstack">{user?.email ?? ""}</p>
-            </div>
+        <div className="mx-4 mt-10 mb-3 bg-white rounded-2xl px-5 py-5 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]">
+          <div className="w-12 h-12 rounded-full bg-[#141414] flex items-center justify-center text-white text-base font-grotesk mb-3 select-none">
+            {initials}
           </div>
-          <span className="inline-block px-3 py-1 rounded-full bg-[#141414] text-white text-xs uppercase tracking-wide font-grotesk">
+          <p className="text-base text-gray-900 font-grotesk">{displayName}</p>
+          <p className="text-sm text-gray-500 mt-0.5 font-techstack">{user?.email ?? ""}</p>
+          <span className="mt-2 inline-block px-3 py-0.5 rounded-full bg-[#141414] text-white text-xs uppercase tracking-wide font-grotesk">
             Office Manager
           </span>
         </div>
@@ -95,7 +91,7 @@ export function SideMenu() {
                 <Icon className="w-5 h-5" strokeWidth={1.5} />
                 <span className="text-sm font-grotesk">{label}</span>
               </div>
-              <span className="text-[10px] text-gray-400 border border-gray-200 rounded px-2 py-0.5 tracking-wide font-grotesk">
+              <span className="text-[10px] text-gray-400 border border-gray-100 rounded px-2 py-0.5 tracking-wide font-grotesk">
                 SOON
               </span>
             </div>
@@ -106,7 +102,7 @@ export function SideMenu() {
         <div className="px-5 py-6 border-t border-gray-100">
           <button
             onClick={handleSignOut}
-            className="flex items-center gap-3 text-red-500 hover:text-red-600 transition-colors"
+            className="flex items-center gap-3 text-red-500 hover:text-red-600 cursor-pointer transition-all duration-200 hover:-translate-y-0.5"
           >
             <LogOut className="w-5 h-5" strokeWidth={1.5} />
             <span className="text-sm font-grotesk">Sign out</span>

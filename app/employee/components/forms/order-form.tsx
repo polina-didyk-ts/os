@@ -125,7 +125,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
             setFormData({ ...formData, what: e.target.value });
             if (fieldErrors.what) setFieldErrors({ ...fieldErrors, what: "" });
           }}
-          className="w-full bg-gray-50 border-gray-200"
+          className="w-full bg-[#FAF8F5] border-gray-200"
         />
         {fieldErrors.what && (
           <div className="flex items-center gap-1.5 mt-1.5">
@@ -147,7 +147,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
             setFormData({ ...formData, quantity: e.target.value });
             if (fieldErrors.quantity) setFieldErrors({ ...fieldErrors, quantity: "" });
           }}
-          className={`w-full bg-gray-50 ${fieldErrors.quantity ? "border-red-400 focus-visible:ring-red-400" : "border-gray-200"}`}
+          className={`w-full bg-[#FAF8F5] ${fieldErrors.quantity ? "border-red-400 focus-visible:ring-red-400" : "border-gray-200"}`}
         />
         {fieldErrors.quantity && (
           <div className="flex items-center gap-1.5 mt-1.5">
@@ -166,7 +166,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
           <button
             type="button"
             onClick={() => setFormData({ ...formData, priority: PRIORITY_LEVELS.LOW })}
-            className={`px-4 py-2 rounded-full transition text-sm font-medium flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 ${
               formData.priority === PRIORITY_LEVELS.LOW
                 ? "bg-green-100 text-green-700 border-2 border-green-500"
                 : "bg-gray-100 text-gray-700 border-2 border-gray-200"
@@ -179,7 +179,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
           <button
             type="button"
             onClick={() => setFormData({ ...formData, priority: PRIORITY_LEVELS.MEDIUM })}
-            className={`px-4 py-2 rounded-full transition text-sm font-medium flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 ${
               formData.priority === PRIORITY_LEVELS.MEDIUM
                 ? "bg-yellow-100 text-yellow-700 border-2 border-yellow-500"
                 : "bg-gray-100 text-gray-700 border-2 border-gray-200"
@@ -192,7 +192,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
           <button
             type="button"
             onClick={() => setFormData({ ...formData, priority: PRIORITY_LEVELS.HIGH })}
-            className={`px-4 py-2 rounded-full transition text-sm font-medium flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 ${
               formData.priority === PRIORITY_LEVELS.HIGH
                 ? "bg-red-100 text-red-700 border-2 border-red-500"
                 : "bg-gray-100 text-gray-700 border-2 border-gray-200"
@@ -225,7 +225,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
       <Button
         type="submit"
         disabled={loading || !formData.what.trim() || !formData.quantity}
-        className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-semibold text-lg transition"
+        className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-grotesk font-normal text-lg cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(20,20,20,0.12),0_2px_6px_rgba(20,20,20,0.08)] disabled:translate-y-0 disabled:shadow-none"
       >
         {loading ? "Submitting..." : "Submit Request →"}
       </Button>

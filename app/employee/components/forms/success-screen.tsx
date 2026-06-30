@@ -38,7 +38,7 @@ export function SuccessScreen({ ticketNumber }: SuccessScreenProps) {
       </p>
 
       {/* What Next */}
-      <div className="w-full max-w-md bg-gray-50 rounded-lg p-4 space-y-2">
+      <div className="w-full max-w-md bg-white rounded-2xl p-4 space-y-2 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]">
         <p className="text-xs text-gray-900 uppercase font-grotesk">What&apos;s Next?</p>
         <p className="text-sm text-gray-600 font-techstack">
           Your request is now being reviewed by the office manager. You&apos;ll typically receive a response within 2 business hours. Check updates in your profile.
@@ -47,13 +47,13 @@ export function SuccessScreen({ ticketNumber }: SuccessScreenProps) {
 
       {/* Buttons */}
       <div className="w-full max-w-md space-y-3">
-        <Link href="/employee/requests" className="block">
-          <Button className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg transition">
+        <Link href="/employee/requests" className="block rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(20,20,20,0.12),0_2px_6px_rgba(20,20,20,0.08)]">
+          <Button className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-grotesk font-normal cursor-pointer transition">
             View My Requests
           </Button>
         </Link>
-        <Link href="/employee" className="block">
-          <Button variant="outline" className="w-full py-3 rounded-lg transition">
+        <Link href="/employee" className="block rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(20,20,20,0.12),0_2px_6px_rgba(20,20,20,0.08)]">
+          <Button variant="outline" className="w-full py-3 rounded-lg font-grotesk font-normal cursor-pointer transition">
             Go to Home
           </Button>
         </Link>

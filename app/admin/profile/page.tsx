@@ -22,7 +22,7 @@ export default function AdminProfilePage() {
   const displayName = user?.name ?? user?.email?.split("@")[0] ?? "—";
 
   return (
-    <main className="min-h-screen bg-gray-50 flex flex-col">
+    <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-white sticky top-0 z-10">
         <div className="flex items-center gap-3">
@@ -63,7 +63,7 @@ export default function AdminProfilePage() {
         <h1 className="text-xl font-grotesk text-gray-900">{displayName}</h1>
 
         {/* Role badge */}
-        <span className="mt-2 px-4 py-1 rounded-full bg-[#F2F2F2] text-[#141414] text-xs font-grotesk uppercase tracking-wide border border-gray-200">
+        <span className="mt-2 px-4 py-1 rounded-full bg-[#F2F2F2] text-[#141414] text-xs font-grotesk uppercase tracking-wide border border-gray-100">
           Office Manager
         </span>
       </div>

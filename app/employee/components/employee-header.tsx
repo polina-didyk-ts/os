@@ -39,7 +39,7 @@ export function EmployeeHeader() {
   const initial = getInitial(user?.name, user?.email ?? "");
 
   return (
-    <header className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white sticky top-0 z-10">
+    <header className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white sticky top-0 z-10">
       <div className="flex items-center gap-3">
         <button
           onClick={toggle}
@@ -65,7 +65,7 @@ export function EmployeeHeader() {
           )}
         </Link>
 
-        <div className="w-10 h-10 rounded-full bg-[#141414] flex items-center justify-center text-white font-semibold select-none">
+        <div className="w-10 h-10 rounded-full bg-[#141414] flex items-center justify-center text-white font-grotesk select-none">
           {initial}
         </div>
       </div>
