@@ -100,7 +100,9 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
           rows={8}
           className="w-full"
         />
-        <div className={`text-right text-xs mt-1 ${formData.question.length >= 1000 ? "text-red-500 font-medium" : "text-gray-400"}`}>
+        <div
+          className={`text-right text-xs mt-1 ${formData.question.length >= 1000 ? "text-red-500 font-medium" : "text-gray-400"}`}
+        >
           {formData.question.length} / 1000
         </div>
         {fieldErrors.question && (
@@ -113,9 +115,7 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
 
       {/* Priority */}
       <div>
-        <label className="block text-sm text-gray-900 uppercase mb-3 font-grotesk">
-          Priority
-        </label>
+        <label className="block text-sm text-gray-900 uppercase mb-3 font-grotesk">Priority</label>
         <div className="flex gap-2 flex-wrap">
           <button
             type="button"

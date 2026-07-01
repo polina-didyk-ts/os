@@ -32,8 +32,8 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
     setError("");
 
     const trimmedWhat = formData.what.trim();
-    const rawQty      = formData.quantity;
-    const qty         = Number(rawQty);
+    const rawQty = formData.quantity;
+    const qty = Number(rawQty);
     const errors: Record<string, string> = {};
 
     if (!trimmedWhat) errors.what = "This field is required";
@@ -74,9 +74,9 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
         const errorData = await response.json();
         if (errorData.code === "VALIDATION_ERROR" && Array.isArray(errorData.details)) {
           const MESSAGES: Record<string, string> = {
-            what:     "This field is required",
+            what: "This field is required",
             quantity: "Please enter a valid quantity",
-            comment:  "Maximum 500 characters",
+            comment: "Maximum 500 characters",
           };
           const mapped: Record<string, string> = {};
           for (const d of errorData.details as { path: string; message: string }[]) {
@@ -137,9 +137,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
 
       {/* Quantity */}
       <div>
-        <label className="block text-sm text-gray-900 uppercase mb-2 font-grotesk">
-          Quantity
-        </label>
+        <label className="block text-sm text-gray-900 uppercase mb-2 font-grotesk">Quantity</label>
         <Input
           type="number"
           value={formData.quantity}
@@ -159,9 +157,7 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
 
       {/* Priority */}
       <div>
-        <label className="block text-sm text-gray-900 uppercase mb-3 font-grotesk">
-          Priority
-        </label>
+        <label className="block text-sm text-gray-900 uppercase mb-3 font-grotesk">Priority</label>
         <div className="flex gap-2 flex-wrap">
           <button
             type="button"
@@ -216,7 +212,9 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
           onChange={(e) => setFormData({ ...formData, comment: e.target.value.slice(0, 500) })}
           className="w-full bg-gray-50 border-gray-200 min-h-24"
         />
-        <div className={`text-right text-xs mt-1 ${formData.comment.length >= 500 ? "text-red-500 font-medium" : "text-gray-400"}`}>
+        <div
+          className={`text-right text-xs mt-1 ${formData.comment.length >= 500 ? "text-red-500 font-medium" : "text-gray-400"}`}
+        >
           {formData.comment.length} / 500
         </div>
       </div>

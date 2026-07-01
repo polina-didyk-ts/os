@@ -31,7 +31,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
     e.preventDefault();
     setError("");
 
-    const trimmedWhat        = formData.what.trim();
+    const trimmedWhat = formData.what.trim();
     const trimmedDescription = formData.description.trim();
     const errors: Record<string, string> = {};
     if (!trimmedWhat) errors.what = "This field is required";
@@ -59,9 +59,9 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
         const errorData = await response.json();
         if (errorData.code === "VALIDATION_ERROR" && Array.isArray(errorData.details)) {
           const MESSAGES: Record<string, string> = {
-            what:        "This field is required",
+            what: "This field is required",
             description: "Maximum 1000 characters",
-            comment:     "Maximum 500 characters",
+            comment: "Maximum 500 characters",
           };
           const mapped: Record<string, string> = {};
           for (const d of errorData.details as { path: string; message: string }[]) {
@@ -135,7 +135,9 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
           }}
           className="w-full"
         />
-        <div className={`text-right text-xs mt-1 ${formData.description.length >= 1000 ? "text-red-500 font-medium" : "text-gray-400"}`}>
+        <div
+          className={`text-right text-xs mt-1 ${formData.description.length >= 1000 ? "text-red-500 font-medium" : "text-gray-400"}`}
+        >
           {formData.description.length} / 1000
         </div>
         {fieldErrors.description && (
@@ -148,9 +150,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
 
       {/* Priority */}
       <div>
-        <label className="block text-sm text-gray-900 uppercase mb-3 font-grotesk">
-          Priority
-        </label>
+        <label className="block text-sm text-gray-900 uppercase mb-3 font-grotesk">Priority</label>
         <div className="flex gap-2 flex-wrap">
           <button
             type="button"
@@ -205,7 +205,9 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
           onChange={(e) => setFormData({ ...formData, comment: e.target.value.slice(0, 500) })}
           className="w-full"
         />
-        <div className={`text-right text-xs mt-1 ${formData.comment.length >= 500 ? "text-red-500 font-medium" : "text-gray-400"}`}>
+        <div
+          className={`text-right text-xs mt-1 ${formData.comment.length >= 500 ? "text-red-500 font-medium" : "text-gray-400"}`}
+        >
           {formData.comment.length} / 500
         </div>
       </div>

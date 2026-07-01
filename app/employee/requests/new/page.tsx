@@ -3,7 +3,13 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { EmployeeHeader, BottomNavigation } from "../../components";
-import { OrderForm, ProblemForm, QuestionForm, IdeaForm, SuccessScreen } from "../../components/forms";
+import {
+  OrderForm,
+  ProblemForm,
+  QuestionForm,
+  IdeaForm,
+  SuccessScreen,
+} from "../../components/forms";
 import { REQUEST_TYPES } from "@/src/modules/requests/request-types";
 import { ChevronLeft } from "lucide-react";
 
@@ -49,7 +55,9 @@ export default function NewRequestPage() {
 
       <div className="flex-1 pb-32 overflow-y-auto">
         {/* Header */}
-        <div className={`mx-4 mt-4 bg-white rounded-2xl px-4 py-3 ${CARD_SHADOW} flex items-center justify-between`}>
+        <div
+          className={`mx-4 mt-4 bg-white rounded-2xl px-4 py-3 ${CARD_SHADOW} flex items-center justify-between`}
+        >
           <button
             onClick={() => router.back()}
             className="p-1 hover:bg-gray-100 rounded-lg transition"
@@ -86,10 +94,10 @@ export default function NewRequestPage() {
 
         {/* Form */}
         <div className={`mx-4 mt-3 mb-4 bg-white rounded-2xl p-5 ${CARD_SHADOW}`}>
-          {type === "order"    && <OrderForm    onSuccess={setSuccessTicket} />}
-          {type === "problem"  && <ProblemForm  onSuccess={setSuccessTicket} />}
+          {type === "order" && <OrderForm onSuccess={setSuccessTicket} />}
+          {type === "problem" && <ProblemForm onSuccess={setSuccessTicket} />}
           {type === "question" && <QuestionForm onSuccess={setSuccessTicket} />}
-          {type === "idea"     && <IdeaForm     onSuccess={setSuccessTicket} />}
+          {type === "idea" && <IdeaForm onSuccess={setSuccessTicket} />}
         </div>
       </div>
 

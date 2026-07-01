@@ -6,7 +6,7 @@ import { ArrowLeft, CheckCircle2, XCircle, Clock, CircleDot, AlertTriangle } fro
 
 // ── types ──────────────────────────────────────────────────────────────────
 
-type RequestType   = "order" | "problem" | "question" | "idea";
+type RequestType = "order" | "problem" | "question" | "idea";
 type RequestStatus = "new" | "in_progress" | "completed" | "rejected";
 
 interface AdminRequest {
@@ -31,40 +31,58 @@ interface Comment {
 // ── config ─────────────────────────────────────────────────────────────────
 
 const TYPE_LABEL: Record<RequestType, string> = {
-  order:    "ORDER",
-  problem:  "PROBLEM",
+  order: "ORDER",
+  problem: "PROBLEM",
   question: "QUESTION",
-  idea:     "IDEA / FEEDBACK",
+  idea: "IDEA / FEEDBACK",
 };
 
 const STATUS_CONFIG: Record<RequestStatus, { label: string; badgeClass: string }> = {
-  new:         { label: "NEW",         badgeClass: "bg-gray-100 text-gray-700"      },
-  in_progress: { label: "IN PROGRESS", badgeClass: "bg-yellow-100 text-yellow-700"  },
-  completed:   { label: "DONE",        badgeClass: "bg-green-100 text-green-700"    },
-  rejected:    { label: "REJECTED",    badgeClass: "bg-red-100 text-red-600"        },
+  new: { label: "NEW", badgeClass: "bg-gray-100 text-gray-700" },
+  in_progress: { label: "IN PROGRESS", badgeClass: "bg-yellow-100 text-yellow-700" },
+  completed: { label: "DONE", badgeClass: "bg-green-100 text-green-700" },
+  rejected: { label: "REJECTED", badgeClass: "bg-red-100 text-red-600" },
 };
 
-const PRIORITY_CONFIG: Record<string, { label: string; bgClass: string; textClass: string; icon: React.ElementType }> = {
-  high:   { label: "HIGH PRIORITY",   bgClass: "bg-red-50",    textClass: "text-red-600",    icon: AlertTriangle },
-  medium: { label: "MEDIUM PRIORITY", bgClass: "bg-yellow-50", textClass: "text-yellow-600", icon: AlertTriangle },
-  low:    { label: "LOW PRIORITY",    bgClass: "bg-green-50",  textClass: "text-green-600",  icon: AlertTriangle },
+const PRIORITY_CONFIG: Record<
+  string,
+  { label: string; bgClass: string; textClass: string; icon: React.ElementType }
+> = {
+  high: {
+    label: "HIGH PRIORITY",
+    bgClass: "bg-red-50",
+    textClass: "text-red-600",
+    icon: AlertTriangle,
+  },
+  medium: {
+    label: "MEDIUM PRIORITY",
+    bgClass: "bg-yellow-50",
+    textClass: "text-yellow-600",
+    icon: AlertTriangle,
+  },
+  low: {
+    label: "LOW PRIORITY",
+    bgClass: "bg-green-50",
+    textClass: "text-green-600",
+    icon: AlertTriangle,
+  },
 };
 
 // Stepper: new → in_progress → completed  (rejected is terminal off-track)
 const STEPPER_STEPS: { status: RequestStatus; label: string }[] = [
-  { status: "new",         label: "New"         },
+  { status: "new", label: "New" },
   { status: "in_progress", label: "In Progress" },
-  { status: "completed",   label: "Done"        },
+  { status: "completed", label: "Done" },
 ];
 
 // ── helpers ────────────────────────────────────────────────────────────────
 
 function getTitle(req: AdminRequest): string {
   const m = req.metadata as Record<string, string>;
-  if (req.type === "order")    return m.what     ?? "Order";
-  if (req.type === "problem")  return m.what     ?? "Problem";
+  if (req.type === "order") return m.what ?? "Order";
+  if (req.type === "problem") return m.what ?? "Problem";
   if (req.type === "question") return m.question ?? "Question";
-  if (req.type === "idea")     return m.idea     ?? "Idea";
+  if (req.type === "idea") return m.idea ?? "Idea";
   return "Request";
 }
 
@@ -115,8 +133,10 @@ function Stepper({ status }: { status: RequestStatus }) {
   return (
     <div className="flex items-center gap-0">
       {STEPPER_STEPS.map((step, idx) => {
-        const isDone    = idx < currentIdx || (idx === currentIdx && !isRejected && status === step.status && status === "completed");
-        const isActive  = idx === currentIdx && !isRejected;
+        const isDone =
+          idx < currentIdx ||
+          (idx === currentIdx && !isRejected && status === step.status && status === "completed");
+        const isActive = idx === currentIdx && !isRejected;
         const isPassedForRejected = isRejected && idx <= 1;
 
         const filled = isDone || isActive || isPassedForRejected;
@@ -124,15 +144,11 @@ function Stepper({ status }: { status: RequestStatus }) {
         return (
           <div key={step.status} className="flex items-center">
             {/* connector before */}
-            {idx > 0 && (
-              <div className={`h-0.5 w-8 ${filled ? "bg-[#141414]" : "bg-gray-200"}`} />
-            )}
+            {idx > 0 && <div className={`h-0.5 w-8 ${filled ? "bg-[#141414]" : "bg-gray-200"}`} />}
             <div className="flex flex-col items-center gap-1">
               <div
                 className={`w-9 h-9 rounded-full flex items-center justify-center border-2 transition-colors ${
-                  filled
-                    ? "bg-[#141414] border-[#141414]"
-                    : "bg-white border-gray-200"
+                  filled ? "bg-[#141414] border-[#141414]" : "bg-white border-gray-200"
                 }`}
               >
                 {filled ? (
@@ -147,7 +163,9 @@ function Stepper({ status }: { status: RequestStatus }) {
                   <CircleDot className="w-4 h-4 text-gray-300" />
                 )}
               </div>
-              <span className={`text-[10px] font-grotesk ${filled ? "text-[#141414]" : "text-gray-400"}`}>
+              <span
+                className={`text-[10px] font-grotesk ${filled ? "text-[#141414]" : "text-gray-400"}`}
+              >
                 {step.label}
               </span>
             </div>
@@ -177,7 +195,7 @@ function ActivityLog({ req }: { req: AdminRequest }) {
   const events: { text: string; sub: string }[] = [
     {
       text: `${getShortName(req.user)} submitted a request`,
-      sub:  `${formatDateShort(req.createdAt)} • Via mobile app`,
+      sub: `${formatDateShort(req.createdAt)} • Via mobile app`,
     },
   ];
 
@@ -185,14 +203,17 @@ function ActivityLog({ req }: { req: AdminRequest }) {
     const statusLabel = STATUS_CONFIG[req.status]?.label ?? req.status;
     events.push({
       text: `Status changed to "${statusLabel}"`,
-      sub:  `${formatDateShort(req.updatedAt)} • Completion expected`,
+      sub: `${formatDateShort(req.updatedAt)} • Completion expected`,
     });
   }
 
   return (
     <div className="flex flex-col gap-2">
       {events.map((e, i) => (
-        <div key={i} className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60 shadow-[0_2px_8px_rgba(20,20,20,0.06)]">
+        <div
+          key={i}
+          className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60 shadow-[0_2px_8px_rgba(20,20,20,0.06)]"
+        >
           <p className="text-sm font-grotesk text-gray-900">{e.text}</p>
           <p className="text-xs text-gray-400 mt-0.5 font-techstack">{e.sub}</p>
         </div>
@@ -260,15 +281,15 @@ function ActionButtons({
 
 export default function AdminRequestDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const router  = useRouter();
+  const router = useRouter();
 
-  const [request, setRequest]             = useState<AdminRequest | null>(null);
-  const [loading, setLoading]             = useState(true);
+  const [request, setRequest] = useState<AdminRequest | null>(null);
+  const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
-  const [error, setError]                 = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const [comments, setComments]           = useState<Comment[]>([]);
-  const [commentText, setCommentText]     = useState("");
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [commentText, setCommentText] = useState("");
 
   const fetchRequest = useCallback(async () => {
     setLoading(true);
@@ -314,9 +335,19 @@ export default function AdminRequestDetailPage() {
       });
       if (!res.ok) throw new Error();
       const updated = await res.json();
-      setRequest((prev) => prev ? { ...prev, status: updated.status, updatedAt: updated.updatedAt } : prev);
+      setRequest((prev) =>
+        prev ? { ...prev, status: updated.status, updatedAt: updated.updatedAt } : prev
+      );
       if (comment) {
-        setComments((prev) => [...prev, { id: Date.now().toString(), text: comment, createdAt: new Date().toISOString(), author: { id: "", name: "You", email: "" } }]);
+        setComments((prev) => [
+          ...prev,
+          {
+            id: Date.now().toString(),
+            text: comment,
+            createdAt: new Date().toISOString(),
+            author: { id: "", name: "You", email: "" },
+          },
+        ]);
         setCommentText("");
       }
     } catch {
@@ -338,16 +369,18 @@ export default function AdminRequestDetailPage() {
     return (
       <main className="min-h-screen bg-[#FAF8F5] flex flex-col items-center justify-center gap-4 px-4">
         <p className="text-gray-600 text-sm">{error ?? "Request not found"}</p>
-        <button onClick={() => router.back()} className="text-[#141414] text-sm font-medium">← Back</button>
+        <button onClick={() => router.back()} className="text-[#141414] text-sm font-medium">
+          ← Back
+        </button>
       </main>
     );
   }
 
-  const statusConf   = STATUS_CONFIG[request.status];
+  const statusConf = STATUS_CONFIG[request.status];
   const priorityConf = PRIORITY_CONFIG[request.priority] ?? PRIORITY_CONFIG.low;
   const PriorityIcon = priorityConf.icon;
-  const title        = getTitle(request);
-  const description  = getDescription(request);
+  const title = getTitle(request);
+  const description = getDescription(request);
 
   return (
     <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
@@ -363,7 +396,9 @@ export default function AdminRequestDetailPage() {
           </button>
           <div>
             <p className="text-sm text-gray-900 font-grotesk">#{request.ticketNumber}</p>
-            <p className="text-[10px] text-gray-400 uppercase tracking-wide font-grotesk">{TYPE_LABEL[request.type]}</p>
+            <p className="text-[10px] text-gray-400 uppercase tracking-wide font-grotesk">
+              {TYPE_LABEL[request.type]}
+            </p>
           </div>
         </div>
         <span className={`text-xs font-bold px-3 py-1 rounded-full ${statusConf.badgeClass}`}>
@@ -382,12 +417,18 @@ export default function AdminRequestDetailPage() {
               </div>
               <div>
                 <p className="text-sm text-gray-900 font-grotesk">{getShortName(request.user)}</p>
-                <p className="text-xs text-gray-400 font-techstack">{formatDateTime(request.createdAt)}</p>
+                <p className="text-xs text-gray-400 font-techstack">
+                  {formatDateTime(request.createdAt)}
+                </p>
               </div>
             </div>
-            <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg ${priorityConf.bgClass} shrink-0`}>
+            <div
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg ${priorityConf.bgClass} shrink-0`}
+            >
               <PriorityIcon className={`w-3.5 h-3.5 ${priorityConf.textClass}`} />
-              <span className={`text-[10px] uppercase tracking-wide font-grotesk ${priorityConf.textClass}`}>
+              <span
+                className={`text-[10px] uppercase tracking-wide font-grotesk ${priorityConf.textClass}`}
+              >
                 {priorityConf.label}
               </span>
             </div>
@@ -428,11 +469,17 @@ export default function AdminRequestDetailPage() {
           {comments.length > 0 && (
             <div className="flex flex-col gap-2 mb-3">
               {comments.map((c) => (
-                <div key={c.id} className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60 shadow-[0_2px_8px_rgba(20,20,20,0.06)]">
+                <div
+                  key={c.id}
+                  className="bg-white rounded-xl px-4 py-3 border-l-4 border-[#FFC600]/60 shadow-[0_2px_8px_rgba(20,20,20,0.06)]"
+                >
                   <p className="text-sm text-gray-900 font-techstack">{c.text}</p>
                   <p className="text-xs text-gray-400 mt-1 font-techstack">
                     {new Date(c.createdAt).toLocaleString("en-US", {
-                      day: "numeric", month: "long", hour: "2-digit", minute: "2-digit",
+                      day: "numeric",
+                      month: "long",
+                      hour: "2-digit",
+                      minute: "2-digit",
                     })}
                   </p>
                 </div>

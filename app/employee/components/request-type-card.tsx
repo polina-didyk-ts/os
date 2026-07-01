@@ -1,12 +1,7 @@
 "use client";
 
 import { LucideIcon } from "lucide-react";
-import {
-  ShoppingCart,
-  Search,
-  Mail,
-  Lightbulb,
-} from "lucide-react";
+import { ShoppingCart, Search, Mail, Lightbulb } from "lucide-react";
 
 interface RequestTypeCardProps {
   icon: string;
@@ -24,17 +19,12 @@ const iconMap: Record<string, LucideIcon> = {
 
 const ICON_GRADIENTS: Record<string, string> = {
   ShoppingCart: "linear-gradient(135deg, #FFC600, #FFB800)",
-  Search:       "linear-gradient(135deg, #FFC600, #FFB800)",
-  Mail:         "linear-gradient(135deg, #FFC600, #FFB800)",
-  Lightbulb:    "linear-gradient(135deg, #FFC600, #FFB800)",
+  Search: "linear-gradient(135deg, #FFC600, #FFB800)",
+  Mail: "linear-gradient(135deg, #FFC600, #FFB800)",
+  Lightbulb: "linear-gradient(135deg, #FFC600, #FFB800)",
 };
 
-export function RequestTypeCard({
-  icon,
-  title,
-  description,
-  onClick,
-}: RequestTypeCardProps) {
+export function RequestTypeCard({ icon, title, description, onClick }: RequestTypeCardProps) {
   const Icon = iconMap[icon];
   const gradient = ICON_GRADIENTS[icon];
 

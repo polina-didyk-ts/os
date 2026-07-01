@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @utility font-grotesk {
   font-family: var(--font-grotesk);
@@ -41,25 +42,25 @@
 
 @theme {
   /* shadcn/ui semantic colors for Tailwind v4 - Techstack Light Theme */
-  --color-background: #F2F2F2;
+  --color-background: #f2f2f2;
   --color-foreground: #141414;
-  --color-card: #FFFFFF;
+  --color-card: #ffffff;
   --color-card-foreground: #141414;
-  --color-popover: #FFFFFF;
+  --color-popover: #ffffff;
   --color-popover-foreground: #141414;
   --color-primary: #141414;
-  --color-primary-foreground: #FFFFFF;
-  --color-secondary: #F2F2F2;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f2f2f2;
   --color-secondary-foreground: #141414;
-  --color-muted: #F2F2F2;
+  --color-muted: #f2f2f2;
   --color-muted-foreground: hsl(0 0% 45%);
-  --color-accent: #FFC600;
+  --color-accent: #ffc600;
   --color-accent-foreground: #141414;
   --color-destructive: hsl(0 84% 60%);
   --color-destructive-foreground: hsl(0 0% 98%);
-  --color-border: #E0E0E0;
-  --color-input: #FFFFFF;
-  --color-ring: #FFC600;
+  --color-border: #e0e0e0;
+  --color-input: #ffffff;
+  --color-ring: #ffc600;
 
   /* Techstack brand colors - Yellow */
   --color-brand-50: #fffbeb;
@@ -67,8 +68,8 @@
   --color-brand-200: #fde68a;
   --color-brand-300: #fcd34d;
   --color-brand-400: #fbbf24;
-  --color-brand-500: #FFC600;
-  --color-brand-600: #FFC600;
+  --color-brand-500: #ffc600;
+  --color-brand-600: #ffc600;
   --color-brand-700: #d97706;
   --color-brand-800: #92400e;
   --color-brand-900: #78350f;
@@ -100,7 +101,7 @@
   /* Semantic colors */
   --color-success: #10b981;
   --color-error: #ef4444;
-  --color-warning: #FFC600;
+  --color-warning: #ffc600;
   --color-info: #141414;
 
   /* Border radius */
@@ -118,7 +119,7 @@
 
 @layer base {
   body {
-    background-color: #F2F2F2;
+    background-color: #f2f2f2;
     color: #141414;
   }
 }

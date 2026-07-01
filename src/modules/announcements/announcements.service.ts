@@ -19,7 +19,10 @@ export const announcementsService = {
       },
     });
 
-    log.info({ announcementId: announcement.id, recipientCount: users.length }, "Announcement saved");
+    log.info(
+      { announcementId: announcement.id, recipientCount: users.length },
+      "Announcement saved"
+    );
     return announcement;
   },
 

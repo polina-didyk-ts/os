@@ -31,27 +31,30 @@ interface Request {
 }
 
 const STATUS_FILTERS = [
-  { id: "all",         label: "ALL"         },
-  { id: "new",         label: "NEW"         },
+  { id: "all", label: "ALL" },
+  { id: "new", label: "NEW" },
   { id: "in_progress", label: "IN PROGRESS" },
-  { id: "completed",   label: "DONE"        },
-  { id: "rejected",    label: "REJECTED"    },
+  { id: "completed", label: "DONE" },
+  { id: "rejected", label: "REJECTED" },
 ] as const;
 
 type FilterId = "all" | RequestStatus;
 type SortOption = "newest" | "oldest" | "updated" | "priority" | "status";
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
-  { value: "newest",   label: "Newest first"      },
-  { value: "oldest",   label: "Oldest first"       },
-  { value: "updated",  label: "Recently updated"   },
-  { value: "priority", label: "Priority"           },
-  { value: "status",   label: "Status"             },
+  { value: "newest", label: "Newest first" },
+  { value: "oldest", label: "Oldest first" },
+  { value: "updated", label: "Recently updated" },
+  { value: "priority", label: "Priority" },
+  { value: "status", label: "Status" },
 ];
 
 const PRIORITY_ORDER: Record<string, number> = { high: 0, medium: 1, low: 2 };
 const STATUS_ORDER: Record<RequestStatus, number> = {
-  new: 0, in_progress: 1, completed: 2, rejected: 3,
+  new: 0,
+  in_progress: 1,
+  completed: 2,
+  rejected: 3,
 };
 
 const STATUS_CONFIG: Record<
@@ -111,9 +114,12 @@ const TYPE_CONFIG: Record<
 };
 
 const PRIORITY_CONFIG: Record<string, { label: string; className: string }> = {
-  high:   { label: "High",   className: "bg-red-50 text-red-600 border border-red-200"              },
-  medium: { label: "Medium", className: "bg-[#FFC600]/15 text-[#8B6914] border border-[#FFC600]/40" },
-  low:    { label: "Low",    className: "bg-green-50 text-green-700 border border-green-200"         },
+  high: { label: "High", className: "bg-red-50 text-red-600 border border-red-200" },
+  medium: {
+    label: "Medium",
+    className: "bg-[#FFC600]/15 text-[#8B6914] border border-[#FFC600]/40",
+  },
+  low: { label: "Low", className: "bg-green-50 text-green-700 border border-green-200" },
 };
 
 function getRequestTitle(request: Request): string {
@@ -143,10 +149,7 @@ function formatDate(dateStr: string): string {
     return `Yesterday, ${timeStr}`;
   }
 
-  return (
-    date.toLocaleDateString("en-US", { month: "long", day: "numeric" }) +
-    `, ${timeStr}`
-  );
+  return date.toLocaleDateString("en-US", { month: "long", day: "numeric" }) + `, ${timeStr}`;
 }
 
 function RequestCardSkeleton() {
@@ -180,9 +183,7 @@ function EmptyState({ filtered }: { filtered: boolean }) {
         {filtered ? "No results found" : "No requests yet"}
       </p>
       <p className="text-gray-500 text-sm mt-1 font-techstack">
-        {filtered
-          ? "Try changing the filter"
-          : "Create your first request"}
+        {filtered ? "Try changing the filter" : "Create your first request"}
       </p>
       {!filtered && (
         <Link
@@ -226,23 +227,29 @@ export default function EmployeeRequestsPage() {
   }, [fetchRequests]);
 
   const filtered =
-    activeFilter === "all"
-      ? requests
-      : requests.filter((r) => r.status === activeFilter);
+    activeFilter === "all" ? requests : requests.filter((r) => r.status === activeFilter);
 
   const sorted = useMemo(() => {
     const arr = [...filtered];
     switch (sortBy) {
       case "oldest":
-        return arr.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+        return arr.sort(
+          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
       case "updated":
-        return arr.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+        return arr.sort(
+          (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        );
       case "priority":
-        return arr.sort((a, b) => (PRIORITY_ORDER[a.priority] ?? 2) - (PRIORITY_ORDER[b.priority] ?? 2));
+        return arr.sort(
+          (a, b) => (PRIORITY_ORDER[a.priority] ?? 2) - (PRIORITY_ORDER[b.priority] ?? 2)
+        );
       case "status":
         return arr.sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
       default:
-        return arr.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        return arr.sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
     }
   }, [filtered, sortBy]);
 
@@ -253,7 +260,11 @@ export default function EmployeeRequestsPage() {
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white sticky top-0 z-10">
         <div className="flex items-center gap-3">
-          <button onClick={toggle} className="p-2 hover:bg-gray-100 rounded-lg transition cursor-pointer" aria-label="Open menu">
+          <button
+            onClick={toggle}
+            className="p-2 hover:bg-gray-100 rounded-lg transition cursor-pointer"
+            aria-label="Open menu"
+          >
             <Menu className="w-6 h-6 text-gray-700" />
           </button>
           <span className="text-lg text-gray-900 font-grotesk">My Requests</span>
@@ -306,10 +317,7 @@ export default function EmployeeRequestsPage() {
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm mb-4">
             {error}
-            <button
-              onClick={fetchRequests}
-              className="ml-2 underline font-medium"
-            >
+            <button onClick={fetchRequests} className="ml-2 underline font-medium">
               Retry
             </button>
           </div>
@@ -343,7 +351,10 @@ export default function EmployeeRequestsPage() {
                   <div className="flex items-start gap-3">
                     <div
                       className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
-                      style={{ background: "linear-gradient(135deg, #FFC600, #FFB800)", boxShadow: "inset 0 -2px 4px rgba(0,0,0,0.1)" }}
+                      style={{
+                        background: "linear-gradient(135deg, #FFC600, #FFB800)",
+                        boxShadow: "inset 0 -2px 4px rgba(0,0,0,0.1)",
+                      }}
                     >
                       <Icon className="w-5 h-5 text-white" strokeWidth={1.5} />
                     </div>
@@ -373,7 +384,9 @@ export default function EmployeeRequestsPage() {
                         <span className="text-[11px] font-grotesk px-2 py-0.5 rounded-md bg-gray-100 text-gray-500">
                           {typeConf.label}
                         </span>
-                        <span className={`text-[11px] font-grotesk px-2 py-0.5 rounded-md ${priorityConf.className}`}>
+                        <span
+                          className={`text-[11px] font-grotesk px-2 py-0.5 rounded-md ${priorityConf.className}`}
+                        >
                           {priorityConf.label}
                         </span>
                       </div>

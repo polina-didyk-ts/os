@@ -101,7 +101,9 @@ export function IdeaForm({ onSuccess }: IdeaFormProps) {
             maxLength={500}
             className="w-full"
           />
-          <div className={`text-right text-xs mt-1 ${formData.idea.length >= 500 ? "text-red-500 font-medium" : "text-gray-400"}`}>
+          <div
+            className={`text-right text-xs mt-1 ${formData.idea.length >= 500 ? "text-red-500 font-medium" : "text-gray-400"}`}
+          >
             {formData.idea.length} / 500
           </div>
         </div>
@@ -115,9 +117,7 @@ export function IdeaForm({ onSuccess }: IdeaFormProps) {
 
       {/* Priority */}
       <div>
-        <label className="block text-sm text-gray-900 uppercase mb-3 font-grotesk">
-          Priority
-        </label>
+        <label className="block text-sm text-gray-900 uppercase mb-3 font-grotesk">Priority</label>
         <div className="flex gap-2 flex-wrap">
           <button
             type="button"

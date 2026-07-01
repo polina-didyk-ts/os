@@ -30,7 +30,9 @@ export function SideMenu() {
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
   const isActive = (href: string) => {
@@ -95,16 +97,25 @@ export function SideMenu() {
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    active ? "bg-[#FFC600]/20" : "bg-transparent"
-                  }`}>
-                    <Icon className={`w-4 h-4 ${active ? "text-[#141414]" : "text-gray-500"}`} strokeWidth={1.5} />
+                  <div
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      active ? "bg-[#FFC600]/20" : "bg-transparent"
+                    }`}
+                  >
+                    <Icon
+                      className={`w-4 h-4 ${active ? "text-[#141414]" : "text-gray-500"}`}
+                      strokeWidth={1.5}
+                    />
                   </div>
-                  <span className={`text-sm font-grotesk ${active ? "text-[#141414]" : "text-gray-600"}`}>
+                  <span
+                    className={`text-sm font-grotesk ${active ? "text-[#141414]" : "text-gray-600"}`}
+                  >
                     {label}
                   </span>
                 </div>
-                <ChevronRight className={`w-4 h-4 transition-opacity ${active ? "opacity-60" : "opacity-20"}`} />
+                <ChevronRight
+                  className={`w-4 h-4 transition-opacity ${active ? "opacity-60" : "opacity-20"}`}
+                />
               </Link>
             );
           })}

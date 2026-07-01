@@ -64,10 +64,7 @@ test.describe("Employee Requests - Form Submission", () => {
     await descriptionInput.fill("Printer is not printing, LED is red");
 
     // 4. Select low priority
-    await page
-      .getByRole("button", { name: /low/i })
-      .first()
-      .click();
+    await page.getByRole("button", { name: /low/i }).first().click();
 
     // 5. Submit form
     const submitBtn = page.getByRole("button", { name: /submit request/i });
@@ -95,10 +92,7 @@ test.describe("Employee Requests - Form Submission", () => {
     await questionInput.fill("How do I take a day off?");
 
     // 4. Select high priority
-    await page
-      .getByRole("button", { name: /high/i })
-      .first()
-      .click();
+    await page.getByRole("button", { name: /high/i }).first().click();
 
     // 5. Submit form
     const submitBtnQ = page.getByRole("button", { name: /submit request/i });
@@ -123,7 +117,8 @@ test.describe("Employee Requests - Form Submission", () => {
 
     // 3. Fill in the idea
     const ideaInput = page.getByPlaceholder(/share your thoughts/i);
-    const ideaText = "Could we get a coffee machine for the office? It would make work more enjoyable!";
+    const ideaText =
+      "Could we get a coffee machine for the office? It would make work more enjoyable!";
     await ideaInput.fill(ideaText);
 
     // 4. Verify character counter

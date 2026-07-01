@@ -18,7 +18,7 @@ export default function AdminProfilePage() {
   const { data: session } = useSession();
 
   const user = session?.user;
-  const initials    = getInitials(user?.name, user?.email ?? "");
+  const initials = getInitials(user?.name, user?.email ?? "");
   const displayName = user?.name ?? user?.email?.split("@")[0] ?? "—";
 
   return (
@@ -36,7 +36,10 @@ export default function AdminProfilePage() {
           <span className="text-lg font-grotesk text-gray-900">Digital Office</span>
         </div>
         <div className="flex items-center gap-2">
-          <button className="p-2 hover:bg-gray-100 rounded-lg transition" aria-label="Notifications">
+          <button
+            className="p-2 hover:bg-gray-100 rounded-lg transition"
+            aria-label="Notifications"
+          >
             <Bell className="w-5 h-5 text-gray-700" />
           </button>
           <div className="w-9 h-9 rounded-full bg-[#141414] flex items-center justify-center text-white text-sm font-bold select-none">
@@ -54,7 +57,11 @@ export default function AdminProfilePage() {
           </div>
           <div className="absolute bottom-0.5 right-0.5 w-7 h-7 rounded-full bg-[#FFC600] border-2 border-white flex items-center justify-center">
             <svg className="w-3.5 h-3.5 text-[#141414]" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              <path
+                fillRule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clipRule="evenodd"
+              />
             </svg>
           </div>
         </div>

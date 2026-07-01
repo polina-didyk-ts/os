@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Megaphone, BarChart2, LogOut } from "lucide-react";
+import { Megaphone, BarChart2, FileText, LogOut } from "lucide-react";
 import { useSession, signOut } from "@/src/lib/client";
 import { useSideMenu } from "./side-menu-context";
 
@@ -16,9 +16,7 @@ function getInitials(name: string | null | undefined, email: string): string {
   return email.slice(0, 2).toUpperCase();
 }
 
-const COMING_SOON_ITEMS = [
-  { icon: BarChart2, label: "Analytics" },
-];
+const COMING_SOON_ITEMS = [{ icon: BarChart2, label: "Analytics" }];
 
 export function SideMenu() {
   const { isOpen, close } = useSideMenu();
@@ -27,7 +25,9 @@ export function SideMenu() {
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
   const handleSignOut = async () => {
@@ -36,8 +36,8 @@ export function SideMenu() {
     router.push("/signin");
   };
 
-  const user        = session?.user;
-  const initials    = getInitials(user?.name, user?.email ?? "");
+  const user = session?.user;
+  const initials = getInitials(user?.name, user?.email ?? "");
   const displayName = user?.name ?? user?.email?.split("@")[0] ?? "—";
 
   return (
@@ -79,6 +79,16 @@ export function SideMenu() {
           >
             <Megaphone className="w-5 h-5" strokeWidth={1.5} />
             <span className="text-sm font-grotesk">Announcements</span>
+          </Link>
+
+          {/* Articles */}
+          <Link
+            href="/admin/articles"
+            onClick={close}
+            className="flex items-center gap-3 py-4 border-b border-gray-100 text-gray-700 hover:text-gray-900 transition"
+          >
+            <FileText className="w-5 h-5" strokeWidth={1.5} />
+            <span className="text-sm font-grotesk">Articles</span>
           </Link>
 
           {/* Coming soon items */}

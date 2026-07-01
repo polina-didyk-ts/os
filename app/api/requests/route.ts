@@ -30,20 +30,20 @@ export const POST = apiHandler(async (req) => {
 
   const request = await requestsService.create(session.user.id, data);
 
-  const meta  = (request.metadata ?? {}) as Record<string, unknown>;
+  const meta = (request.metadata ?? {}) as Record<string, unknown>;
   const title =
     data.type === "order" || data.type === "problem"
       ? String(meta.what ?? "")
       : data.type === "question"
-      ? String(meta.question ?? "")
-      : String(meta.idea ?? "");
+        ? String(meta.question ?? "")
+        : String(meta.idea ?? "");
 
   await sendNewRequestAdminEmail({
     employeeName: session.user.name ?? session.user.email,
-    requestId:    request.id,
-    requestType:  request.type,
+    requestId: request.id,
+    requestType: request.type,
     title,
-    priority:     request.priority,
+    priority: request.priority,
     ticketNumber: request.ticketNumber,
   });
 

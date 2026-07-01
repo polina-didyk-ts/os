@@ -5,7 +5,13 @@ import { AlertCircle, Megaphone } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Textarea } from "@/app/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/app/components/ui/select";
 import { AdminHeader, BottomNavigation } from "../components";
 
 type Channel = "email" | "slack" | "both";
@@ -24,17 +30,22 @@ function parseManualEmails(raw: string): string[] {
 }
 
 export default function AnnouncementsPage() {
-  const [employees, setEmployees]         = useState<Employee[]>([]);
-  const [loadingUsers, setLoadingUsers]   = useState(true);
-  const [selected, setSelected]           = useState<Set<string>>(new Set());
-  const [subject, setSubject]             = useState("");
-  const [message, setMessage]             = useState("");
-  const [manualEmails, setManualEmails]   = useState("");
-  const [channel, setChannel]             = useState<Channel>("email");
-  const [loading, setLoading]             = useState(false);
-  const [error, setError]                 = useState("");
-  const [fieldErrors, setFieldErrors]     = useState<Record<string, string>>({});
-  const [sendResult, setSendResult]       = useState<{ sentEmail: number; sentSlack: number; slackErrors: string[]; skippedEmails: string[] } | null>(null);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+  const [manualEmails, setManualEmails] = useState("");
+  const [channel, setChannel] = useState<Channel>("email");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [sendResult, setSendResult] = useState<{
+    sentEmail: number;
+    sentSlack: number;
+    slackErrors: string[];
+    skippedEmails: string[];
+  } | null>(null);
 
   const fetchEmployees = useCallback(async () => {
     try {
@@ -48,12 +59,18 @@ export default function AnnouncementsPage() {
     }
   }, []);
 
-  useEffect(() => { fetchEmployees(); }, [fetchEmployees]);
+  useEffect(() => {
+    fetchEmployees();
+  }, [fetchEmployees]);
 
   const toggleEmployee = (email: string) => {
     setSelected((prev) => {
       const next = new Set(prev);
-      if (next.has(email)) { next.delete(email); } else { next.add(email); }
+      if (next.has(email)) {
+        next.delete(email);
+      } else {
+        next.add(email);
+      }
       return next;
     });
   };
@@ -66,8 +83,8 @@ export default function AnnouncementsPage() {
     }
   };
 
-  const parsedManual  = parseManualEmails(manualEmails);
-  const combined      = Array.from(new Set([...selected, ...parsedManual]));
+  const parsedManual = parseManualEmails(manualEmails);
+  const combined = Array.from(new Set([...selected, ...parsedManual]));
   const recipientCount = combined.length;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -76,8 +93,8 @@ export default function AnnouncementsPage() {
     setSendResult(null);
 
     const errors: Record<string, string> = {};
-    if (!subject.trim())  errors.subject = "Subject is required";
-    if (!message.trim())  errors.message = "Message is required";
+    if (!subject.trim()) errors.subject = "Subject is required";
+    if (!message.trim()) errors.message = "Message is required";
     if (recipientCount === 0) errors.recipients = "Add at least one recipient";
 
     if (Object.keys(errors).length > 0) {
@@ -126,9 +143,7 @@ export default function AnnouncementsPage() {
       <div className="flex-1 pb-28 px-4 py-5 flex flex-col gap-5 max-w-xl mx-auto w-full">
         {/* Title */}
         <div>
-          <p className="text-xs font-grotesk uppercase tracking-widest text-gray-400">
-            ADMIN
-          </p>
+          <p className="text-xs font-grotesk uppercase tracking-widest text-gray-400">ADMIN</p>
           <h1 className="text-2xl font-grotesk text-gray-900 mt-0.5 flex items-center gap-2">
             <Megaphone className="w-6 h-6" strokeWidth={1.5} />
             Announcements
@@ -138,11 +153,25 @@ export default function AnnouncementsPage() {
         {/* Success */}
         {sendResult !== null && (
           <div className="p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm space-y-0.5">
-            {sendResult.sentEmail > 0 && <p className="font-techstack">✓ Email sent to {sendResult.sentEmail} recipient{sendResult.sentEmail !== 1 ? "s" : ""}</p>}
-            {sendResult.sentSlack > 0 && <p className="font-techstack">✓ Slack DM sent to {sendResult.sentSlack} recipient{sendResult.sentSlack !== 1 ? "s" : ""}</p>}
+            {sendResult.sentEmail > 0 && (
+              <p className="font-techstack">
+                ✓ Email sent to {sendResult.sentEmail} recipient
+                {sendResult.sentEmail !== 1 ? "s" : ""}
+              </p>
+            )}
+            {sendResult.sentSlack > 0 && (
+              <p className="font-techstack">
+                ✓ Slack DM sent to {sendResult.sentSlack} recipient
+                {sendResult.sentSlack !== 1 ? "s" : ""}
+              </p>
+            )}
             {sendResult.skippedEmails.length > 0 && (
               <div className="text-yellow-700">
-                <p>⚠ {sendResult.skippedEmails.length} Slack DM{sendResult.skippedEmails.length !== 1 ? "s" : ""} skipped — not found in workspace:</p>
+                <p>
+                  ⚠ {sendResult.skippedEmails.length} Slack DM
+                  {sendResult.skippedEmails.length !== 1 ? "s" : ""} skipped — not found in
+                  workspace:
+                </p>
                 <ul className="mt-1 ml-4 list-disc text-xs">
                   {sendResult.skippedEmails.map((email) => (
                     <li key={email}>{email}</li>
@@ -178,7 +207,9 @@ export default function AnnouncementsPage() {
               }}
               className="w-full"
             />
-            <div className={`text-right text-xs mt-1 ${subject.length >= 100 ? "text-red-500 font-medium" : "text-gray-400"}`}>
+            <div
+              className={`text-right text-xs mt-1 ${subject.length >= 100 ? "text-red-500 font-medium" : "text-gray-400"}`}
+            >
               {subject.length} / 100
             </div>
             {fieldErrors.subject && (
@@ -205,7 +236,9 @@ export default function AnnouncementsPage() {
               }}
               className="w-full"
             />
-            <div className={`text-right text-xs mt-1 ${message.length >= 2000 ? "text-red-500 font-medium" : "text-gray-400"}`}>
+            <div
+              className={`text-right text-xs mt-1 ${message.length >= 2000 ? "text-red-500 font-medium" : "text-gray-400"}`}
+            >
               {message.length} / 2000
             </div>
             {fieldErrors.message && (
@@ -237,14 +270,22 @@ export default function AnnouncementsPage() {
                     onClick={toggleAll}
                     className="w-full flex items-center gap-3 px-4 py-3 border-b border-gray-100 hover:bg-[#FAF8F5] transition text-left"
                   >
-                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${
-                      selected.size === employees.length && employees.length > 0
-                        ? "bg-[#141414] border-[#141414]"
-                        : "border-gray-300"
-                    }`}>
+                    <div
+                      className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${
+                        selected.size === employees.length && employees.length > 0
+                          ? "bg-[#141414] border-[#141414]"
+                          : "border-gray-300"
+                      }`}
+                    >
                       {selected.size === employees.length && employees.length > 0 && (
                         <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 10 8">
-                          <path d="M1 4l3 3 5-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          <path
+                            d="M1 4l3 3 5-6"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
                         </svg>
                       )}
                     </div>
@@ -260,18 +301,27 @@ export default function AnnouncementsPage() {
                         type="button"
                         onClick={() => {
                           toggleEmployee(emp.email);
-                          if (fieldErrors.recipients) setFieldErrors({ ...fieldErrors, recipients: "" });
+                          if (fieldErrors.recipients)
+                            setFieldErrors({ ...fieldErrors, recipients: "" });
                         }}
                         className="w-full flex items-center gap-3 px-4 py-3 border-b border-gray-50 last:border-0 hover:bg-[#FAF8F5] transition text-left"
                       >
-                        <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${
-                          selected.has(emp.email)
-                            ? "bg-[#141414] border-[#141414]"
-                            : "border-gray-300"
-                        }`}>
+                        <div
+                          className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${
+                            selected.has(emp.email)
+                              ? "bg-[#141414] border-[#141414]"
+                              : "border-gray-300"
+                          }`}
+                        >
                           {selected.has(emp.email) && (
                             <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 10 8">
-                              <path d="M1 4l3 3 5-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                              <path
+                                d="M1 4l3 3 5-6"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
                             </svg>
                           )}
                         </div>
@@ -280,7 +330,9 @@ export default function AnnouncementsPage() {
                             {emp.name ?? emp.email}
                           </p>
                           {emp.name && (
-                            <p className="text-xs text-gray-400 truncate font-techstack">{emp.email}</p>
+                            <p className="text-xs text-gray-400 truncate font-techstack">
+                              {emp.email}
+                            </p>
                           )}
                         </div>
                       </button>
@@ -305,7 +357,9 @@ export default function AnnouncementsPage() {
               className="w-full text-sm"
             />
             {parsedManual.length > 0 && (
-              <p className="text-xs text-gray-400 mt-1">{parsedManual.length} valid email{parsedManual.length !== 1 ? "s" : ""} detected</p>
+              <p className="text-xs text-gray-400 mt-1">
+                {parsedManual.length} valid email{parsedManual.length !== 1 ? "s" : ""} detected
+              </p>
             )}
 
             {fieldErrors.recipients && (
@@ -348,7 +402,9 @@ export default function AnnouncementsPage() {
             disabled={loading || recipientCount === 0 || !subject.trim() || !message.trim()}
             className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-grotesk font-normal text-lg cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(20,20,20,0.12),0_2px_6px_rgba(20,20,20,0.08)] disabled:translate-y-0 disabled:shadow-none"
           >
-            {loading ? "Sending..." : `Send Announcement${recipientCount > 0 ? ` → ${recipientCount}` : ""}`}
+            {loading
+              ? "Sending..."
+              : `Send Announcement${recipientCount > 0 ? ` → ${recipientCount}` : ""}`}
           </Button>
         </form>
       </div>

@@ -28,9 +28,7 @@ export function BottomNavigation() {
             key={path}
             href={path}
             className={`flex flex-col items-center gap-1 py-3 px-6 rounded-lg transition ${
-              active
-                ? "text-[#141414] bg-[#FFC600]/20"
-                : "text-gray-600 hover:text-gray-900"
+              active ? "text-[#141414] bg-[#FFC600]/20" : "text-gray-600 hover:text-gray-900"
             }`}
           >
             <Icon className="w-6 h-6" strokeWidth={1.5} />

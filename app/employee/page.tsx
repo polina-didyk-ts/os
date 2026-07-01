@@ -1,11 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/src/lib/client";
-import { EmployeeHeader, RequestTypeCard, BottomNavigation } from "./components";
-import { REQUEST_TYPES } from "@/src/modules/requests/request-types";
-import { FileText, ChevronRight } from "lucide-react";
+import { EmployeeHeader, BottomNavigation } from "./components";
+import { PortalHighlights } from "./components/portal-highlights";
+import { QuickActions } from "./components/quick-actions";
 
 export default function EmployeeDashboard() {
   const router = useRouter();
@@ -22,43 +21,20 @@ export default function EmployeeDashboard() {
       <EmployeeHeader />
 
       <div className="flex-1 pb-32 overflow-y-auto">
-        {/* Greeting Section */}
+        {/* Greeting */}
         <section className="px-4 py-6 bg-white border-b border-gray-200">
           <h1 className="text-3xl text-gray-900 mb-1 font-grotesk">
             Hey, {userName.split(" ")[0]} 👋
           </h1>
-          <p className="text-gray-600 font-techstack">How can we help you today?</p>
+          <p className="text-gray-600 font-techstack">
+            Here&apos;s what&apos;s happening at Techstack.
+          </p>
         </section>
 
-        {/* Request Types Grid */}
-        <section className="px-4 py-6">
-          <div className="grid grid-cols-2 gap-4 md:gap-6">
-            {REQUEST_TYPES.map((type) => (
-              <RequestTypeCard
-                key={type.id}
-                icon={type.icon}
-                title={type.title}
-                description={type.description}
-                onClick={() => handleRequestTypeClick(type.id)}
-              />
-            ))}
-          </div>
-        </section>
-
-        {/* My Requests Section */}
-        <section className="px-4 pb-6">
-          <Link
-            href="/employee/requests"
-            className="flex items-center justify-between px-4 py-4 bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-sm transition"
-          >
-            <div className="flex items-center gap-3">
-              <FileText className="w-6 h-6 text-gray-700" strokeWidth={1.5} />
-              <span className="text-gray-900 font-medium font-grotesk">My Requests</span>
-            </div>
-            <ChevronRight className="w-5 h-5 text-gray-400" strokeWidth={1.5} />
-          </Link>
-        </section>
-
+        <div className="px-4 py-5 flex flex-col gap-4">
+          <PortalHighlights />
+          <QuickActions onRequestTypeClick={handleRequestTypeClick} />
+        </div>
       </div>
 
       <BottomNavigation />

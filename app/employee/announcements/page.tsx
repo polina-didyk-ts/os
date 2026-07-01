@@ -34,7 +34,9 @@ export default function AnnouncementsPage() {
 
       if (data.some((a) => !a.readAt)) {
         await fetch("/api/employee/announcements/read-all", { method: "POST" });
-        setItems((prev) => prev.map((a) => ({ ...a, readAt: a.readAt ?? new Date().toISOString() })));
+        setItems((prev) =>
+          prev.map((a) => ({ ...a, readAt: a.readAt ?? new Date().toISOString() }))
+        );
       }
     } catch {
       setError("Failed to load announcements");
@@ -43,7 +45,9 @@ export default function AnnouncementsPage() {
     }
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
 
   return (
     <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
@@ -51,9 +55,7 @@ export default function AnnouncementsPage() {
 
       <div className="flex-1 pb-28 px-4 py-5 flex flex-col gap-5 max-w-xl mx-auto w-full">
         <div>
-          <p className="text-xs uppercase tracking-widest text-gray-400 font-grotesk">
-            News
-          </p>
+          <p className="text-xs uppercase tracking-widest text-gray-400 font-grotesk">News</p>
           <h1 className="text-2xl text-gray-900 mt-0.5 flex items-center gap-2 font-grotesk">
             <Bell className="w-6 h-6" strokeWidth={1.5} />
             Announcements
@@ -70,7 +72,10 @@ export default function AnnouncementsPage() {
         {loading && (
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white rounded-xl p-4 space-y-2 animate-pulse shadow-[0_2px_8px_rgba(20,20,20,0.06)]">
+              <div
+                key={i}
+                className="bg-white rounded-xl p-4 space-y-2 animate-pulse shadow-[0_2px_8px_rgba(20,20,20,0.06)]"
+              >
                 <div className="h-4 bg-gray-100 rounded w-3/4" />
                 <div className="h-3 bg-gray-100 rounded w-1/3" />
               </div>
@@ -106,7 +111,9 @@ export default function AnnouncementsPage() {
                 <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed font-techstack">
                   {item.message}
                 </p>
-                <p className="text-xs text-gray-400 mt-3 font-techstack">{formatDate(item.createdAt)}</p>
+                <p className="text-xs text-gray-400 mt-3 font-techstack">
+                  {formatDate(item.createdAt)}
+                </p>
               </div>
             ))}
           </div>

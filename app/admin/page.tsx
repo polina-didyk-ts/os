@@ -39,26 +39,36 @@ const TYPE_CONFIG: Record<
   AdminRequest["type"],
   { icon: React.ElementType; bgClass: string; iconClass: string; label: string }
 > = {
-  order:    { icon: ShoppingCart,  bgClass: "bg-[#FFC600]/15", iconClass: "text-[#141414]", label: "ORDER"    },
-  problem:  { icon: Wrench,        bgClass: "bg-pink-100",   iconClass: "text-pink-500",   label: "PROBLEM"  },
-  question: { icon: MessageSquare, bgClass: "bg-gray-100",   iconClass: "text-gray-600",   label: "QUESTION" },
-  idea:     { icon: Lightbulb,     bgClass: "bg-orange-100", iconClass: "text-orange-400", label: "IDEA"     },
+  order: {
+    icon: ShoppingCart,
+    bgClass: "bg-[#FFC600]/15",
+    iconClass: "text-[#141414]",
+    label: "ORDER",
+  },
+  problem: { icon: Wrench, bgClass: "bg-pink-100", iconClass: "text-pink-500", label: "PROBLEM" },
+  question: {
+    icon: MessageSquare,
+    bgClass: "bg-gray-100",
+    iconClass: "text-gray-600",
+    label: "QUESTION",
+  },
+  idea: { icon: Lightbulb, bgClass: "bg-orange-100", iconClass: "text-orange-400", label: "IDEA" },
 };
 
 function getRequestTitle(req: AdminRequest): string {
   const m = req.metadata as Record<string, string>;
-  if (req.type === "order")    return m.what      ?? "Order";
-  if (req.type === "problem")  return m.what      ?? "Problem";
-  if (req.type === "question") return m.question  ?? "Question";
-  if (req.type === "idea")     return m.idea      ?? "Idea";
+  if (req.type === "order") return m.what ?? "Order";
+  if (req.type === "problem") return m.what ?? "Problem";
+  if (req.type === "question") return m.question ?? "Question";
+  if (req.type === "idea") return m.idea ?? "Idea";
   return "Request";
 }
 
 function timeAgo(dateStr: string): string {
   const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
-  if (diff < 60)          return `${diff}s ago`;
-  if (diff < 3600)        return `${Math.floor(diff / 60)} min ago`;
-  if (diff < 86400)       return `${Math.floor(diff / 3600)} hr ago`;
+  if (diff < 60) return `${diff}s ago`;
+  if (diff < 3600) return `${Math.floor(diff / 60)} min ago`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)} hr ago`;
   return `${Math.floor(diff / 86400)} d ago`;
 }
 
@@ -119,10 +129,10 @@ export default function AdminDashboard() {
   }, [fetchRequests]);
 
   const stats: Stats = {
-    new:         requests.filter((r) => r.status === "new").length,
+    new: requests.filter((r) => r.status === "new").length,
     in_progress: requests.filter((r) => r.status === "in_progress").length,
-    completed:   requests.filter((r) => r.status === "completed").length,
-    rejected:    requests.filter((r) => r.status === "rejected").length,
+    completed: requests.filter((r) => r.status === "completed").length,
+    rejected: requests.filter((r) => r.status === "rejected").length,
   };
 
   const recent = requests.slice(0, 3);
@@ -137,9 +147,7 @@ export default function AdminDashboard() {
           <p className="text-xs uppercase tracking-widest text-gray-400 font-grotesk">
             WELCOME BACK
           </p>
-          <h1 className="text-2xl text-gray-900 mt-0.5 font-grotesk">
-            Dashboard
-          </h1>
+          <h1 className="text-2xl text-gray-900 mt-0.5 font-grotesk">Dashboard</h1>
         </div>
 
         {/* Error */}
@@ -195,7 +203,10 @@ export default function AdminDashboard() {
           <div className="flex flex-col gap-2">
             {loading ? (
               [1, 2, 3].map((i) => (
-                <div key={i} className="bg-white rounded-2xl p-4 flex items-center gap-3 animate-pulse shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]">
+                <div
+                  key={i}
+                  className="bg-white rounded-2xl p-4 flex items-center gap-3 animate-pulse shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]"
+                >
                   <div className="w-10 h-10 rounded-full bg-gray-100 shrink-0" />
                   <div className="flex-1">
                     <div className="h-3 bg-gray-100 rounded w-1/2 mb-2" />
@@ -220,7 +231,10 @@ export default function AdminDashboard() {
                   >
                     <div
                       className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
-                      style={{ background: "linear-gradient(135deg, #FFC600, #FFB800)", boxShadow: "inset 0 -2px 4px rgba(0,0,0,0.1)" }}
+                      style={{
+                        background: "linear-gradient(135deg, #FFC600, #FFB800)",
+                        boxShadow: "inset 0 -2px 4px rgba(0,0,0,0.1)",
+                      }}
                     >
                       <Icon className="w-5 h-5 text-white" strokeWidth={1.5} />
                     </div>

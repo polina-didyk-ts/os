@@ -86,7 +86,11 @@ export default function EmployeeProfilePage() {
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white sticky top-0 z-10">
         <div className="flex items-center gap-3">
-          <button onClick={toggle} className="p-2 hover:bg-gray-100 rounded-lg transition" aria-label="Open menu">
+          <button
+            onClick={toggle}
+            className="p-2 hover:bg-gray-100 rounded-lg transition"
+            aria-label="Open menu"
+          >
             <Menu className="w-6 h-6 text-gray-700" />
           </button>
           <span className="text-lg text-gray-900 font-grotesk">Profile</span>
@@ -138,7 +142,6 @@ export default function EmployeeProfilePage() {
             value={statsLoading ? "—" : (stats?.completed ?? 0)}
           />
         </div>
-
       </div>
 
       <BottomNavigation />

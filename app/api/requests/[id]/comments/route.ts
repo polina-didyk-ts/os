@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { apiHandler, requireSession, requireRole, getOrganizationContext, prisma } from "@/src/lib/server";
+import {
+  apiHandler,
+  requireSession,
+  requireRole,
+  getOrganizationContext,
+  prisma,
+} from "@/src/lib/server";
 import { commentsService } from "@/src/modules/comments/comments.service";
 
 const createCommentSchema = z.object({

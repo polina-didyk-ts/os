@@ -30,7 +30,9 @@ export function EmployeeHeader() {
   }, [fetchUnread, pathname]);
 
   useEffect(() => {
-    const onVisible = () => { if (document.visibilityState === "visible") fetchUnread(); };
+    const onVisible = () => {
+      if (document.visibilityState === "visible") fetchUnread();
+    };
     document.addEventListener("visibilitychange", onVisible);
     return () => document.removeEventListener("visibilitychange", onVisible);
   }, [fetchUnread]);

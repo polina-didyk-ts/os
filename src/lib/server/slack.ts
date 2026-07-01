@@ -53,9 +53,7 @@ export async function sendAnnouncementSlack(opts: {
         { type: "divider" },
         {
           type: "context",
-          elements: [
-            { type: "mrkdwn", text: ":mega: *Digital Office* · Announcement" },
-          ],
+          elements: [{ type: "mrkdwn", text: ":mega: *Digital Office* · Announcement" }],
         },
       ],
     });
