@@ -7,6 +7,7 @@ import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Textarea } from "@/app/components/ui/textarea";
 import { ArticleEditor } from "../../components/article-editor";
+import { ARTICLE_CATEGORIES } from "@/src/modules/articles/articles.dto";
 
 function slugify(text: string) {
   return text
@@ -25,6 +26,7 @@ export default function NewArticlePage() {
     slug: "",
     excerpt: "",
     coverImage: "",
+    category: "" as string,
     published: false,
   });
   const [content, setContent] = useState<object>({});
@@ -108,18 +110,36 @@ export default function NewArticlePage() {
           />
         </div>
 
-        {/* Cover Image */}
-        <div>
-          <label className="block text-xs font-grotesk text-gray-900 uppercase mb-2">
-            Cover Image URL{" "}
-            <span className="text-gray-400 normal-case font-techstack">(optional)</span>
-          </label>
-          <Input
-            value={form.coverImage}
-            onChange={(e) => setForm((f) => ({ ...f, coverImage: e.target.value }))}
-            placeholder="https://..."
-            className="w-full font-techstack"
-          />
+        {/* Cover Image + Category row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-grotesk text-gray-900 uppercase mb-2">
+              Cover Image URL{" "}
+              <span className="text-gray-400 normal-case font-techstack">(optional)</span>
+            </label>
+            <Input
+              value={form.coverImage}
+              onChange={(e) => setForm((f) => ({ ...f, coverImage: e.target.value }))}
+              placeholder="https://..."
+              className="w-full font-techstack"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-grotesk text-gray-900 uppercase mb-2">
+              Category{" "}
+              <span className="text-gray-400 normal-case font-techstack">(optional)</span>
+            </label>
+            <select
+              value={form.category}
+              onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
+              className="w-full h-9 rounded-md border border-input bg-white px-3 text-sm font-techstack text-gray-700 focus:outline-none focus:ring-1 focus:ring-gray-400"
+            >
+              <option value="">No category</option>
+              {ARTICLE_CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {/* Excerpt */}

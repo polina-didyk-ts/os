@@ -95,8 +95,8 @@ export function ArticleEditor({ content, onChange }: ArticleEditorProps) {
 
   return (
     <div className="bg-white rounded-2xl shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] overflow-hidden">
-      {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-0.5 px-3 py-2 border-b border-gray-100">
+      {/* Toolbar — always visible */}
+      <div className="flex flex-wrap items-center gap-0.5 px-3 py-2 border-b border-gray-100 bg-white sticky top-0 z-10">
         {/* History */}
         <ToolbarButton onClick={() => editor.chain().focus().undo().run()} title="Undo">
           <Undo className="w-4 h-4" />
@@ -220,8 +220,10 @@ export function ArticleEditor({ content, onChange }: ArticleEditorProps) {
         </ToolbarButton>
       </div>
 
-      {/* Editor area */}
-      <EditorContent editor={editor} />
+      {/* Editor area — fixed height, scrolls internally */}
+      <div className="overflow-y-auto max-h-[480px]">
+        <EditorContent editor={editor} />
+      </div>
     </div>
   );
 }

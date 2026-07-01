@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Sparkles, ChevronRight, Calendar } from "lucide-react";
 
 const CATEGORIES = ["All", "News", "Guides", "Office Life", "Events"] as const;
+type Category = typeof CATEGORIES[number];
 
 interface Article {
   id: string;
@@ -42,13 +43,15 @@ function FeaturedPlaceholder() {
 }
 
 export function PortalHighlights() {
-  const [articles, setArticles]     = useState<Article[]>([]);
-  const [loading, setLoading]       = useState(true);
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [articles, setArticles]           = useState<Article[]>([]);
+  const [loading, setLoading]             = useState(true);
+  const [activeCategory, setActiveCategory] = useState<Category>("All");
 
-  const fetchArticles = useCallback(async () => {
+  const fetchArticles = useCallback(async (category: Category) => {
+    setLoading(true);
     try {
-      const res = await fetch("/api/articles");
+      const url = category === "All" ? "/api/articles" : `/api/articles?category=${encodeURIComponent(category)}`;
+      const res = await fetch(url);
       if (!res.ok) throw new Error();
       setArticles(await res.json());
     } catch {
@@ -58,7 +61,7 @@ export function PortalHighlights() {
     }
   }, []);
 
-  useEffect(() => { fetchArticles(); }, [fetchArticles]);
+  useEffect(() => { fetchArticles(activeCategory); }, [fetchArticles, activeCategory]);
 
   const featured = articles[0] ?? null;
   const compact  = articles.slice(1, 3);

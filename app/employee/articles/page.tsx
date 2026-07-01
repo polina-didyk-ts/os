@@ -6,12 +6,16 @@ import Image from "next/image";
 import { ArrowLeft, Calendar } from "lucide-react";
 import { BottomNavigation } from "../components";
 
+const CATEGORIES = ["All", "News", "Guides", "Office Life", "Events"] as const;
+type Category = typeof CATEGORIES[number];
+
 interface Article {
   id: string;
   title: string;
   slug: string;
   excerpt: string | null;
   coverImage: string | null;
+  category: string | null;
   publishedAt: string | null;
   author: { name: string | null };
 }
@@ -25,12 +29,18 @@ function formatDate(dateStr: string) {
 }
 
 export default function EmployeeArticlesPage() {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [articles, setArticles]             = useState<Article[]>([]);
+  const [loading, setLoading]               = useState(true);
+  const [activeCategory, setActiveCategory] = useState<Category>("All");
 
-  const fetchArticles = useCallback(async () => {
+  const fetchArticles = useCallback(async (category: Category) => {
+    setLoading(true);
     try {
-      const res = await fetch("/api/articles");
+      const url =
+        category === "All"
+          ? "/api/articles"
+          : `/api/articles?category=${encodeURIComponent(category)}`;
+      const res = await fetch(url);
       if (!res.ok) throw new Error();
       setArticles(await res.json());
     } catch {
@@ -41,8 +51,8 @@ export default function EmployeeArticlesPage() {
   }, []);
 
   useEffect(() => {
-    fetchArticles();
-  }, [fetchArticles]);
+    fetchArticles(activeCategory);
+  }, [fetchArticles, activeCategory]);
 
   return (
     <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
@@ -58,6 +68,23 @@ export default function EmployeeArticlesPage() {
           <span className="text-lg font-grotesk text-gray-900">What&apos;s New</span>
         </div>
       </header>
+
+      {/* Category chips */}
+      <div className="flex gap-2 px-4 py-3 bg-white border-b border-gray-100 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {CATEGORIES.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setActiveCategory(cat)}
+            className={`shrink-0 px-3 py-1 rounded-full text-xs font-grotesk transition-all cursor-pointer ${
+              activeCategory === cat
+                ? "bg-[#141414] text-white"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
 
       <div className="flex-1 pb-28 px-4 py-5 flex flex-col gap-4 max-w-xl mx-auto w-full">
         {loading ? (
@@ -77,7 +104,11 @@ export default function EmployeeArticlesPage() {
         ) : articles.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <p className="text-gray-800 font-grotesk">No articles yet</p>
-            <p className="text-gray-400 text-sm mt-1 font-techstack">Check back soon for updates</p>
+            <p className="text-gray-400 text-sm mt-1 font-techstack">
+              {activeCategory === "All"
+                ? "Check back soon for updates"
+                : `No articles in "${activeCategory}" yet`}
+            </p>
           </div>
         ) : (
           articles.map((article) => (
@@ -88,26 +119,26 @@ export default function EmployeeArticlesPage() {
             >
               {article.coverImage && (
                 <div className="relative w-full h-44">
-                  <Image
-                    src={article.coverImage}
-                    alt={article.title}
-                    fill
-                    className="object-cover"
-                  />
+                  <Image src={article.coverImage} alt={article.title} fill className="object-cover" />
                 </div>
               )}
               <div className="p-4">
-                {article.publishedAt && (
-                  <div className="flex items-center gap-1.5 mb-2">
-                    <Calendar className="w-3.5 h-3.5 text-gray-400" />
-                    <span className="text-xs text-gray-400 font-techstack">
-                      {formatDate(article.publishedAt)}
+                <div className="flex items-center gap-2 mb-2">
+                  {article.category && (
+                    <span className="text-[10px] font-grotesk uppercase tracking-wide text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                      {article.category}
                     </span>
-                  </div>
-                )}
-                <h2 className="text-base font-grotesk text-gray-900 leading-snug">
-                  {article.title}
-                </h2>
+                  )}
+                  {article.publishedAt && (
+                    <div className="flex items-center gap-1">
+                      <Calendar className="w-3 h-3 text-gray-400" />
+                      <span className="text-xs text-gray-400 font-techstack">
+                        {formatDate(article.publishedAt)}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <h2 className="text-base font-grotesk text-gray-900 leading-snug">{article.title}</h2>
                 {article.excerpt && (
                   <p className="text-sm text-gray-500 mt-1.5 font-techstack line-clamp-2">
                     {article.excerpt}

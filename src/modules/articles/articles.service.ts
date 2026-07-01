@@ -4,9 +4,12 @@ import type { CreateArticleDto, UpdateArticleDto } from "./articles.dto";
 const log = logger.child({ module: "articles.service" });
 
 export const articlesService = {
-  async list(onlyPublished = true) {
+  async list(onlyPublished = true, category?: string | null) {
     return prisma.article.findMany({
-      where: onlyPublished ? { published: true } : undefined,
+      where: {
+        ...(onlyPublished ? { published: true } : {}),
+        ...(category ? { category } : {}),
+      },
       orderBy: { publishedAt: "desc" },
       select: {
         id: true,
@@ -14,6 +17,7 @@ export const articlesService = {
         slug: true,
         excerpt: true,
         coverImage: true,
+        category: true,
         published: true,
         publishedAt: true,
         createdAt: true,

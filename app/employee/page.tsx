@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useSession } from "@/src/lib/client";
 import { EmployeeHeader, BottomNavigation } from "./components";
 import { PortalHighlights } from "./components/portal-highlights";
@@ -20,15 +21,24 @@ export default function EmployeeDashboard() {
     <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
       <EmployeeHeader />
 
-      <div className="flex-1 pb-32 overflow-y-auto">
+      <div className="flex-1 pb-32">
         {/* Greeting */}
-        <section className="px-4 py-6 bg-white border-b border-gray-200">
-          <h1 className="text-3xl text-gray-900 mb-1 font-grotesk">
-            Hey, {userName.split(" ")[0]} 👋
-          </h1>
-          <p className="text-gray-600 font-techstack">
-            Here&apos;s what&apos;s happening at Techstack.
-          </p>
+        <section className="px-4 py-6 bg-white border-b border-gray-200 relative overflow-visible z-20">
+          <div className="pr-28">
+            <h1 className="text-3xl text-gray-900 mb-1 font-grotesk">
+              Hey, {userName.split(" ")[0]} 👋
+            </h1>
+            <p className="text-gray-600 font-techstack">
+              Here&apos;s what&apos;s happening at Techstack.
+            </p>
+          </div>
+          <Image
+            src="/stacky_no_bg.png"
+            alt="Stacky"
+            width={140}
+            height={140}
+            className="absolute right-3 top-1/2 -translate-y-1/2 z-10"
+          />
         </section>
 
         <div className="px-4 py-5 flex flex-col gap-4">
