@@ -1,7 +1,7 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { Check } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
 
 interface SuccessScreenProps {
@@ -11,19 +11,16 @@ interface SuccessScreenProps {
 export function SuccessScreen({ ticketNumber }: SuccessScreenProps) {
   return (
     <div className="flex flex-col items-center justify-center py-12 space-y-8">
-      {/* Checkmark Circle */}
-      <div className="relative w-24 h-24">
-        <div className="absolute inset-0 bg-[#141414] rounded-full flex items-center justify-center">
-          <Check className="w-12 h-12 text-white" strokeWidth={3} />
-        </div>
-      </div>
-
-      {/* Success Message */}
-      <div className="text-center space-y-2">
+      {/* Cat + Title grouped */}
+      <div className="flex flex-col items-center gap-3">
+        <Image
+          src="/sucess-cat.png"
+          alt="Success"
+          width={190}
+          height={190}
+          className="object-contain"
+        />
         <h1 className="text-3xl text-gray-900 font-grotesk">Request Submitted!</h1>
-        <p className="text-green-600 flex items-center justify-center gap-1">
-          <span className="text-xl">✅</span>
-        </p>
       </div>
 
       {/* Ticket Number */}
@@ -31,11 +28,6 @@ export function SuccessScreen({ ticketNumber }: SuccessScreenProps) {
         <p className="text-xs text-gray-600 uppercase font-grotesk">Request Number</p>
         <p className="text-2xl text-gray-900 font-grotesk">#{ticketNumber}</p>
       </div>
-
-      {/* Info Text */}
-      <p className="text-gray-700 text-center max-w-sm font-techstack">
-        We&apos;ll notify you as soon as the status changes
-      </p>
 
       {/* What Next */}
       <div className="w-full max-w-md bg-white rounded-2xl p-4 space-y-2 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]">

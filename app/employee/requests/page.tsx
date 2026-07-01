@@ -342,9 +342,10 @@ export default function EmployeeRequestsPage() {
                 >
                   <div className="flex items-start gap-3">
                     <div
-                      className={`w-10 h-10 rounded-xl ${typeConf.bgClass} flex items-center justify-center shrink-0`}
+                      className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+                      style={{ background: "linear-gradient(135deg, #FFC600, #FFB800)", boxShadow: "inset 0 -2px 4px rgba(0,0,0,0.1)" }}
                     >
-                      <Icon className={`w-5 h-5 ${typeConf.iconClass}`} />
+                      <Icon className="w-5 h-5 text-white" strokeWidth={1.5} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
