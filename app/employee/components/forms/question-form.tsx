@@ -14,6 +14,7 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [shaking, setShaking] = useState(false);
   const [formData, setFormData] = useState<{
     question: string;
     priority: string;
@@ -29,6 +30,7 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
     const trimmedQuestion = formData.question.trim();
     if (!trimmedQuestion) {
       setFieldErrors({ question: "Please enter your question" });
+      setShaking(true);
       return;
     }
     setFieldErrors({});
@@ -63,6 +65,7 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
         } else {
           setError(errorData.error || "Something went wrong. Please try again.");
         }
+        setShaking(true);
         setLoading(false);
         return;
       }
@@ -76,7 +79,11 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form
+      onSubmit={handleSubmit}
+      className={`space-y-6 ${shaking ? "animate-shake" : ""}`}
+      onAnimationEnd={() => setShaking(false)}
+    >
       {error && (
         <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
           <AlertCircle className="w-4 h-4 shrink-0" />

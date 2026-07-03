@@ -15,6 +15,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [shaking, setShaking] = useState(false);
   const [formData, setFormData] = useState<{
     what: string;
     description: string;
@@ -37,6 +38,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
     if (!trimmedWhat) errors.what = "This field is required";
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
+      setShaking(true);
       return;
     }
     setFieldErrors({});
@@ -75,6 +77,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
         } else {
           setError(errorData.error || "Something went wrong. Please try again.");
         }
+        setShaking(true);
         setLoading(false);
         return;
       }
@@ -88,7 +91,11 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form
+      onSubmit={handleSubmit}
+      className={`space-y-6 ${shaking ? "animate-shake" : ""}`}
+      onAnimationEnd={() => setShaking(false)}
+    >
       {error && (
         <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
           <AlertCircle className="w-4 h-4 shrink-0" />

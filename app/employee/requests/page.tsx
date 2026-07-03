@@ -333,7 +333,7 @@ export default function EmployeeRequestsPage() {
           <EmptyState filtered={activeFilter !== "all"} />
         ) : (
           <div className="flex flex-col gap-3">
-            {sorted.map((request) => {
+            {sorted.map((request, i) => {
               const typeConf = TYPE_CONFIG[request.type];
               const statusConf = STATUS_CONFIG[request.status];
               const priorityConf = PRIORITY_CONFIG[request.priority] ?? PRIORITY_CONFIG.low;
@@ -345,7 +345,8 @@ export default function EmployeeRequestsPage() {
                 <Link
                   key={request.id}
                   href={`/employee/requests/${request.id}`}
-                  className="bg-white rounded-2xl px-4 pt-4 pb-0 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] block"
+                  className="bg-white rounded-2xl px-4 pt-4 pb-0 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] block animate-fade-up"
+                  style={{ animationDelay: `${Math.min(i * 70, 350)}ms` }}
                   data-testid="request-card"
                 >
                   <div className="flex items-start gap-3">

@@ -111,11 +111,12 @@ export default function EmployeeArticlesPage() {
             </p>
           </div>
         ) : (
-          articles.map((article) => (
+          articles.map((article, i) => (
             <Link
               key={article.id}
               href={`/employee/articles/${article.slug}`}
-              className="bg-white rounded-2xl overflow-hidden shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] block hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(20,20,20,0.12),0_2px_6px_rgba(20,20,20,0.08)] transition-all duration-200"
+              className="bg-white rounded-2xl overflow-hidden shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] block hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(20,20,20,0.12),0_2px_6px_rgba(20,20,20,0.08)] transition-all duration-200 animate-fade-up"
+              style={{ animationDelay: `${Math.min(i * 80, 400)}ms` }}
             >
               {article.coverImage && (
                 <div className="relative w-full h-44">

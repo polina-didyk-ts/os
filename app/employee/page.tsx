@@ -23,7 +23,7 @@ export default function EmployeeDashboard() {
 
       <div className="flex-1 pb-32">
         {/* Greeting */}
-        <section className="px-4 py-6 bg-white border-b border-gray-200 relative overflow-visible z-20">
+        <section className="px-4 py-6 bg-white border-b border-gray-200 relative overflow-visible z-20 animate-fade-up">
           <div className="pr-28">
             <h1 className="text-3xl text-gray-900 mb-1 font-grotesk">
               Hey, {userName.split(" ")[0]} 👋
@@ -42,8 +42,12 @@ export default function EmployeeDashboard() {
         </section>
 
         <div className="px-4 py-5 flex flex-col gap-4">
-          <PortalHighlights />
-          <QuickActions onRequestTypeClick={handleRequestTypeClick} />
+          <div className="animate-fade-up [animation-delay:120ms]">
+            <PortalHighlights />
+          </div>
+          <div className="animate-fade-up [animation-delay:240ms]">
+            <QuickActions onRequestTypeClick={handleRequestTypeClick} />
+          </div>
         </div>
       </div>
 

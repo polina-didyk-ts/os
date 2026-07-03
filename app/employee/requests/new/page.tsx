@@ -40,7 +40,7 @@ export default function NewRequestPage() {
       <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
         <EmployeeHeader />
         <div className="flex-1 pb-32 overflow-y-auto">
-          <div className={`mx-4 mt-4 bg-white rounded-2xl p-5 ${CARD_SHADOW}`}>
+          <div className={`mx-4 mt-4 bg-white rounded-2xl p-5 ${CARD_SHADOW} animate-fade-scale`}>
             <SuccessScreen ticketNumber={successTicket} />
           </div>
         </div>
@@ -56,7 +56,7 @@ export default function NewRequestPage() {
       <div className="flex-1 pb-32 overflow-y-auto">
         {/* Header */}
         <div
-          className={`mx-4 mt-4 bg-white rounded-2xl px-4 py-3 ${CARD_SHADOW} flex items-center justify-between`}
+          className={`mx-4 mt-4 bg-white rounded-2xl px-4 py-3 ${CARD_SHADOW} flex items-center justify-between animate-fade-up`}
         >
           <button
             onClick={() => router.back()}
@@ -71,7 +71,7 @@ export default function NewRequestPage() {
         </div>
 
         {/* Title */}
-        <div className={`mx-4 mt-3 bg-white rounded-2xl p-5 ${CARD_SHADOW}`}>
+        <div className={`mx-4 mt-3 bg-white rounded-2xl p-5 ${CARD_SHADOW} animate-fade-up [animation-delay:80ms]`}>
           <h2 className="text-2xl text-gray-900 font-grotesk">
             {requestType.title === "Order"
               ? "What do you need?"
@@ -93,7 +93,7 @@ export default function NewRequestPage() {
         </div>
 
         {/* Form */}
-        <div className={`mx-4 mt-3 mb-4 bg-white rounded-2xl p-5 ${CARD_SHADOW}`}>
+        <div className={`mx-4 mt-3 mb-4 bg-white rounded-2xl p-5 ${CARD_SHADOW} animate-fade-up [animation-delay:160ms]`}>
           {type === "order" && <OrderForm onSuccess={setSuccessTicket} />}
           {type === "problem" && <ProblemForm onSuccess={setSuccessTicket} />}
           {type === "question" && <QuestionForm onSuccess={setSuccessTicket} />}

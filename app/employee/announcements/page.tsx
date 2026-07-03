@@ -54,7 +54,7 @@ export default function AnnouncementsPage() {
       <EmployeeHeader />
 
       <div className="flex-1 pb-28 px-4 py-5 flex flex-col gap-5 max-w-xl mx-auto w-full">
-        <div>
+        <div className="animate-fade-up">
           <p className="text-xs uppercase tracking-widest text-gray-400 font-grotesk">News</p>
           <h1 className="text-2xl text-gray-900 mt-0.5 flex items-center gap-2 font-grotesk">
             <Bell className="w-6 h-6" strokeWidth={1.5} />
@@ -95,10 +95,11 @@ export default function AnnouncementsPage() {
 
         {!loading && !error && items.length > 0 && (
           <div className="space-y-3">
-            {items.map((item) => (
+            {items.map((item, i) => (
               <div
                 key={item.id}
-                className="bg-white rounded-xl p-4 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]"
+                className="bg-white rounded-xl p-4 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] animate-fade-up"
+                style={{ animationDelay: `${80 + Math.min(i * 70, 350)}ms` }}
               >
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <h2 className="text-sm text-gray-900 leading-snug font-grotesk">

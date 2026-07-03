@@ -100,7 +100,7 @@ export default function EmployeeProfilePage() {
 
       <div className="flex-1 pb-28 px-4 py-4 flex flex-col gap-4">
         {/* Profile card */}
-        <div className="bg-white rounded-2xl px-6 py-8 flex flex-col items-center shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]">
+        <div className="bg-white rounded-2xl px-6 py-8 flex flex-col items-center shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] animate-fade-up">
           {/* Avatar */}
           <div className="relative mb-4">
             <div className="w-24 h-24 rounded-full bg-[#141414] flex items-center justify-center text-white text-2xl font-bold select-none">
@@ -122,7 +122,7 @@ export default function EmployeeProfilePage() {
         </div>
 
         {/* Stats */}
-        <div className="flex gap-3">
+        <div className="flex gap-3 animate-fade-up [animation-delay:120ms]">
           <StatCard
             icon={<FileText className="w-5 h-5" />}
             iconClass="text-[#141414]"

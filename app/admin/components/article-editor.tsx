@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -26,12 +27,20 @@ import {
   Image as ImageIcon,
   Undo,
   Redo,
+  MessageSquareQuote,
+  X,
+  Check,
+  Upload,
+  Loader2,
 } from "lucide-react";
+import { PersonQuoteExtension } from "@/app/components/person-quote-extension";
 
 interface ArticleEditorProps {
   content: object;
   onChange: (content: object) => void;
 }
+
+const emptyQuote = { quote: "", authorName: "", authorRole: "", authorPhoto: "" };
 
 function ToolbarButton({
   onClick,
@@ -59,6 +68,10 @@ function ToolbarButton({
 }
 
 export function ArticleEditor({ content, onChange }: ArticleEditorProps) {
+  const [quoteOpen, setQuoteOpen] = useState(false);
+  const [quoteFields, setQuoteFields] = useState(emptyQuote);
+  const [photoUploading, setPhotoUploading] = useState(false);
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -67,6 +80,7 @@ export function ArticleEditor({ content, onChange }: ArticleEditorProps) {
       Placeholder.configure({ placeholder: "Start writing your article…" }),
       Link.configure({ openOnClick: false, HTMLAttributes: { class: "text-[#141414] underline" } }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),
+      PersonQuoteExtension,
     ],
     content: Object.keys(content).length ? content : undefined,
     onUpdate: ({ editor }) => {
@@ -91,6 +105,27 @@ export function ArticleEditor({ content, onChange }: ArticleEditorProps) {
     const url = window.prompt("URL:");
     if (url) editor.chain().focus().setLink({ href: url }).run();
     else editor.chain().focus().unsetLink().run();
+  };
+
+  const insertQuote = () => {
+    editor.chain().focus().insertContent({ type: "personQuote", attrs: quoteFields }).run();
+    setQuoteFields(emptyQuote);
+    setQuoteOpen(false);
+  };
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setPhotoUploading(true);
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      const res = await fetch("/api/uploads", { method: "POST", body: form });
+      const { url } = await res.json();
+      setQuoteFields((f) => ({ ...f, authorPhoto: url }));
+    } finally {
+      setPhotoUploading(false);
+    }
   };
 
   return (
@@ -218,7 +253,77 @@ export function ArticleEditor({ content, onChange }: ArticleEditorProps) {
         <ToolbarButton onClick={addImage} title="Add image (URL)">
           <ImageIcon className="w-4 h-4" />
         </ToolbarButton>
+
+        <div className="w-px h-5 bg-gray-200 mx-1" />
+
+        <ToolbarButton
+          onClick={() => setQuoteOpen((v) => !v)}
+          active={quoteOpen}
+          title="Insert person quote"
+        >
+          <MessageSquareQuote className="w-4 h-4" />
+        </ToolbarButton>
       </div>
+
+      {/* Person quote form */}
+      {quoteOpen && (
+        <div className="border-b border-gray-100 bg-[#FAFAF9] px-4 py-3 space-y-2">
+          <p className="text-xs font-grotesk text-gray-500 uppercase tracking-wide">Insert quote</p>
+          <textarea
+            className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 font-techstack resize-none focus:outline-none focus:border-[#141414] bg-white"
+            rows={2}
+            placeholder="Quote text…"
+            value={quoteFields.quote}
+            onChange={(e) => setQuoteFields((f) => ({ ...f, quote: e.target.value }))}
+          />
+          <div className="grid grid-cols-2 gap-2">
+            <input
+              className="text-sm border border-gray-200 rounded-lg px-3 py-2 font-techstack focus:outline-none focus:border-[#141414] bg-white"
+              placeholder="Author name"
+              value={quoteFields.authorName}
+              onChange={(e) => setQuoteFields((f) => ({ ...f, authorName: e.target.value }))}
+            />
+            <input
+              className="text-sm border border-gray-200 rounded-lg px-3 py-2 font-techstack focus:outline-none focus:border-[#141414] bg-white"
+              placeholder="Role in company"
+              value={quoteFields.authorRole}
+              onChange={(e) => setQuoteFields((f) => ({ ...f, authorRole: e.target.value }))}
+            />
+          </div>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <div className="flex items-center gap-2 px-3 py-2 border border-gray-200 rounded-lg bg-white text-sm font-techstack text-gray-600 hover:border-[#141414] transition">
+              {photoUploading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Upload className="w-4 h-4" />
+              )}
+              {photoUploading ? "Uploading…" : "Upload photo (optional)"}
+            </div>
+            {quoteFields.authorPhoto && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={quoteFields.authorPhoto} alt="" className="w-8 h-8 rounded-full object-cover" />
+            )}
+            <input type="file" accept="image/*" className="sr-only" onChange={handlePhotoUpload} />
+          </label>
+          <div className="flex gap-2 pt-0.5">
+            <button
+              type="button"
+              onClick={insertQuote}
+              disabled={!quoteFields.quote || !quoteFields.authorName}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#141414] text-white text-sm rounded-lg font-grotesk disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+            >
+              <Check className="w-3.5 h-3.5" /> Insert
+            </button>
+            <button
+              type="button"
+              onClick={() => { setQuoteOpen(false); setQuoteFields(emptyQuote); }}
+              className="flex items-center gap-1.5 px-3 py-1.5 border border-gray-200 text-sm rounded-lg font-grotesk text-gray-600 cursor-pointer"
+            >
+              <X className="w-3.5 h-3.5" /> Cancel
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Editor area — fixed height, scrolls internally */}
       <div className="overflow-y-auto max-h-[480px]">
