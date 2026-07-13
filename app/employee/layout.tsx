@@ -16,9 +16,9 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
   useEffect(() => {
     if (isAuthPage) return;
     if (!isPending && !session && !isSigningOut.current) {
-      router.push("/employee/signin");
+      router.push(`/employee/signin?redirect=${encodeURIComponent(pathname)}`);
     }
-  }, [session, isPending, router, isAuthPage]);
+  }, [session, isPending, router, isAuthPage, pathname]);
 
   if (isAuthPage) {
     return <>{children}</>;
