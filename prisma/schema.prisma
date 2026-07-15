@@ -22,6 +22,8 @@ model User {
   accounts               Account[]
   articles               Article[]
   comments               Comment[]
+  articleLikes           ArticleLike[]
+  articleComments        ArticleComment[]
   memberships            Member[]
   notes                  Note[]
   requests               Request[]
@@ -192,12 +194,41 @@ model Article {
   updatedAt   DateTime  @updatedAt
   authorId    String
   author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  likes       ArticleLike[]
+  articleComments ArticleComment[]
 
   @@index([authorId])
   @@index([published])
   @@index([slug])
   @@index([category])
   @@map("articles")
+}
+
+model ArticleLike {
+  id        String   @id @default(cuid())
+  articleId String
+  userId    String
+  createdAt DateTime @default(now())
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([articleId, userId])
+  @@index([articleId])
+  @@map("article_likes")
+}
+
+model ArticleComment {
+  id        String   @id @default(cuid())
+  articleId String
+  authorId  String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([articleId])
+  @@map("article_comments")
 }
 
 model Announcement {

@@ -4,7 +4,8 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Calendar, ArrowUp } from "lucide-react";
+import { ArrowLeft, Calendar, ArrowUp, Heart, MessageCircle, Send, Pencil, Trash2 } from "lucide-react";
+import { useSession } from "@/src/lib/client";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TiptapImage from "@tiptap/extension-image";
@@ -81,9 +82,7 @@ function TableOfContents({ items, activeId }: { items: TocItem[]; activeId: stri
               e.preventDefault();
               document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
             }}
-            className={`block text-xs font-techstack leading-snug py-1 transition-all duration-150 border-l-2 ${
-              item.level === 1 ? "pl-3" : item.level === 2 ? "pl-5" : "pl-7"
-            } ${
+            className={`block text-xs font-techstack leading-snug py-1 transition-all duration-150 border-l-2 pl-3 ${
               activeId === item.id
                 ? "border-[#FFC600] text-[#141414] font-grotesk"
                 : "border-transparent text-gray-400 hover:text-gray-600"
@@ -175,8 +174,242 @@ function ArticleContent({
   );
 }
 
+interface ArticleComment {
+  id: string;
+  content: string;
+  createdAt: string;
+  author: { id: string; name: string | null; email: string; image: string | null };
+}
+
+function ArticleLikeButton({ articleId }: { articleId: string }) {
+  const [likes, setLikes] = useState({ count: 0, liked: false });
+
+  useEffect(() => {
+    fetch(`/api/articles/${articleId}/likes`).then((r) => r.json()).then(setLikes);
+  }, [articleId]);
+
+  const handleLike = async () => {
+    const res = await fetch(`/api/articles/${articleId}/likes`, { method: "POST" });
+    const data = await res.json();
+    setLikes((prev) => ({ count: prev.count + (data.liked ? 1 : -1), liked: data.liked }));
+  };
+
+  return (
+    <div className="flex items-center gap-3 pt-4 mt-4 border-t border-gray-100">
+      <button
+        onClick={handleLike}
+        className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-grotesk transition-all cursor-pointer ${
+          likes.liked
+            ? "bg-[#FFC600]/15 text-[#141414]"
+            : "bg-[#FAF8F5] text-gray-500 hover:bg-gray-100"
+        }`}
+      >
+        <Heart
+          className={`w-4 h-4 transition-all ${likes.liked ? "fill-[#FFC600] text-[#FFC600]" : ""}`}
+        />
+        <span>{likes.count}</span>
+      </button>
+    </div>
+  );
+}
+
+function ArticleComments({
+  articleId,
+  currentUserId,
+  isAdmin,
+}: {
+  articleId: string;
+  currentUserId: string;
+  isAdmin: boolean;
+}) {
+  const [comments, setComments] = useState<ArticleComment[]>([]);
+  const [input, setInput] = useState("");
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editContent, setEditContent] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    fetch(`/api/articles/${articleId}/comments`).then((r) => r.json()).then(setComments);
+  }, [articleId]);
+
+  const handleComment = async () => {
+    if (!input.trim() || submitting) return;
+    setSubmitting(true);
+    const res = await fetch(`/api/articles/${articleId}/comments`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: input.trim() }),
+    });
+    if (res.ok) {
+      const comment = await res.json();
+      setComments((prev) => [...prev, comment]);
+      setInput("");
+    }
+    setSubmitting(false);
+  };
+
+  const handleEdit = async (commentId: string) => {
+    if (!editContent.trim()) return;
+    const res = await fetch(`/api/articles/${articleId}/comments/${commentId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: editContent.trim() }),
+    });
+    if (res.ok) {
+      const updated = await res.json();
+      setComments((prev) => prev.map((c) => (c.id === commentId ? updated : c)));
+      setEditingId(null);
+    }
+  };
+
+  const handleDelete = async (commentId: string) => {
+    await fetch(`/api/articles/${articleId}/comments/${commentId}`, { method: "DELETE" });
+    setComments((prev) => prev.filter((c) => c.id !== commentId));
+  };
+
+  return (
+    <div className="mx-4 mt-3 mb-4 lg:mx-0 animate-fade-up [animation-delay:160ms]">
+      <div className="bg-white rounded-2xl shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] overflow-hidden">
+        <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
+          <MessageCircle className="w-4 h-4 text-gray-400" />
+          <h3 className="text-sm font-grotesk text-gray-900">
+            Comments
+            {comments.length > 0 && (
+              <span className="text-gray-400 ml-1">({comments.length})</span>
+            )}
+          </h3>
+        </div>
+
+        {comments.length === 0 ? (
+          <p className="px-5 py-8 text-center text-sm text-gray-400 font-techstack">
+            No comments yet. Be the first!
+          </p>
+        ) : (
+          <div className="divide-y divide-gray-100">
+            {comments.map((comment) => {
+              const isOwn = comment.author.id === currentUserId;
+              const canDelete = isOwn || isAdmin;
+              const displayName = comment.author.name ?? comment.author.email.split("@")[0];
+              const initials = displayName.slice(0, 2).toUpperCase();
+
+              return (
+                <div key={comment.id} className="px-5 py-4">
+                  <div className="flex items-start gap-3">
+                    {comment.author.image ? (
+                      <img
+                        src={comment.author.image}
+                        alt={displayName}
+                        className="w-8 h-8 rounded-full object-cover shrink-0"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-[#141414] flex items-center justify-center text-white text-xs font-grotesk shrink-0">
+                        {initials}
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2 mb-1">
+                        <span className="text-xs font-grotesk text-gray-900">{displayName}</span>
+                        <div className="flex items-center gap-0.5 shrink-0">
+                          <span className="text-[10px] text-gray-400 font-techstack mr-1">
+                            {new Date(comment.createdAt).toLocaleDateString("en-GB", {
+                              day: "numeric",
+                              month: "short",
+                            })}
+                          </span>
+                          {isOwn && editingId !== comment.id && (
+                            <button
+                              onClick={() => {
+                                setEditingId(comment.id);
+                                setEditContent(comment.content);
+                              }}
+                              className="p-1 text-gray-400 hover:text-gray-700 transition rounded cursor-pointer"
+                            >
+                              <Pencil className="w-3 h-3" />
+                            </button>
+                          )}
+                          {canDelete && editingId !== comment.id && (
+                            <button
+                              onClick={() => handleDelete(comment.id)}
+                              className="p-1 text-gray-400 hover:text-red-500 transition rounded cursor-pointer"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {editingId === comment.id ? (
+                        <div className="space-y-2">
+                          <textarea
+                            value={editContent}
+                            onChange={(e) => setEditContent(e.target.value)}
+                            rows={3}
+                            autoFocus
+                            className="w-full text-sm text-gray-700 font-techstack border border-gray-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-[#FFC600] focus:border-[#FFC600]"
+                          />
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleEdit(comment.id)}
+                              className="px-3 py-1 bg-[#141414] text-white text-xs font-grotesk rounded-lg"
+                            >
+                              Save
+                            </button>
+                            <button
+                              onClick={() => setEditingId(null)}
+                              className="px-3 py-1 bg-gray-100 text-gray-600 text-xs font-grotesk rounded-lg"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="text-sm text-gray-700 font-techstack leading-relaxed whitespace-pre-wrap">
+                          {comment.content}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        <div className="px-5 py-4 border-t border-gray-100">
+          <div className="flex gap-3 items-end">
+            <textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleComment();
+                }
+              }}
+              placeholder="Write a comment..."
+              rows={1}
+              className="flex-1 text-sm font-techstack text-gray-700 border border-gray-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-1 focus:ring-[#FFC600] focus:border-[#FFC600] placeholder:text-gray-400"
+            />
+            <button
+              onClick={handleComment}
+              disabled={!input.trim() || submitting}
+              className="w-9 h-9 bg-[#141414] rounded-xl flex items-center justify-center text-white disabled:opacity-40 transition shrink-0 mb-0.5 cursor-pointer"
+            >
+              <Send className="w-4 h-4" />
+            </button>
+          </div>
+          <p className="text-[10px] text-gray-400 font-techstack mt-1.5">
+            Enter to send · Shift+Enter for new line
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ArticlePage() {
   const { slug } = useParams<{ slug: string }>();
+  const { data: session } = useSession();
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -277,13 +510,27 @@ export default function ArticlePage() {
                 )}
               </div>
             )}
-            <h1 className="text-2xl font-grotesk text-gray-900 mb-4">{article.title}</h1>
+            <h1 className="text-2xl font-grotesk text-gray-900 mb-3">{article.title}</h1>
+            {article.excerpt && (
+              <p className="text-base font-techstack text-gray-500 leading-relaxed mb-5 pb-5 border-b border-gray-100">
+                {article.excerpt}
+              </p>
+            )}
             <ArticleContent
               content={article.content}
               tocItems={tocItems}
               onActiveChange={setActiveId}
             />
+            {session && <ArticleLikeButton articleId={article.id} />}
           </div>
+
+          {session && (
+            <ArticleComments
+              articleId={article.id}
+              currentUserId={session.user.id}
+              isAdmin={session.user.role === "admin"}
+            />
+          )}
         </div>
       </div>
 

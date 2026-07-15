@@ -2,8 +2,15 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { Plus, FileText, Eye, EyeOff, Pencil, Trash2 } from "lucide-react";
+import { Plus, FileText, Eye, EyeOff, Pencil, Trash2, MessageCircle, ChevronDown, ChevronUp } from "lucide-react";
 import { AdminHeader, BottomNavigation } from "../components";
+
+interface AdminComment {
+  id: string;
+  content: string;
+  createdAt: string;
+  author: { id: string; name: string | null; email: string };
+}
 
 interface Article {
   id: string;
@@ -29,6 +36,8 @@ export default function AdminArticlesPage() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [expandedComments, setExpandedComments] = useState<string | null>(null);
+  const [commentsByArticle, setCommentsByArticle] = useState<Record<string, AdminComment[]>>({});
 
   const fetchArticles = useCallback(async () => {
     setLoading(true);
@@ -46,6 +55,29 @@ export default function AdminArticlesPage() {
   useEffect(() => {
     fetchArticles();
   }, [fetchArticles]);
+
+  const toggleComments = async (articleId: string) => {
+    if (expandedComments === articleId) {
+      setExpandedComments(null);
+      return;
+    }
+    setExpandedComments(articleId);
+    if (!commentsByArticle[articleId]) {
+      const res = await fetch(`/api/articles/${articleId}/comments`);
+      if (res.ok) {
+        const data: AdminComment[] = await res.json();
+        setCommentsByArticle((prev) => ({ ...prev, [articleId]: data }));
+      }
+    }
+  };
+
+  const handleDeleteComment = async (articleId: string, commentId: string) => {
+    await fetch(`/api/articles/${articleId}/comments/${commentId}`, { method: "DELETE" });
+    setCommentsByArticle((prev) => ({
+      ...prev,
+      [articleId]: prev[articleId].filter((c) => c.id !== commentId),
+    }));
+  };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this article?")) return;
@@ -165,6 +197,18 @@ export default function AdminArticlesPage() {
                     {article.published ? "Unpublish" : "Publish"}
                   </button>
                   <button
+                    onClick={() => toggleComments(article.id)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#FAF8F5] text-gray-700 text-xs font-grotesk cursor-pointer"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    Comments
+                    {expandedComments === article.id ? (
+                      <ChevronUp className="w-3 h-3" />
+                    ) : (
+                      <ChevronDown className="w-3 h-3" />
+                    )}
+                  </button>
+                  <button
                     onClick={() => handleDelete(article.id)}
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-50 text-red-500 text-xs font-grotesk cursor-pointer ml-auto"
                   >
@@ -172,6 +216,42 @@ export default function AdminArticlesPage() {
                     Delete
                   </button>
                 </div>
+
+                {expandedComments === article.id && (
+                  <div className="mt-3 border-t border-gray-100 pt-3 space-y-2">
+                    {!commentsByArticle[article.id] ? (
+                      <p className="text-xs text-gray-400 font-techstack">Loading...</p>
+                    ) : commentsByArticle[article.id].length === 0 ? (
+                      <p className="text-xs text-gray-400 font-techstack">No comments yet</p>
+                    ) : (
+                      commentsByArticle[article.id].map((comment) => {
+                        const displayName = comment.author.name ?? comment.author.email.split("@")[0];
+                        return (
+                          <div key={comment.id} className="flex items-start gap-2 p-2.5 bg-[#FAF8F5] rounded-xl">
+                            <div className="w-6 h-6 rounded-full bg-[#141414] flex items-center justify-center text-white text-[10px] font-grotesk shrink-0">
+                              {displayName.slice(0, 2).toUpperCase()}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center justify-between gap-2">
+                                <span className="text-[11px] font-grotesk text-gray-700">{displayName}</span>
+                                <span className="text-[10px] text-gray-400 font-techstack shrink-0">
+                                  {new Date(comment.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+                                </span>
+                              </div>
+                              <p className="text-xs text-gray-600 font-techstack mt-0.5 line-clamp-2">{comment.content}</p>
+                            </div>
+                            <button
+                              onClick={() => handleDeleteComment(article.id, comment.id)}
+                              className="p-1 text-gray-400 hover:text-red-500 transition shrink-0"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        );
+                      })
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { Menu, FileText, Hourglass, CheckCircle2 } from "lucide-react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { Menu, FileText, Hourglass, CheckCircle2, Camera } from "lucide-react";
 import { BottomNavigation, useSideMenu } from "../components";
 import { useSession } from "@/src/lib/client";
 
@@ -54,6 +54,36 @@ export default function EmployeeProfilePage() {
   const { toggle } = useSideMenu();
   const [stats, setStats] = useState<Stats | null>(null);
   const [statsLoading, setStatsLoading] = useState(true);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (session?.user.image) setAvatarUrl(session.user.image);
+  }, [session?.user.image]);
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingAvatar(true);
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      const uploadRes = await fetch("/api/uploads", { method: "POST", body: form });
+      if (!uploadRes.ok) throw new Error();
+      const { url } = await uploadRes.json();
+      await fetch("/api/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: url }),
+      });
+      setAvatarUrl(url);
+    } finally {
+      setUploadingAvatar(false);
+      e.target.value = "";
+    }
+  };
+
   const fetchStats = useCallback(async () => {
     setStatsLoading(true);
     try {
@@ -103,10 +133,39 @@ export default function EmployeeProfilePage() {
         <div className="bg-white rounded-2xl px-6 py-8 flex flex-col items-center shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] animate-fade-up">
           {/* Avatar */}
           <div className="relative mb-4">
-            <div className="w-24 h-24 rounded-full bg-[#141414] flex items-center justify-center text-white text-2xl font-bold select-none">
-              {initials}
-            </div>
-            <div className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-[#FFC600] border-2 border-white flex items-center justify-center">
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploadingAvatar}
+              className="relative w-24 h-24 rounded-full overflow-hidden group cursor-pointer focus:outline-none"
+              aria-label="Change avatar"
+            >
+              {avatarUrl ? (
+                <img
+                  src={avatarUrl}
+                  alt={displayName}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-[#141414] flex items-center justify-center text-white text-2xl font-bold select-none">
+                  {initials}
+                </div>
+              )}
+              <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                {uploadingAvatar ? (
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <Camera className="w-5 h-5 text-white" />
+                )}
+              </div>
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleAvatarUpload}
+            />
+            <div className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-[#FFC600] border-2 border-white flex items-center justify-center pointer-events-none">
               <CheckCircle2 className="w-4 h-4 text-white" />
             </div>
           </div>
