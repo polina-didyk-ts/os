@@ -111,10 +111,16 @@ export default function AnnouncementsPage() {
                     <span className="shrink-0 w-2 h-2 rounded-full bg-amber-400 mt-1.5" />
                   )}
                 </div>
-                <div
-                  className="prose prose-sm max-w-none text-gray-700 leading-relaxed font-techstack [&_a]:text-amber-600 [&_a]:underline"
-                  dangerouslySetInnerHTML={{ __html: item.message }}
-                />
+                {/<[a-z][\s\S]*>/i.test(item.message) ? (
+                  <div
+                    className="prose prose-sm max-w-none text-gray-700 [&_a]:text-amber-600 [&_a]:underline"
+                    dangerouslySetInnerHTML={{ __html: item.message }}
+                  />
+                ) : (
+                  <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed font-techstack">
+                    {item.message}
+                  </p>
+                )}
                 <p className="text-xs text-gray-400 mt-3 font-techstack">
                   {formatDate(item.createdAt)}
                 </p>

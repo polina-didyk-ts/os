@@ -67,8 +67,7 @@ export function AnnouncementEditor({ value, onChange, placeholder }: Announcemen
     },
     editorProps: {
       attributes: {
-        class:
-          "prose prose-sm max-w-none min-h-[200px] px-4 py-3 focus:outline-none font-techstack text-gray-800",
+        class: "prose prose-sm max-w-none min-h-[200px] px-4 py-3 focus:outline-none text-gray-800",
       },
     },
   });
