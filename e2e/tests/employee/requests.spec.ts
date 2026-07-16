@@ -58,7 +58,7 @@ test.describe("Employee Requests - Form Submission", () => {
     await expect(page).toHaveURL(/.*requests\/new.*type=problem/);
 
     // 3. Fill in the form
-    await page.getByPlaceholder(/air conditioner or printer/i).fill("Printer");
+    await page.getByPlaceholder(/conditioner is not working/i).fill("Printer");
 
     const descriptionInput = page.getByPlaceholder(/describe in detail/i);
     await descriptionInput.fill("Printer is not printing, LED is red");
