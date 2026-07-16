@@ -18,12 +18,12 @@ export default function EmployeeDashboard() {
   };
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
+    <main className="min-h-screen bg-transparent flex flex-col">
       <EmployeeHeader />
 
       <div className="flex-1 pb-32">
         {/* Greeting */}
-        <section className="px-4 py-6 bg-white border-b border-gray-200 relative overflow-visible z-20 animate-fade-up">
+        <section className="px-4 py-6 bg-gradient-to-br from-white/60 via-amber-50/40 to-orange-50/30 backdrop-blur-md border-b border-white/30 relative overflow-visible z-20 animate-fade-up">
           <div className="pr-28">
             <h1 className="text-3xl text-gray-900 mb-1 font-grotesk">
               Hey, {userName.split(" ")[0]} 👋

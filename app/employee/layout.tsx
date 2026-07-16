@@ -26,10 +26,10 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
 
   if (isPending) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-white">
+      <main className="min-h-screen flex items-center justify-center bg-[#f9f7ff]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#141414] border-t-transparent mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-violet-400 border-t-transparent mx-auto"></div>
+          <p className="mt-4 text-gray-500">Loading...</p>
         </div>
       </main>
     );
@@ -41,6 +41,13 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
 
   return (
     <SideMenuProvider>
+      {/* Aurora mesh background — fixed, behind all content */}
+      <div className="fixed inset-0 -z-10 bg-[#fffdf7] overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 right-0 w-[750px] h-[750px] rounded-full bg-amber-300/55 blur-[110px]" />
+        <div className="absolute top-1/4 -left-40 w-[650px] h-[650px] rounded-full bg-orange-300/45 blur-[95px]" />
+        <div className="absolute bottom-10 right-1/3 w-[550px] h-[550px] rounded-full bg-yellow-300/50 blur-[95px]" />
+        <div className="absolute top-2/3 left-1/2 w-[400px] h-[400px] rounded-full bg-rose-300/25 blur-[75px]" />
+      </div>
       <SideMenu />
       {children}
     </SideMenuProvider>

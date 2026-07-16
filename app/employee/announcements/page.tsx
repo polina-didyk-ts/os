@@ -45,12 +45,10 @@ export default function AnnouncementsPage() {
     }
   }, []);
 
-  useEffect(() => {
-    load();
-  }, [load]);
+  useEffect(() => { load(); }, [load]);
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
+    <main className="min-h-screen bg-transparent flex flex-col">
       <EmployeeHeader />
 
       <div className="flex-1 pb-28 px-4 py-5 flex flex-col gap-5 max-w-xl mx-auto w-full">
@@ -74,7 +72,7 @@ export default function AnnouncementsPage() {
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="bg-white rounded-xl p-4 space-y-2 animate-pulse shadow-[0_2px_8px_rgba(20,20,20,0.06)]"
+                className="bg-white/60 backdrop-blur-sm rounded-xl p-4 space-y-2 animate-pulse border border-white/40 shadow-[0_2px_8px_rgba(20,20,20,0.06)]"
               >
                 <div className="h-4 bg-gray-100 rounded w-3/4" />
                 <div className="h-3 bg-gray-100 rounded w-1/3" />
@@ -85,7 +83,9 @@ export default function AnnouncementsPage() {
 
         {!loading && !error && items.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <Bell className="w-12 h-12 text-gray-200 mb-4" strokeWidth={1} />
+            <div className="w-16 h-16 rounded-2xl bg-white/60 backdrop-blur-sm border border-white/40 flex items-center justify-center mb-4">
+              <Bell className="w-8 h-8 text-gray-300" strokeWidth={1} />
+            </div>
             <p className="text-gray-500 font-grotesk">No announcements yet</p>
             <p className="text-gray-400 text-sm mt-1 font-techstack">
               You&apos;ll see messages from your office manager here
@@ -98,7 +98,7 @@ export default function AnnouncementsPage() {
             {items.map((item, i) => (
               <div
                 key={item.id}
-                className="bg-white rounded-xl p-4 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] animate-fade-up"
+                className="bg-white/60 backdrop-blur-sm rounded-xl p-4 shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] border border-white/40 animate-fade-up"
                 style={{ animationDelay: `${80 + Math.min(i * 70, 350)}ms` }}
               >
                 <div className="flex items-start justify-between gap-2 mb-2">
@@ -106,7 +106,7 @@ export default function AnnouncementsPage() {
                     {item.subject}
                   </h2>
                   {!item.readAt && (
-                    <span className="shrink-0 w-2 h-2 rounded-full bg-[#FFC600] mt-1.5" />
+                    <span className="shrink-0 w-2 h-2 rounded-full bg-amber-400 mt-1.5" />
                   )}
                 </div>
                 <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed font-techstack">

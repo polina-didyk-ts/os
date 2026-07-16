@@ -22,13 +22,13 @@ export default function AdminProfilePage() {
   const displayName = user?.name ?? user?.email?.split("@")[0] ?? "—";
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
+    <main className="min-h-screen bg-transparent flex flex-col">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 bg-white sticky top-0 z-10">
+      <header className="flex items-center justify-between px-4 py-3 bg-white/60 backdrop-blur-md sticky top-0 z-10 border-b border-white/30">
         <div className="flex items-center gap-3">
           <button
             onClick={toggle}
-            className="p-2 hover:bg-gray-100 rounded-lg transition"
+            className="p-2 hover:bg-white/60 rounded-lg transition cursor-pointer"
             aria-label="Open menu"
           >
             <Menu className="w-6 h-6 text-gray-700" />
@@ -36,14 +36,15 @@ export default function AdminProfilePage() {
           <span className="text-lg font-grotesk text-gray-900">Digital Office</span>
         </div>
         <div className="flex items-center gap-2">
-          <button
-            className="p-2 hover:bg-gray-100 rounded-lg transition"
-            aria-label="Notifications"
-          >
+          <button className="p-2 hover:bg-white/60 rounded-lg transition cursor-pointer" aria-label="Notifications">
             <Bell className="w-5 h-5 text-gray-700" />
           </button>
-          <div className="w-9 h-9 rounded-full bg-[#141414] flex items-center justify-center text-white text-sm font-bold select-none">
-            {initials}
+          <div
+            className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-grotesk select-none relative overflow-hidden"
+            style={{ background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-white/5 to-transparent" />
+            <span className="relative z-10">{initials}</span>
           </div>
         </div>
       </header>
@@ -52,11 +53,15 @@ export default function AdminProfilePage() {
       <div className="flex-1 pb-28 flex flex-col items-center pt-16 px-4">
         {/* Avatar */}
         <div className="relative mb-5">
-          <div className="w-28 h-28 rounded-full bg-[#141414] flex items-center justify-center text-white text-3xl font-bold select-none ring-4 ring-[#FFC600]/30">
-            {initials}
+          <div
+            className="w-28 h-28 rounded-full flex items-center justify-center text-white text-3xl font-bold select-none relative overflow-hidden"
+            style={{ background: "linear-gradient(135deg, #fde68a 0%, #fbbf24 32%, #f97316 65%, #ea580c 100%)" }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-white/5 to-transparent" />
+            <span className="relative z-10">{initials}</span>
           </div>
-          <div className="absolute bottom-0.5 right-0.5 w-7 h-7 rounded-full bg-[#FFC600] border-2 border-white flex items-center justify-center">
-            <svg className="w-3.5 h-3.5 text-[#141414]" viewBox="0 0 20 20" fill="currentColor">
+          <div className="absolute bottom-0.5 right-0.5 w-7 h-7 rounded-full bg-amber-400 border-2 border-white flex items-center justify-center">
+            <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 20 20" fill="currentColor">
               <path
                 fillRule="evenodd"
                 d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -70,7 +75,7 @@ export default function AdminProfilePage() {
         <h1 className="text-xl font-grotesk text-gray-900">{displayName}</h1>
 
         {/* Role badge */}
-        <span className="mt-2 px-4 py-1 rounded-full bg-[#F2F2F2] text-[#141414] text-xs font-grotesk uppercase tracking-wide border border-gray-100">
+        <span className="mt-2 px-4 py-1 rounded-full bg-amber-100/80 text-amber-700 text-xs font-grotesk uppercase tracking-wide border border-amber-200">
           Office Manager
         </span>
       </div>

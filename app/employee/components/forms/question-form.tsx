@@ -93,7 +93,7 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
 
       {/* Question */}
       <div>
-        <label className="block text-sm text-gray-900 uppercase mb-2 font-grotesk">
+        <label className="block text-xs text-gray-500 uppercase tracking-widest mb-2 font-grotesk">
           Your question
         </label>
         <Textarea
@@ -105,7 +105,7 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
             if (fieldErrors.question) setFieldErrors({ ...fieldErrors, question: "" });
           }}
           rows={8}
-          className="w-full"
+          className="w-full bg-white/50 backdrop-blur-sm border-white/60 focus-visible:ring-amber-400/50"
         />
         <div
           className={`text-right text-xs mt-1 ${formData.question.length >= 1000 ? "text-red-500 font-medium" : "text-gray-400"}`}
@@ -122,51 +122,49 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
 
       {/* Priority */}
       <div>
-        <label className="block text-sm text-gray-900 uppercase mb-3 font-grotesk">Priority</label>
+        <label className="block text-xs text-gray-500 uppercase tracking-widest mb-3 font-grotesk">Priority</label>
         <div className="flex gap-2 flex-wrap">
           <button
             type="button"
             onClick={() => setFormData({ ...formData, priority: PRIORITY_LEVELS.LOW })}
-            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 cursor-pointer ${
               formData.priority === PRIORITY_LEVELS.LOW
-                ? "bg-green-100 text-green-700 border-2 border-green-500"
-                : "bg-gray-100 text-gray-700 border-2 border-gray-200"
+                ? "bg-green-100/80 text-green-700 border-2 border-green-400"
+                : "bg-white/40 backdrop-blur-sm text-gray-600 border-2 border-white/60 hover:bg-white/60"
             }`}
           >
-            <span className="inline-block w-3 h-3 rounded-full bg-green-500"></span>
+            <span className="inline-block w-2.5 h-2.5 rounded-full bg-green-500"></span>
             Low
           </button>
-
           <button
             type="button"
             onClick={() => setFormData({ ...formData, priority: PRIORITY_LEVELS.MEDIUM })}
-            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 cursor-pointer ${
               formData.priority === PRIORITY_LEVELS.MEDIUM
-                ? "bg-yellow-100 text-yellow-700 border-2 border-yellow-500"
-                : "bg-gray-100 text-gray-700 border-2 border-gray-200"
+                ? "bg-amber-100/80 text-amber-700 border-2 border-amber-400"
+                : "bg-white/40 backdrop-blur-sm text-gray-600 border-2 border-white/60 hover:bg-white/60"
             }`}
           >
-            <span className="inline-block w-3 h-3 rounded-full bg-yellow-500"></span>
+            <span className="inline-block w-2.5 h-2.5 rounded-full bg-amber-400"></span>
             Medium
           </button>
-
           <button
             type="button"
             onClick={() => setFormData({ ...formData, priority: PRIORITY_LEVELS.HIGH })}
-            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 cursor-pointer ${
               formData.priority === PRIORITY_LEVELS.HIGH
-                ? "bg-red-100 text-red-700 border-2 border-red-500"
-                : "bg-gray-100 text-gray-700 border-2 border-gray-200"
+                ? "bg-red-100/80 text-red-700 border-2 border-red-400"
+                : "bg-white/40 backdrop-blur-sm text-gray-600 border-2 border-white/60 hover:bg-white/60"
             }`}
           >
-            <span className="inline-block w-3 h-3 rounded-full bg-red-500"></span>
+            <span className="inline-block w-2.5 h-2.5 rounded-full bg-red-500"></span>
             High
           </button>
         </div>
       </div>
 
       {/* Note About Response Time */}
-      <p className="text-xs text-gray-600 uppercase tracking-wide font-medium">
+      <p className="text-xs text-gray-400 font-techstack">
         We usually respond within 24 hours
       </p>
 
@@ -174,7 +172,8 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
       <Button
         type="submit"
         disabled={loading || !formData.question.trim()}
-        className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-grotesk font-normal text-lg cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(20,20,20,0.12),0_2px_6px_rgba(20,20,20,0.08)] disabled:translate-y-0 disabled:shadow-none"
+        className="w-full text-white py-3 rounded-xl font-grotesk font-normal text-lg cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(249,115,22,0.3)] disabled:translate-y-0 disabled:shadow-none disabled:opacity-60"
+        style={{ background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" }}
       >
         {loading ? "Submitting..." : "Submit Request →"}
       </Button>

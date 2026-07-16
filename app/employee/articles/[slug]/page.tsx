@@ -200,12 +200,12 @@ function ArticleLikeButton({ articleId }: { articleId: string }) {
         onClick={handleLike}
         className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-grotesk transition-all cursor-pointer ${
           likes.liked
-            ? "bg-[#FFC600]/15 text-[#141414]"
-            : "bg-[#FAF8F5] text-gray-500 hover:bg-gray-100"
+            ? "bg-amber-100/80 text-amber-700"
+            : "bg-white/40 backdrop-blur-sm text-gray-500 border border-white/60 hover:bg-white/60"
         }`}
       >
         <Heart
-          className={`w-4 h-4 transition-all ${likes.liked ? "fill-[#FFC600] text-[#FFC600]" : ""}`}
+          className={`w-4 h-4 transition-all ${likes.liked ? "fill-amber-400 text-amber-400" : ""}`}
         />
         <span>{likes.count}</span>
       </button>
@@ -269,8 +269,8 @@ function ArticleComments({
 
   return (
     <div className="mx-4 mt-3 mb-4 lg:mx-0 animate-fade-up [animation-delay:160ms]">
-      <div className="bg-white rounded-2xl shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] overflow-hidden">
-        <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
+      <div className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] border border-white/40 overflow-hidden">
+        <div className="px-5 py-4 border-b border-white/40 flex items-center gap-2">
           <MessageCircle className="w-4 h-4 text-gray-400" />
           <h3 className="text-sm font-grotesk text-gray-900">
             Comments
@@ -285,7 +285,7 @@ function ArticleComments({
             No comments yet. Be the first!
           </p>
         ) : (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-white/40">
             {comments.map((comment) => {
               const isOwn = comment.author.id === currentUserId;
               const canDelete = isOwn || isAdmin;
@@ -375,7 +375,7 @@ function ArticleComments({
           </div>
         )}
 
-        <div className="px-5 py-4 border-t border-gray-100">
+        <div className="px-5 py-4 border-t border-white/40">
           <div className="flex gap-3 items-end">
             <textarea
               value={input}
@@ -388,12 +388,13 @@ function ArticleComments({
               }}
               placeholder="Write a comment..."
               rows={1}
-              className="flex-1 text-sm font-techstack text-gray-700 border border-gray-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-1 focus:ring-[#FFC600] focus:border-[#FFC600] placeholder:text-gray-400"
+              className="flex-1 text-sm font-techstack text-gray-700 bg-white/50 backdrop-blur-sm border border-white/60 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-1 focus:ring-amber-400/50 focus:border-amber-300 placeholder:text-gray-400"
             />
             <button
               onClick={handleComment}
               disabled={!input.trim() || submitting}
-              className="w-9 h-9 bg-[#141414] rounded-xl flex items-center justify-center text-white disabled:opacity-40 transition shrink-0 mb-0.5 cursor-pointer"
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-white disabled:opacity-40 transition shrink-0 mb-0.5 cursor-pointer"
+              style={{ background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" }}
             >
               <Send className="w-4 h-4" />
             </button>
@@ -446,17 +447,17 @@ export default function ArticlePage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-[#FAF8F5] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#141414] border-t-transparent" />
+      <main className="min-h-screen bg-transparent flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-amber-400 border-t-transparent" />
       </main>
     );
   }
 
   if (error || !article) {
     return (
-      <main className="min-h-screen bg-[#FAF8F5] flex flex-col items-center justify-center gap-4 px-4">
+      <main className="min-h-screen bg-transparent flex flex-col items-center justify-center gap-4 px-4">
         <p className="text-gray-600 font-techstack text-sm">Article not found</p>
-        <Link href="/employee/articles" className="text-[#141414] text-sm font-grotesk underline">
+        <Link href="/employee/articles" className="text-amber-600 text-sm font-grotesk underline">
           ← Back to articles
         </Link>
       </main>
@@ -466,16 +467,16 @@ export default function ArticlePage() {
   const tocItems = extractHeadings(article.content);
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
+    <main className="min-h-screen bg-transparent flex flex-col">
       {/* Reading progress bar */}
       <div
-        className="fixed top-0 left-0 z-50 h-0.5 bg-[#FFC600] transition-[width] duration-100 pointer-events-none"
-        style={{ width: `${progress}%` }}
+        className="fixed top-0 left-0 z-50 h-0.5 transition-[width] duration-100 pointer-events-none"
+        style={{ width: `${progress}%`, background: "linear-gradient(90deg, #fbbf24, #f97316)" }}
       />
 
       {/* Header */}
-      <header className="flex items-center gap-3 px-4 py-3 bg-white sticky top-0 z-10 border-b border-gray-100">
-        <Link href="/employee/articles" className="p-2 hover:bg-gray-100 rounded-lg transition">
+      <header className="flex items-center gap-3 px-4 py-3 bg-white/60 backdrop-blur-md sticky top-0 z-10 border-b border-white/30">
+        <Link href="/employee/articles" className="p-2 hover:bg-white/60 rounded-lg transition">
           <ArrowLeft className="w-5 h-5 text-gray-700" />
         </Link>
         <p className="text-[10px] uppercase tracking-widest text-gray-400 font-grotesk">
@@ -496,7 +497,7 @@ export default function ArticlePage() {
           )}
 
           {/* Article card */}
-          <div className="mx-4 mt-4 lg:mx-0 bg-white rounded-2xl p-5 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] animate-fade-up [animation-delay:80ms]">
+          <div className="mx-4 mt-4 lg:mx-0 bg-white/60 backdrop-blur-sm rounded-2xl p-5 shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] border border-white/40 animate-fade-up [animation-delay:80ms]">
             {article.publishedAt && (
               <div className="flex items-center gap-1.5 mb-3">
                 <Calendar className="w-3.5 h-3.5 text-gray-400" />
@@ -538,7 +539,7 @@ export default function ArticlePage() {
       {showBackToTop && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="fixed bottom-28 right-4 w-10 h-10 bg-white rounded-full shadow-[0_4px_12px_rgba(20,20,20,0.15)] flex items-center justify-center text-[#141414] hover:bg-gray-50 transition-all z-30 animate-fade-scale"
+          className="fixed bottom-28 right-4 w-10 h-10 bg-white/70 backdrop-blur-sm rounded-full shadow-[0_4px_12px_rgba(20,20,20,0.12)] border border-white/40 flex items-center justify-center text-gray-600 hover:bg-white/90 transition-all z-30 animate-fade-scale"
           aria-label="Back to top"
         >
           <ArrowUp className="w-4 h-4" />

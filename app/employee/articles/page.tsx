@@ -50,15 +50,13 @@ export default function EmployeeArticlesPage() {
     }
   }, []);
 
-  useEffect(() => {
-    fetchArticles(activeCategory);
-  }, [fetchArticles, activeCategory]);
+  useEffect(() => { fetchArticles(activeCategory); }, [fetchArticles, activeCategory]);
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
+    <main className="min-h-screen bg-transparent flex flex-col">
       {/* Header */}
-      <header className="flex items-center gap-3 px-4 py-3 bg-white sticky top-0 z-10 border-b border-gray-100">
-        <Link href="/employee" className="p-2 hover:bg-gray-100 rounded-lg transition">
+      <header className="flex items-center gap-3 px-4 py-3 bg-white/60 backdrop-blur-md sticky top-0 z-10 border-b border-white/30">
+        <Link href="/employee" className="p-2 hover:bg-white/60 rounded-lg transition">
           <ArrowLeft className="w-5 h-5 text-gray-700" />
         </Link>
         <div>
@@ -70,16 +68,17 @@ export default function EmployeeArticlesPage() {
       </header>
 
       {/* Category chips */}
-      <div className="flex gap-2 px-4 py-3 bg-white border-b border-gray-100 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex gap-2 px-4 py-3 bg-white/50 backdrop-blur-sm border-b border-white/30 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {CATEGORIES.map((cat) => (
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
             className={`shrink-0 px-3 py-1 rounded-full text-xs font-grotesk transition-all cursor-pointer ${
               activeCategory === cat
-                ? "bg-[#141414] text-white"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                ? "text-white"
+                : "bg-white/40 backdrop-blur-sm text-gray-600 border border-white/60 hover:bg-white/60"
             }`}
+            style={activeCategory === cat ? { background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" } : {}}
           >
             {cat}
           </button>
@@ -91,9 +90,9 @@ export default function EmployeeArticlesPage() {
           [1, 2, 3].map((i) => (
             <div
               key={i}
-              className="bg-white rounded-2xl overflow-hidden animate-pulse shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]"
+              className="bg-white/60 backdrop-blur-sm rounded-2xl overflow-hidden animate-pulse border border-white/40 shadow-[0_4px_12px_rgba(20,20,20,0.06)]"
             >
-              <div className="h-40 bg-gray-100" />
+              <div className="h-40 bg-gray-100/60" />
               <div className="p-4 space-y-2">
                 <div className="h-3 bg-gray-100 rounded w-1/3" />
                 <div className="h-4 bg-gray-200 rounded w-3/4" />
@@ -115,7 +114,7 @@ export default function EmployeeArticlesPage() {
             <Link
               key={article.id}
               href={`/employee/articles/${article.slug}`}
-              className="bg-white rounded-2xl overflow-hidden shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] block hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(20,20,20,0.12),0_2px_6px_rgba(20,20,20,0.08)] transition-all duration-200 animate-fade-up"
+              className="bg-white/60 backdrop-blur-sm rounded-2xl overflow-hidden shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] border border-white/40 block hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(20,20,20,0.10),0_2px_6px_rgba(20,20,20,0.06)] transition-all duration-200 animate-fade-up"
               style={{ animationDelay: `${Math.min(i * 80, 400)}ms` }}
             >
               {article.coverImage && (
@@ -126,7 +125,7 @@ export default function EmployeeArticlesPage() {
               <div className="p-4">
                 <div className="flex items-center gap-2 mb-2">
                   {article.category && (
-                    <span className="text-[10px] font-grotesk uppercase tracking-wide text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                    <span className="text-[10px] font-grotesk uppercase tracking-wide text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
                       {article.category}
                     </span>
                   )}
@@ -145,7 +144,7 @@ export default function EmployeeArticlesPage() {
                     {article.excerpt}
                   </p>
                 )}
-                <p className="text-xs text-[#141414] font-grotesk mt-3">Read more →</p>
+                <p className="text-xs text-amber-600 font-grotesk mt-3">Read more →</p>
               </div>
             </Link>
           ))

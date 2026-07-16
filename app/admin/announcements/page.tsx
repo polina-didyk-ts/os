@@ -59,28 +59,20 @@ export default function AnnouncementsPage() {
     }
   }, []);
 
-  useEffect(() => {
-    fetchEmployees();
-  }, [fetchEmployees]);
+  useEffect(() => { fetchEmployees(); }, [fetchEmployees]);
 
   const toggleEmployee = (email: string) => {
     setSelected((prev) => {
       const next = new Set(prev);
-      if (next.has(email)) {
-        next.delete(email);
-      } else {
-        next.add(email);
-      }
+      if (next.has(email)) next.delete(email);
+      else next.add(email);
       return next;
     });
   };
 
   const toggleAll = () => {
-    if (selected.size === employees.length) {
-      setSelected(new Set());
-    } else {
-      setSelected(new Set(employees.map((e) => e.email)));
-    }
+    if (selected.size === employees.length) setSelected(new Set());
+    else setSelected(new Set(employees.map((e) => e.email)));
   };
 
   const parsedManual = parseManualEmails(manualEmails);
@@ -97,10 +89,7 @@ export default function AnnouncementsPage() {
     if (!message.trim()) errors.message = "Message is required";
     if (recipientCount === 0) errors.recipients = "Add at least one recipient";
 
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
-      return;
-    }
+    if (Object.keys(errors).length > 0) { setFieldErrors(errors); return; }
     setFieldErrors({});
     setLoading(true);
 
@@ -108,12 +97,7 @@ export default function AnnouncementsPage() {
       const res = await fetch("/api/admin/announcements", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          subject: subject.trim(),
-          message: message.trim(),
-          recipientEmails: combined,
-          channel,
-        }),
+        body: JSON.stringify({ subject: subject.trim(), message: message.trim(), recipientEmails: combined, channel }),
       });
 
       if (!res.ok) {
@@ -137,12 +121,12 @@ export default function AnnouncementsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
+    <main className="min-h-screen bg-transparent flex flex-col">
       <AdminHeader />
 
       <div className="flex-1 pb-28 px-4 py-5 flex flex-col gap-5 max-w-xl mx-auto w-full">
         {/* Title */}
-        <div>
+        <div className="animate-fade-up">
           <p className="text-xs font-grotesk uppercase tracking-widest text-gray-400">ADMIN</p>
           <h1 className="text-2xl font-grotesk text-gray-900 mt-0.5 flex items-center gap-2">
             <Megaphone className="w-6 h-6" strokeWidth={1.5} />
@@ -152,37 +136,24 @@ export default function AnnouncementsPage() {
 
         {/* Success */}
         {sendResult !== null && (
-          <div className="p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm space-y-0.5">
+          <div className="p-4 bg-green-50/80 backdrop-blur-sm border border-green-200 rounded-xl text-green-700 text-sm space-y-0.5">
             {sendResult.sentEmail > 0 && (
-              <p className="font-techstack">
-                ✓ Email sent to {sendResult.sentEmail} recipient
-                {sendResult.sentEmail !== 1 ? "s" : ""}
-              </p>
+              <p className="font-techstack">✓ Email sent to {sendResult.sentEmail} recipient{sendResult.sentEmail !== 1 ? "s" : ""}</p>
             )}
             {sendResult.sentSlack > 0 && (
-              <p className="font-techstack">
-                ✓ Slack DM sent to {sendResult.sentSlack} recipient
-                {sendResult.sentSlack !== 1 ? "s" : ""}
-              </p>
+              <p className="font-techstack">✓ Slack DM sent to {sendResult.sentSlack} recipient{sendResult.sentSlack !== 1 ? "s" : ""}</p>
             )}
             {sendResult.skippedEmails.length > 0 && (
               <div className="text-yellow-700">
-                <p>
-                  ⚠ {sendResult.skippedEmails.length} Slack DM
-                  {sendResult.skippedEmails.length !== 1 ? "s" : ""} skipped — not found in
-                  workspace:
-                </p>
+                <p>⚠ {sendResult.skippedEmails.length} Slack DM{sendResult.skippedEmails.length !== 1 ? "s" : ""} skipped — not found in workspace:</p>
                 <ul className="mt-1 ml-4 list-disc text-xs">
-                  {sendResult.skippedEmails.map((email) => (
-                    <li key={email}>{email}</li>
-                  ))}
+                  {sendResult.skippedEmails.map((email) => <li key={email}>{email}</li>)}
                 </ul>
               </div>
             )}
           </div>
         )}
 
-        {/* Error */}
         {error && (
           <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
             <AlertCircle className="w-4 h-4 shrink-0" />
@@ -193,23 +164,16 @@ export default function AnnouncementsPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Subject */}
           <div>
-            <label className="block text-sm font-grotesk text-gray-900 uppercase mb-2">
-              Subject
-            </label>
+            <label className="block text-xs font-grotesk text-gray-500 uppercase tracking-widest mb-2">Subject</label>
             <Input
               type="text"
               placeholder="E.g. Office closed on Friday"
               value={subject}
               maxLength={100}
-              onChange={(e) => {
-                setSubject(e.target.value);
-                if (fieldErrors.subject) setFieldErrors({ ...fieldErrors, subject: "" });
-              }}
-              className="w-full"
+              onChange={(e) => { setSubject(e.target.value); if (fieldErrors.subject) setFieldErrors({ ...fieldErrors, subject: "" }); }}
+              className="w-full bg-white/50 backdrop-blur-sm border-white/60 focus-visible:ring-amber-400/50"
             />
-            <div
-              className={`text-right text-xs mt-1 ${subject.length >= 100 ? "text-red-500 font-medium" : "text-gray-400"}`}
-            >
+            <div className={`text-right text-xs mt-1 ${subject.length >= 100 ? "text-red-500 font-medium" : "text-gray-400"}`}>
               {subject.length} / 100
             </div>
             {fieldErrors.subject && (
@@ -222,23 +186,16 @@ export default function AnnouncementsPage() {
 
           {/* Message */}
           <div>
-            <label className="block text-sm font-grotesk text-gray-900 uppercase mb-2">
-              Message
-            </label>
+            <label className="block text-xs font-grotesk text-gray-500 uppercase tracking-widest mb-2">Message</label>
             <Textarea
               placeholder="Write your announcement here..."
               value={message}
               maxLength={2000}
               rows={8}
-              onChange={(e) => {
-                setMessage(e.target.value.slice(0, 2000));
-                if (fieldErrors.message) setFieldErrors({ ...fieldErrors, message: "" });
-              }}
-              className="w-full"
+              onChange={(e) => { setMessage(e.target.value.slice(0, 2000)); if (fieldErrors.message) setFieldErrors({ ...fieldErrors, message: "" }); }}
+              className="w-full bg-white/50 backdrop-blur-sm border-white/60 focus-visible:ring-amber-400/50"
             />
-            <div
-              className={`text-right text-xs mt-1 ${message.length >= 2000 ? "text-red-500 font-medium" : "text-gray-400"}`}
-            >
+            <div className={`text-right text-xs mt-1 ${message.length >= 2000 ? "text-red-500 font-medium" : "text-gray-400"}`}>
               {message.length} / 2000
             </div>
             {fieldErrors.message && (
@@ -251,47 +208,32 @@ export default function AnnouncementsPage() {
 
           {/* Recipients */}
           <div>
-            <label className="block text-sm font-grotesk text-gray-900 uppercase mb-3">
-              Recipients
-            </label>
+            <label className="block text-xs font-grotesk text-gray-500 uppercase tracking-widest mb-3">Recipients</label>
 
-            {/* Employee multiselect */}
-            <div className="bg-white rounded-xl overflow-hidden mb-3 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]">
+            <div className="bg-white/60 backdrop-blur-sm rounded-xl overflow-hidden mb-3 border border-white/40 shadow-[0_4px_12px_rgba(20,20,20,0.06)]">
               {loadingUsers ? (
                 <div className="p-4 space-y-2">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="h-4 bg-gray-100 rounded animate-pulse" />
-                  ))}
+                  {[1, 2, 3].map((i) => <div key={i} className="h-4 bg-gray-100 rounded animate-pulse" />)}
                 </div>
               ) : (
                 <>
                   <button
                     type="button"
                     onClick={toggleAll}
-                    className="w-full flex items-center gap-3 px-4 py-3 border-b border-gray-100 hover:bg-[#FAF8F5] transition text-left"
+                    className="w-full flex items-center gap-3 px-4 py-3 border-b border-white/40 hover:bg-white/40 transition text-left cursor-pointer"
                   >
-                    <div
-                      className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${
-                        selected.size === employees.length && employees.length > 0
-                          ? "bg-[#141414] border-[#141414]"
-                          : "border-gray-300"
-                      }`}
-                    >
+                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${
+                      selected.size === employees.length && employees.length > 0
+                        ? "bg-amber-400 border-amber-400"
+                        : "border-gray-300"
+                    }`}>
                       {selected.size === employees.length && employees.length > 0 && (
                         <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 10 8">
-                          <path
-                            d="M1 4l3 3 5-6"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
+                          <path d="M1 4l3 3 5-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       )}
                     </div>
-                    <span className="text-xs font-grotesk text-gray-500 uppercase tracking-wide">
-                      Select all ({employees.length})
-                    </span>
+                    <span className="text-xs font-grotesk text-gray-500 uppercase tracking-wide">Select all ({employees.length})</span>
                   </button>
 
                   <div className="max-h-48 overflow-y-auto">
@@ -299,41 +241,21 @@ export default function AnnouncementsPage() {
                       <button
                         key={emp.id}
                         type="button"
-                        onClick={() => {
-                          toggleEmployee(emp.email);
-                          if (fieldErrors.recipients)
-                            setFieldErrors({ ...fieldErrors, recipients: "" });
-                        }}
-                        className="w-full flex items-center gap-3 px-4 py-3 border-b border-gray-50 last:border-0 hover:bg-[#FAF8F5] transition text-left"
+                        onClick={() => { toggleEmployee(emp.email); if (fieldErrors.recipients) setFieldErrors({ ...fieldErrors, recipients: "" }); }}
+                        className="w-full flex items-center gap-3 px-4 py-3 border-b border-white/30 last:border-0 hover:bg-white/40 transition text-left cursor-pointer"
                       >
-                        <div
-                          className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${
-                            selected.has(emp.email)
-                              ? "bg-[#141414] border-[#141414]"
-                              : "border-gray-300"
-                          }`}
-                        >
+                        <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${
+                          selected.has(emp.email) ? "bg-amber-400 border-amber-400" : "border-gray-300"
+                        }`}>
                           {selected.has(emp.email) && (
                             <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 10 8">
-                              <path
-                                d="M1 4l3 3 5-6"
-                                stroke="currentColor"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
+                              <path d="M1 4l3 3 5-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                           )}
                         </div>
                         <div className="min-w-0">
-                          <p className="text-sm font-grotesk text-gray-900 truncate">
-                            {emp.name ?? emp.email}
-                          </p>
-                          {emp.name && (
-                            <p className="text-xs text-gray-400 truncate font-techstack">
-                              {emp.email}
-                            </p>
-                          )}
+                          <p className="text-sm font-grotesk text-gray-900 truncate">{emp.name ?? emp.email}</p>
+                          {emp.name && <p className="text-xs text-gray-400 truncate font-techstack">{emp.email}</p>}
                         </div>
                       </button>
                     ))}
@@ -342,24 +264,16 @@ export default function AnnouncementsPage() {
               )}
             </div>
 
-            {/* Manual emails */}
-            <label className="block text-xs font-grotesk text-gray-500 uppercase mb-2">
-              Or add emails manually
-            </label>
+            <label className="block text-xs font-grotesk text-gray-400 uppercase tracking-widest mb-2">Or add emails manually</label>
             <Textarea
               placeholder={"john@example.com, jane@example.com\nor one per line"}
               value={manualEmails}
               rows={3}
-              onChange={(e) => {
-                setManualEmails(e.target.value);
-                if (fieldErrors.recipients) setFieldErrors({ ...fieldErrors, recipients: "" });
-              }}
-              className="w-full text-sm"
+              onChange={(e) => { setManualEmails(e.target.value); if (fieldErrors.recipients) setFieldErrors({ ...fieldErrors, recipients: "" }); }}
+              className="w-full text-sm bg-white/50 backdrop-blur-sm border-white/60 focus-visible:ring-amber-400/50"
             />
             {parsedManual.length > 0 && (
-              <p className="text-xs text-gray-400 mt-1">
-                {parsedManual.length} valid email{parsedManual.length !== 1 ? "s" : ""} detected
-              </p>
+              <p className="text-xs text-gray-400 mt-1">{parsedManual.length} valid email{parsedManual.length !== 1 ? "s" : ""} detected</p>
             )}
 
             {fieldErrors.recipients && (
@@ -369,10 +283,9 @@ export default function AnnouncementsPage() {
               </div>
             )}
 
-            {/* Recipient count */}
             {recipientCount > 0 && (
-              <div className="mt-3 px-3 py-2 bg-[#141414]/5 rounded-lg">
-                <p className="text-xs font-grotesk text-[#141414]">
+              <div className="mt-3 px-3 py-2 bg-amber-50/80 border border-amber-200 rounded-lg">
+                <p className="text-xs font-grotesk text-amber-700">
                   {recipientCount} recipient{recipientCount !== 1 ? "s" : ""} selected
                 </p>
               </div>
@@ -381,11 +294,9 @@ export default function AnnouncementsPage() {
 
           {/* Send via */}
           <div>
-            <label className="block text-sm font-grotesk text-gray-900 uppercase mb-2">
-              Send via
-            </label>
+            <label className="block text-xs font-grotesk text-gray-500 uppercase tracking-widest mb-2">Send via</label>
             <Select value={channel} onValueChange={(v) => setChannel(v as Channel)}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full bg-white/50 backdrop-blur-sm border-white/60">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -400,11 +311,10 @@ export default function AnnouncementsPage() {
           <Button
             type="submit"
             disabled={loading || recipientCount === 0 || !subject.trim() || !message.trim()}
-            className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-grotesk font-normal text-lg cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(20,20,20,0.12),0_2px_6px_rgba(20,20,20,0.08)] disabled:translate-y-0 disabled:shadow-none"
+            className="w-full text-white py-3 rounded-xl font-grotesk font-normal text-lg cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(249,115,22,0.3)] disabled:translate-y-0 disabled:shadow-none disabled:opacity-60"
+            style={{ background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" }}
           >
-            {loading
-              ? "Sending..."
-              : `Send Announcement${recipientCount > 0 ? ` → ${recipientCount}` : ""}`}
+            {loading ? "Sending..." : `Send Announcement${recipientCount > 0 ? ` → ${recipientCount}` : ""}`}
           </Button>
         </form>
       </div>

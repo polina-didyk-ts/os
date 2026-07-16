@@ -105,7 +105,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
 
       {/* What */}
       <div>
-        <label className="block text-sm text-gray-900 uppercase mb-2 font-grotesk">
+        <label className="block text-xs text-gray-500 uppercase tracking-widest mb-2 font-grotesk">
           What is the problem?
         </label>
         <Input
@@ -117,7 +117,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
             setFormData({ ...formData, what: e.target.value });
             if (fieldErrors.what) setFieldErrors({ ...fieldErrors, what: "" });
           }}
-          className="w-full"
+          className="w-full bg-white/50 backdrop-blur-sm border-white/60 focus-visible:ring-amber-400/50"
         />
         {fieldErrors.what && (
           <div className="flex items-center gap-1.5 mt-1.5">
@@ -129,7 +129,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
 
       {/* Description */}
       <div>
-        <label className="block text-sm text-gray-900 uppercase mb-2 font-grotesk">
+        <label className="block text-xs text-gray-500 uppercase tracking-widest mb-2 font-grotesk">
           Problem Description
         </label>
         <Textarea
@@ -140,7 +140,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
             setFormData({ ...formData, description: e.target.value.slice(0, 1000) });
             if (fieldErrors.description) setFieldErrors({ ...fieldErrors, description: "" });
           }}
-          className="w-full"
+          className="w-full bg-white/50 backdrop-blur-sm border-white/60 focus-visible:ring-amber-400/50"
         />
         <div
           className={`text-right text-xs mt-1 ${formData.description.length >= 1000 ? "text-red-500 font-medium" : "text-gray-400"}`}
@@ -157,44 +157,42 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
 
       {/* Priority */}
       <div>
-        <label className="block text-sm text-gray-900 uppercase mb-3 font-grotesk">Priority</label>
+        <label className="block text-xs text-gray-500 uppercase tracking-widest mb-3 font-grotesk">Priority</label>
         <div className="flex gap-2 flex-wrap">
           <button
             type="button"
             onClick={() => setFormData({ ...formData, priority: PRIORITY_LEVELS.LOW })}
-            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 cursor-pointer ${
               formData.priority === PRIORITY_LEVELS.LOW
-                ? "bg-green-100 text-green-700 border-2 border-green-500"
-                : "bg-gray-100 text-gray-700 border-2 border-gray-200"
+                ? "bg-green-100/80 text-green-700 border-2 border-green-400"
+                : "bg-white/40 backdrop-blur-sm text-gray-600 border-2 border-white/60 hover:bg-white/60"
             }`}
           >
-            <span className="inline-block w-3 h-3 rounded-full bg-green-500"></span>
+            <span className="inline-block w-2.5 h-2.5 rounded-full bg-green-500"></span>
             Low
           </button>
-
           <button
             type="button"
             onClick={() => setFormData({ ...formData, priority: PRIORITY_LEVELS.MEDIUM })}
-            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 cursor-pointer ${
               formData.priority === PRIORITY_LEVELS.MEDIUM
-                ? "bg-yellow-100 text-yellow-700 border-2 border-yellow-500"
-                : "bg-gray-100 text-gray-700 border-2 border-gray-200"
+                ? "bg-amber-100/80 text-amber-700 border-2 border-amber-400"
+                : "bg-white/40 backdrop-blur-sm text-gray-600 border-2 border-white/60 hover:bg-white/60"
             }`}
           >
-            <span className="inline-block w-3 h-3 rounded-full bg-yellow-500"></span>
+            <span className="inline-block w-2.5 h-2.5 rounded-full bg-amber-400"></span>
             Medium
           </button>
-
           <button
             type="button"
             onClick={() => setFormData({ ...formData, priority: PRIORITY_LEVELS.HIGH })}
-            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 cursor-pointer ${
               formData.priority === PRIORITY_LEVELS.HIGH
-                ? "bg-red-100 text-red-700 border-2 border-red-500"
-                : "bg-gray-100 text-gray-700 border-2 border-gray-200"
+                ? "bg-red-100/80 text-red-700 border-2 border-red-400"
+                : "bg-white/40 backdrop-blur-sm text-gray-600 border-2 border-white/60 hover:bg-white/60"
             }`}
           >
-            <span className="inline-block w-3 h-3 rounded-full bg-red-500"></span>
+            <span className="inline-block w-2.5 h-2.5 rounded-full bg-red-500"></span>
             High
           </button>
         </div>
@@ -202,15 +200,15 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
 
       {/* Comment */}
       <div>
-        <label className="block text-sm text-gray-900 uppercase mb-2 font-grotesk">
-          Comment <span className="text-gray-500 text-xs font-normal">optional</span>
+        <label className="block text-xs text-gray-500 uppercase tracking-widest mb-2 font-grotesk">
+          Comment <span className="text-gray-400 text-xs font-normal normal-case tracking-normal">optional</span>
         </label>
         <Textarea
           placeholder="Any additional information..."
           value={formData.comment}
           maxLength={500}
           onChange={(e) => setFormData({ ...formData, comment: e.target.value.slice(0, 500) })}
-          className="w-full"
+          className="w-full bg-white/50 backdrop-blur-sm border-white/60 focus-visible:ring-amber-400/50"
         />
         <div
           className={`text-right text-xs mt-1 ${formData.comment.length >= 500 ? "text-red-500 font-medium" : "text-gray-400"}`}
@@ -223,7 +221,8 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
       <Button
         type="submit"
         disabled={loading || !formData.what.trim()}
-        className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-grotesk font-normal text-lg cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(20,20,20,0.12),0_2px_6px_rgba(20,20,20,0.08)] disabled:translate-y-0 disabled:shadow-none"
+        className="w-full text-white py-3 rounded-xl font-grotesk font-normal text-lg cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(249,115,22,0.3)] disabled:translate-y-0 disabled:shadow-none disabled:opacity-60"
+        style={{ background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" }}
       >
         {loading ? "Submitting..." : "Submit Request →"}
       </Button>

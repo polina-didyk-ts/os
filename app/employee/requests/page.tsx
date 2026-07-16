@@ -5,10 +5,11 @@ import Link from "next/link";
 import {
   ChevronRight,
   Plus,
-  ShoppingCart,
-  Wrench,
+  Package,
+  Zap,
+  MessageCircle,
+  Sparkles,
   MessageSquare,
-  Lightbulb,
   Menu,
 } from "lucide-react";
 import { BottomNavigation, useSideMenu } from "../components";
@@ -83,51 +84,35 @@ const STATUS_CONFIG: Record<
   },
 };
 
+const HOLO: string[] = [
+  "linear-gradient(135deg, #fde68a 0%, #fbbf24 32%, #f97316 65%, #ea580c 100%)",
+  "linear-gradient(225deg, #fef08a 0%, #facc15 30%, #fb923c 65%, #ef4444 100%)",
+  "linear-gradient(315deg, #fff7ed 0%, #fbbf24 28%, #f97316 62%, #dc2626 100%)",
+  "linear-gradient(45deg,  #fef9c3 0%, #fde047 32%, #fb923c 65%, #f97316 100%)",
+];
+
 const TYPE_CONFIG: Record<
   RequestType,
-  { icon: React.ElementType; bgClass: string; iconClass: string; label: string }
+  { icon: React.ElementType; holoIndex: number; label: string }
 > = {
-  order: {
-    icon: ShoppingCart,
-    bgClass: "bg-[#FFC600]/15",
-    iconClass: "text-[#141414]",
-    label: "Order",
-  },
-  problem: {
-    icon: Wrench,
-    bgClass: "bg-gray-100",
-    iconClass: "text-gray-600",
-    label: "Problem",
-  },
-  question: {
-    icon: MessageSquare,
-    bgClass: "bg-gray-100",
-    iconClass: "text-gray-600",
-    label: "Question",
-  },
-  idea: {
-    icon: Lightbulb,
-    bgClass: "bg-orange-100",
-    iconClass: "text-orange-500",
-    label: "Idea",
-  },
+  order:    { icon: Package,       holoIndex: 0, label: "Order" },
+  problem:  { icon: Zap,           holoIndex: 1, label: "Problem" },
+  question: { icon: MessageCircle, holoIndex: 2, label: "Question" },
+  idea:     { icon: Sparkles,      holoIndex: 3, label: "Idea" },
 };
 
 const PRIORITY_CONFIG: Record<string, { label: string; className: string }> = {
-  high: { label: "High", className: "bg-red-50 text-red-600 border border-red-200" },
-  medium: {
-    label: "Medium",
-    className: "bg-[#FFC600]/15 text-[#8B6914] border border-[#FFC600]/40",
-  },
-  low: { label: "Low", className: "bg-green-50 text-green-700 border border-green-200" },
+  high:   { label: "High",   className: "bg-red-50 text-red-600 border border-red-200" },
+  medium: { label: "Medium", className: "bg-amber-50 text-amber-700 border border-amber-200" },
+  low:    { label: "Low",    className: "bg-green-50 text-green-700 border border-green-200" },
 };
 
 function getRequestTitle(request: Request): string {
   const meta = request.metadata as Record<string, string | number>;
-  if (request.type === "order") return (meta.what as string) ?? "Order";
-  if (request.type === "problem") return (meta.what as string) ?? "Problem";
+  if (request.type === "order")    return (meta.what as string)     ?? "Order";
+  if (request.type === "problem")  return (meta.what as string)     ?? "Problem";
   if (request.type === "question") return (meta.question as string) ?? "Question";
-  if (request.type === "idea") return (meta.idea as string) ?? "Idea";
+  if (request.type === "idea")     return (meta.idea as string)     ?? "Idea";
   return "Request";
 }
 
@@ -137,26 +122,19 @@ function formatDate(dateStr: string): string {
   const yesterday = new Date(today);
   yesterday.setDate(yesterday.getDate() - 1);
 
-  const timeStr = date.toLocaleTimeString("en-GB", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const timeStr = date.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
 
-  if (date.toDateString() === today.toDateString()) {
-    return `Today, ${timeStr}`;
-  }
-  if (date.toDateString() === yesterday.toDateString()) {
-    return `Yesterday, ${timeStr}`;
-  }
+  if (date.toDateString() === today.toDateString())     return `Today, ${timeStr}`;
+  if (date.toDateString() === yesterday.toDateString()) return `Yesterday, ${timeStr}`;
 
   return date.toLocaleDateString("en-US", { month: "long", day: "numeric" }) + `, ${timeStr}`;
 }
 
 function RequestCardSkeleton() {
   return (
-    <div className="bg-white rounded-2xl p-4 animate-pulse">
+    <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 animate-pulse border border-white/40">
       <div className="flex items-start gap-3">
-        <div className="w-10 h-10 rounded-xl bg-gray-200 shrink-0" />
+        <div className="w-10 h-10 rounded-2xl bg-gray-200 shrink-0" />
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
             <div className="h-4 bg-gray-200 rounded w-3/5" />
@@ -165,7 +143,7 @@ function RequestCardSkeleton() {
           <div className="h-3 bg-gray-100 rounded w-1/3 mt-2" />
         </div>
       </div>
-      <div className="mt-3 pt-3 border-t border-gray-100">
+      <div className="mt-3 pt-3 border-t border-white/40">
         <div className="h-3 bg-gray-100 rounded w-1/4" />
         <div className="h-3 bg-gray-200 rounded w-2/5 mt-1" />
       </div>
@@ -176,7 +154,7 @@ function RequestCardSkeleton() {
 function EmptyState({ filtered }: { filtered: boolean }) {
   return (
     <div className="flex flex-col items-center justify-center py-20 px-6 text-center">
-      <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+      <div className="w-16 h-16 rounded-2xl bg-white/60 backdrop-blur-sm border border-white/40 flex items-center justify-center mb-4">
         <MessageSquare className="w-7 h-7 text-gray-400" />
       </div>
       <p className="text-gray-800 text-base font-grotesk">
@@ -188,7 +166,8 @@ function EmptyState({ filtered }: { filtered: boolean }) {
       {!filtered && (
         <Link
           href="/employee"
-          className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-[#141414] text-white text-sm font-medium rounded-xl"
+          className="mt-4 inline-flex items-center gap-2 px-4 py-2 text-white text-sm font-grotesk rounded-xl"
+          style={{ background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" }}
         >
           <Plus className="w-4 h-4" />
           New Request
@@ -222,9 +201,7 @@ export default function EmployeeRequestsPage() {
     }
   }, []);
 
-  useEffect(() => {
-    fetchRequests();
-  }, [fetchRequests]);
+  useEffect(() => { fetchRequests(); }, [fetchRequests]);
 
   const filtered =
     activeFilter === "all" ? requests : requests.filter((r) => r.status === activeFilter);
@@ -233,36 +210,28 @@ export default function EmployeeRequestsPage() {
     const arr = [...filtered];
     switch (sortBy) {
       case "oldest":
-        return arr.sort(
-          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        );
+        return arr.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
       case "updated":
-        return arr.sort(
-          (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-        );
+        return arr.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
       case "priority":
-        return arr.sort(
-          (a, b) => (PRIORITY_ORDER[a.priority] ?? 2) - (PRIORITY_ORDER[b.priority] ?? 2)
-        );
+        return arr.sort((a, b) => (PRIORITY_ORDER[a.priority] ?? 2) - (PRIORITY_ORDER[b.priority] ?? 2));
       case "status":
         return arr.sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
       default:
-        return arr.sort(
-          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
+        return arr.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     }
   }, [filtered, sortBy]);
 
   const userInitial = session?.user?.name?.[0]?.toUpperCase() ?? "?";
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
+    <main className="min-h-screen bg-transparent flex flex-col">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white sticky top-0 z-10">
+      <header className="flex items-center justify-between px-4 py-3 border-b border-white/30 bg-white/60 backdrop-blur-md sticky top-0 z-10">
         <div className="flex items-center gap-3">
           <button
             onClick={toggle}
-            className="p-2 hover:bg-gray-100 rounded-lg transition cursor-pointer"
+            className="p-2 hover:bg-white/60 rounded-lg transition cursor-pointer"
             aria-label="Open menu"
           >
             <Menu className="w-6 h-6 text-gray-700" />
@@ -275,7 +244,7 @@ export default function EmployeeRequestsPage() {
       </header>
 
       {/* Sort filter */}
-      <div className="bg-white border-b border-gray-100 px-4 py-3">
+      <div className="bg-white/50 backdrop-blur-sm border-b border-white/30 px-4 py-3">
         <div className="flex gap-2 overflow-x-auto scrollbar-none">
           {SORT_OPTIONS.map((opt) => (
             <button
@@ -283,9 +252,10 @@ export default function EmployeeRequestsPage() {
               onClick={() => setSortBy(opt.value)}
               className={`px-4 py-1.5 rounded-full text-sm font-grotesk whitespace-nowrap transition cursor-pointer ${
                 sortBy === opt.value
-                  ? "bg-[#141414] text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  ? "text-white"
+                  : "bg-white/40 backdrop-blur-sm text-gray-600 border border-white/60 hover:bg-white/60"
               }`}
+              style={sortBy === opt.value ? { background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" } : {}}
             >
               {opt.label}
             </button>
@@ -294,7 +264,7 @@ export default function EmployeeRequestsPage() {
       </div>
 
       {/* Status filter */}
-      <div className="bg-white border-b border-gray-100 px-4 pb-3">
+      <div className="bg-white/50 backdrop-blur-sm border-b border-white/30 px-4 pb-3">
         <div className="flex gap-1 overflow-x-auto scrollbar-none">
           {STATUS_FILTERS.map((f) => (
             <button
@@ -302,7 +272,7 @@ export default function EmployeeRequestsPage() {
               onClick={() => setActiveFilter(f.id)}
               className={`px-3 py-1.5 text-xs font-grotesk whitespace-nowrap transition border-b-2 cursor-pointer ${
                 activeFilter === f.id
-                  ? "border-[#FFC600] text-[#141414]"
+                  ? "border-amber-400 text-amber-700"
                   : "border-transparent text-gray-400 hover:text-gray-600"
               }`}
             >
@@ -317,7 +287,7 @@ export default function EmployeeRequestsPage() {
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm mb-4">
             {error}
-            <button onClick={fetchRequests} className="ml-2 underline font-medium">
+            <button onClick={fetchRequests} className="ml-2 underline font-medium cursor-pointer">
               Retry
             </button>
           </div>
@@ -325,9 +295,7 @@ export default function EmployeeRequestsPage() {
 
         {loading ? (
           <div className="flex flex-col gap-3">
-            {[1, 2, 3].map((i) => (
-              <RequestCardSkeleton key={i} />
-            ))}
+            {[1, 2, 3].map((i) => <RequestCardSkeleton key={i} />)}
           </div>
         ) : sorted.length === 0 ? (
           <EmptyState filtered={activeFilter !== "all"} />
@@ -345,19 +313,17 @@ export default function EmployeeRequestsPage() {
                 <Link
                   key={request.id}
                   href={`/employee/requests/${request.id}`}
-                  className="bg-white rounded-2xl px-4 pt-4 pb-0 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] block animate-fade-up"
+                  className="bg-white/60 backdrop-blur-sm rounded-2xl px-4 pt-4 pb-0 shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] border border-white/40 block animate-fade-up"
                   style={{ animationDelay: `${Math.min(i * 70, 350)}ms` }}
                   data-testid="request-card"
                 >
                   <div className="flex items-start gap-3">
                     <div
-                      className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
-                      style={{
-                        background: "linear-gradient(135deg, #FFC600, #FFB800)",
-                        boxShadow: "inset 0 -2px 4px rgba(0,0,0,0.1)",
-                      }}
+                      className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 relative overflow-hidden"
+                      style={{ background: HOLO[typeConf.holoIndex] }}
                     >
-                      <Icon className="w-5 h-5 text-white" strokeWidth={1.5} />
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-white/5 to-transparent" />
+                      <Icon className="w-5 h-5 text-white relative z-10 drop-shadow-sm" strokeWidth={1.5} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
@@ -368,12 +334,10 @@ export default function EmployeeRequestsPage() {
                           {hasComments && (
                             <div className="relative">
                               <MessageSquare className="w-4 h-4 text-gray-400" />
-                              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-[#FFC600] rounded-full" />
+                              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-amber-400 rounded-full" />
                             </div>
                           )}
-                          <span
-                            className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${statusConf.badgeClass}`}
-                          >
+                          <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${statusConf.badgeClass}`}>
                             {statusConf.label}
                           </span>
                         </div>
@@ -382,19 +346,17 @@ export default function EmployeeRequestsPage() {
                         ID #{request.ticketNumber}
                       </p>
                       <div className="flex items-center gap-1.5 mt-2">
-                        <span className="text-[11px] font-grotesk px-2 py-0.5 rounded-md bg-gray-100 text-gray-500">
+                        <span className="text-[11px] font-grotesk px-2 py-0.5 rounded-md bg-white/60 text-gray-500 border border-white/40">
                           {typeConf.label}
                         </span>
-                        <span
-                          className={`text-[11px] font-grotesk px-2 py-0.5 rounded-md ${priorityConf.className}`}
-                        >
+                        <span className={`text-[11px] font-grotesk px-2 py-0.5 rounded-md ${priorityConf.className}`}>
                           {priorityConf.label}
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100 pb-4">
+                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/40 pb-4">
                     <div>
                       <p className="text-[10px] uppercase tracking-wide text-gray-400 font-grotesk">
                         Created
@@ -415,7 +377,8 @@ export default function EmployeeRequestsPage() {
       {/* FAB */}
       <Link
         href="/employee"
-        className="fixed bottom-24 right-4 w-14 h-14 bg-[#141414] rounded-full flex items-center justify-center shadow-lg z-30 hover:bg-black transition"
+        className="fixed bottom-24 right-4 w-14 h-14 rounded-full flex items-center justify-center shadow-lg z-30 transition hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(249,115,22,0.3)]"
+        style={{ background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" }}
         data-testid="create-request-fab"
       >
         <Plus className="w-7 h-7 text-white" />

@@ -20,7 +20,7 @@ export function BottomNavigation() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-4 py-2 flex justify-around z-40">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white/60 backdrop-blur-md border-t border-white/30 px-4 py-2 flex justify-around z-40">
       {navItems.map(({ path, label, icon: Icon }) => {
         const active = isActive(path);
         return (

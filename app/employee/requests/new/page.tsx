@@ -13,8 +13,6 @@ import {
 import { REQUEST_TYPES } from "@/src/modules/requests/request-types";
 import { ChevronLeft } from "lucide-react";
 
-const CARD_SHADOW = "shadow-[0_2px_8px_rgba(20,20,20,0.06)]";
-
 export default function NewRequestPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -25,7 +23,7 @@ export default function NewRequestPage() {
 
   if (!type || !requestType) {
     return (
-      <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
+      <main className="min-h-screen bg-transparent flex flex-col">
         <EmployeeHeader />
         <div className="flex-1 pb-32 flex items-center justify-center">
           <p className="text-gray-600">Invalid request type</p>
@@ -37,10 +35,10 @@ export default function NewRequestPage() {
 
   if (successTicket) {
     return (
-      <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
+      <main className="min-h-screen bg-transparent flex flex-col">
         <EmployeeHeader />
         <div className="flex-1 pb-32 overflow-y-auto">
-          <div className={`mx-4 mt-4 bg-white rounded-2xl p-5 ${CARD_SHADOW} animate-fade-scale`}>
+          <div className="mx-4 mt-4 bg-white/60 backdrop-blur-sm rounded-2xl p-5 shadow-[0_4px_12px_rgba(20,20,20,0.06)] border border-white/40 animate-fade-scale">
             <SuccessScreen ticketNumber={successTicket} />
           </div>
         </div>
@@ -50,28 +48,26 @@ export default function NewRequestPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
+    <main className="min-h-screen bg-transparent flex flex-col">
       <EmployeeHeader />
 
       <div className="flex-1 pb-32 overflow-y-auto">
         {/* Header */}
-        <div
-          className={`mx-4 mt-4 bg-white rounded-2xl px-4 py-3 ${CARD_SHADOW} flex items-center justify-between animate-fade-up`}
-        >
+        <div className="mx-4 mt-4 bg-white/60 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-[0_4px_12px_rgba(20,20,20,0.06)] border border-white/40 flex items-center justify-between animate-fade-up">
           <button
             onClick={() => router.back()}
-            className="p-1 hover:bg-gray-100 rounded-lg transition"
+            className="p-1 hover:bg-white/60 rounded-lg transition cursor-pointer"
           >
             <ChevronLeft className="w-6 h-6 text-gray-700" strokeWidth={1.5} />
           </button>
           <h1 className="text-lg text-gray-900 flex-1 ml-2 font-grotesk">New Request</h1>
-          <span className="px-3 py-1 bg-[#FFC600]/20 text-[#141414] text-xs font-grotesk rounded-full">
+          <span className="px-3 py-1 bg-amber-100/80 text-amber-700 text-xs font-grotesk rounded-full">
             {requestType.title.toUpperCase()}
           </span>
         </div>
 
         {/* Title */}
-        <div className={`mx-4 mt-3 bg-white rounded-2xl p-5 ${CARD_SHADOW} animate-fade-up [animation-delay:80ms]`}>
+        <div className="mx-4 mt-3 bg-white/60 backdrop-blur-sm rounded-2xl p-5 shadow-[0_4px_12px_rgba(20,20,20,0.06)] border border-white/40 animate-fade-up [animation-delay:80ms]">
           <h2 className="text-2xl text-gray-900 font-grotesk">
             {requestType.title === "Order"
               ? "What do you need?"
@@ -93,7 +89,7 @@ export default function NewRequestPage() {
         </div>
 
         {/* Form */}
-        <div className={`mx-4 mt-3 mb-4 bg-white rounded-2xl p-5 ${CARD_SHADOW} animate-fade-up [animation-delay:160ms]`}>
+        <div className="mx-4 mt-3 mb-4 bg-white/60 backdrop-blur-sm rounded-2xl p-5 shadow-[0_4px_12px_rgba(20,20,20,0.06)] border border-white/40 animate-fade-up [animation-delay:160ms]">
           {type === "order" && <OrderForm onSuccess={setSuccessTicket} />}
           {type === "problem" && <ProblemForm onSuccess={setSuccessTicket} />}
           {type === "question" && <QuestionForm onSuccess={setSuccessTicket} />}

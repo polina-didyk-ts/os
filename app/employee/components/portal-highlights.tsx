@@ -44,15 +44,16 @@ export function PortalHighlights() {
   useEffect(() => { fetchArticles(); }, [fetchArticles]);
 
   return (
-    <div className="bg-white rounded-2xl shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] overflow-hidden">
+    <div className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-5 pt-5 pb-4">
         <div className="flex items-center gap-2.5">
           <div
-            className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
-            style={{ background: "linear-gradient(135deg,#FFC600,#FFB800)", boxShadow: "inset 0 -2px 4px rgba(0,0,0,0.1)" }}
+            className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0 relative overflow-hidden"
+            style={{ background: "linear-gradient(135deg, #fde68a 0%, #fbbf24 38%, #f97316 75%, #ea580c 100%)" }}
           >
-            <Sparkles className="w-3.5 h-3.5 text-white" strokeWidth={1.5} />
+            <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-white/5 to-transparent" />
+            <Sparkles className="w-3.5 h-3.5 text-white relative z-10" strokeWidth={1.5} />
           </div>
           <h2 className="text-base font-grotesk text-gray-900">What&apos;s New at Techstack</h2>
         </div>

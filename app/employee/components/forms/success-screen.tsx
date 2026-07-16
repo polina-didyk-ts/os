@@ -25,13 +25,13 @@ export function SuccessScreen({ ticketNumber }: SuccessScreenProps) {
 
       {/* Ticket Number */}
       <div className="space-y-1 text-center">
-        <p className="text-xs text-gray-600 uppercase font-grotesk">Request Number</p>
+        <p className="text-xs text-gray-500 uppercase font-grotesk tracking-widest">Request Number</p>
         <p className="text-2xl text-gray-900 font-grotesk">#{ticketNumber}</p>
       </div>
 
       {/* What Next */}
-      <div className="w-full max-w-md bg-white rounded-2xl p-4 space-y-2 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]">
-        <p className="text-xs text-gray-900 uppercase font-grotesk">What&apos;s Next?</p>
+      <div className="w-full max-w-md bg-white/50 backdrop-blur-sm rounded-2xl p-4 space-y-2 border border-white/60 shadow-[0_4px_12px_rgba(20,20,20,0.06)]">
+        <p className="text-xs text-gray-500 uppercase tracking-widest font-grotesk">What&apos;s Next?</p>
         <p className="text-sm text-gray-600 font-techstack">
           Your request is now being reviewed by the office manager. You&apos;ll typically receive a
           response within 2 business hours. Check updates in your profile.
@@ -42,19 +42,22 @@ export function SuccessScreen({ ticketNumber }: SuccessScreenProps) {
       <div className="w-full max-w-md space-y-3">
         <Link
           href="/employee/requests"
-          className="block rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(20,20,20,0.12),0_2px_6px_rgba(20,20,20,0.08)]"
+          className="block rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(249,115,22,0.3)]"
         >
-          <Button className="w-full bg-[#141414] hover:bg-black text-white py-3 rounded-lg font-grotesk font-normal cursor-pointer transition">
+          <Button
+            className="w-full text-white py-3 rounded-xl font-grotesk font-normal cursor-pointer transition disabled:opacity-60"
+            style={{ background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" }}
+          >
             View My Requests
           </Button>
         </Link>
         <Link
           href="/employee"
-          className="block rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(20,20,20,0.12),0_2px_6px_rgba(20,20,20,0.08)]"
+          className="block rounded-xl transition-all duration-200 hover:-translate-y-0.5"
         >
           <Button
             variant="outline"
-            className="w-full py-3 rounded-lg font-grotesk font-normal cursor-pointer transition"
+            className="w-full py-3 rounded-xl font-grotesk font-normal cursor-pointer transition bg-white/40 backdrop-blur-sm border-white/60 hover:bg-white/60"
           >
             Go to Home
           </Button>

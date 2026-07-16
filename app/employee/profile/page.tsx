@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Menu, FileText, Hourglass, CheckCircle2, Camera } from "lucide-react";
+import { Menu, FileText, Hourglass, CheckCircle2, MoreHorizontal, Upload, Trash2 } from "lucide-react";
 import { BottomNavigation, useSideMenu } from "../components";
 import { useSession } from "@/src/lib/client";
 
@@ -19,9 +19,7 @@ interface Stats {
 function getInitials(name: string | null | undefined, email: string): string {
   if (name) {
     const parts = name.trim().split(/\s+/);
-    if (parts.length >= 2) {
-      return (parts[0][0] + parts[1][0]).toUpperCase();
-    }
+    if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
     return name.slice(0, 2).toUpperCase();
   }
   return email.slice(0, 2).toUpperCase();
@@ -31,16 +29,27 @@ function StatCard({
   icon,
   label,
   value,
-  iconClass,
+  holoIndex,
 }: {
   icon: React.ReactNode;
   label: string;
   value: number | string;
-  iconClass: string;
+  holoIndex: number;
 }) {
+  const HOLO = [
+    "linear-gradient(135deg, #fde68a 0%, #fbbf24 32%, #f97316 65%, #ea580c 100%)",
+    "linear-gradient(225deg, #fef08a 0%, #facc15 30%, #fb923c 65%, #ef4444 100%)",
+    "linear-gradient(45deg,  #fef9c3 0%, #fde047 32%, #fb923c 65%, #f97316 100%)",
+  ];
   return (
-    <div className="flex-1 bg-white rounded-2xl py-4 flex flex-col items-center gap-1 shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)]">
-      <div className={iconClass}>{icon}</div>
+    <div className="flex-1 bg-white/60 backdrop-blur-sm rounded-2xl py-4 flex flex-col items-center gap-1 shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] border border-white/40">
+      <div
+        className="w-9 h-9 rounded-xl flex items-center justify-center relative overflow-hidden"
+        style={{ background: HOLO[holoIndex] }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-white/5 to-transparent" />
+        <div className="relative z-10 text-white [&>*]:w-4 [&>*]:h-4">{icon}</div>
+      </div>
       <span className="text-[10px] uppercase tracking-wide text-gray-400 mt-1 font-grotesk">
         {label}
       </span>
@@ -56,11 +65,38 @@ export default function EmployeeProfilePage() {
   const [statsLoading, setStatsLoading] = useState(true);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [deletingAvatar, setDeletingAvatar] = useState(false);
+  const [avatarMenuOpen, setAvatarMenuOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const avatarMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (avatarMenuRef.current && !avatarMenuRef.current.contains(e.target as Node)) {
+        setAvatarMenuOpen(false);
+      }
+    };
+    if (avatarMenuOpen) document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [avatarMenuOpen]);
 
   useEffect(() => {
     if (session?.user.image) setAvatarUrl(session.user.image);
   }, [session?.user.image]);
+
+  const handleAvatarDelete = async () => {
+    setDeletingAvatar(true);
+    try {
+      await fetch("/api/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: null }),
+      });
+      setAvatarUrl(null);
+    } finally {
+      setDeletingAvatar(false);
+    }
+  };
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -102,9 +138,7 @@ export default function EmployeeProfilePage() {
     }
   }, []);
 
-  useEffect(() => {
-    fetchStats();
-  }, [fetchStats]);
+  useEffect(() => { fetchStats(); }, [fetchStats]);
 
   const user = session?.user;
   const initials = getInitials(user?.name, user?.email ?? "");
@@ -112,13 +146,13 @@ export default function EmployeeProfilePage() {
   const email = user?.email ?? "";
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] flex flex-col">
+    <main className="min-h-screen bg-transparent flex flex-col">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white sticky top-0 z-10">
+      <header className="flex items-center justify-between px-4 py-3 border-b border-white/30 bg-white/60 backdrop-blur-md sticky top-0 z-10">
         <div className="flex items-center gap-3">
           <button
             onClick={toggle}
-            className="p-2 hover:bg-gray-100 rounded-lg transition"
+            className="p-2 hover:bg-white/60 rounded-lg transition cursor-pointer"
             aria-label="Open menu"
           >
             <Menu className="w-6 h-6 text-gray-700" />
@@ -130,34 +164,56 @@ export default function EmployeeProfilePage() {
 
       <div className="flex-1 pb-28 px-4 py-4 flex flex-col gap-4">
         {/* Profile card */}
-        <div className="bg-white rounded-2xl px-6 py-8 flex flex-col items-center shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] animate-fade-up">
+        <div className="bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-8 flex flex-col items-center shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] border border-white/40 animate-fade-up">
           {/* Avatar */}
-          <div className="relative mb-4">
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              disabled={uploadingAvatar}
-              className="relative w-24 h-24 rounded-full overflow-hidden group cursor-pointer focus:outline-none"
-              aria-label="Change avatar"
-            >
+          <div className="relative mb-4" ref={avatarMenuRef}>
+            {/* Avatar circle */}
+            <div className="relative w-24 h-24 rounded-full overflow-hidden">
               {avatarUrl ? (
-                <img
-                  src={avatarUrl}
-                  alt={displayName}
-                  className="w-full h-full object-cover"
-                />
+                <img src={avatarUrl} alt={displayName} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full bg-[#141414] flex items-center justify-center text-white text-2xl font-bold select-none">
                   {initials}
                 </div>
               )}
-              <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                {uploadingAvatar ? (
+              {(uploadingAvatar || deletingAvatar) && (
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  <Camera className="w-5 h-5 text-white" />
+                </div>
+              )}
+            </div>
+
+            {/* Three-dot button */}
+            <button
+              onClick={() => setAvatarMenuOpen((v) => !v)}
+              className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-white border border-gray-200 shadow-md flex items-center justify-center hover:bg-gray-50 transition cursor-pointer"
+              aria-label="Photo options"
+            >
+              <MoreHorizontal className="w-3.5 h-3.5 text-gray-500" />
+            </button>
+
+            {/* Dropdown */}
+            {avatarMenuOpen && (
+              <div className="absolute top-6 right-[-60px] z-20 w-44 bg-white/90 backdrop-blur-md rounded-xl shadow-[0_8px_24px_rgba(20,20,20,0.12)] border border-white/60 py-1 overflow-hidden">
+                <button
+                  onClick={() => { setAvatarMenuOpen(false); fileInputRef.current?.click(); }}
+                  className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm font-grotesk text-gray-700 hover:bg-amber-50 transition cursor-pointer"
+                >
+                  <Upload className="w-4 h-4 text-amber-500" />
+                  Upload photo
+                </button>
+                {avatarUrl && (
+                  <button
+                    onClick={() => { setAvatarMenuOpen(false); handleAvatarDelete(); }}
+                    className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm font-grotesk text-red-500 hover:bg-red-50 transition cursor-pointer"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Remove photo
+                  </button>
                 )}
               </div>
-            </button>
+            )}
+
             <input
               ref={fileInputRef}
               type="file"
@@ -165,9 +221,6 @@ export default function EmployeeProfilePage() {
               className="hidden"
               onChange={handleAvatarUpload}
             />
-            <div className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-[#FFC600] border-2 border-white flex items-center justify-center pointer-events-none">
-              <CheckCircle2 className="w-4 h-4 text-white" />
-            </div>
           </div>
 
           {/* Name & email */}
@@ -175,7 +228,7 @@ export default function EmployeeProfilePage() {
           <p className="text-sm text-gray-500 mt-0.5 font-techstack">{email}</p>
 
           {/* Role badge */}
-          <span className="mt-3 px-4 py-1 rounded-full bg-[#F2F2F2] text-[#141414] text-xs uppercase tracking-wide border border-gray-200 font-grotesk">
+          <span className="mt-3 px-4 py-1 rounded-full bg-white/50 backdrop-blur-sm text-gray-600 text-xs uppercase tracking-wide border border-white/60 font-grotesk">
             Member
           </span>
         </div>
@@ -183,20 +236,20 @@ export default function EmployeeProfilePage() {
         {/* Stats */}
         <div className="flex gap-3 animate-fade-up [animation-delay:120ms]">
           <StatCard
-            icon={<FileText className="w-5 h-5" />}
-            iconClass="text-[#141414]"
+            icon={<FileText />}
+            holoIndex={0}
             label="Total"
             value={statsLoading ? "—" : (stats?.total ?? 0)}
           />
           <StatCard
-            icon={<Hourglass className="w-5 h-5" />}
-            iconClass="text-[#141414]"
+            icon={<Hourglass />}
+            holoIndex={1}
             label="In Progress"
             value={statsLoading ? "—" : (stats?.inProgress ?? 0)}
           />
           <StatCard
-            icon={<CheckCircle2 className="w-5 h-5" />}
-            iconClass="text-green-500"
+            icon={<CheckCircle2 />}
+            holoIndex={2}
             label="Done"
             value={statsLoading ? "—" : (stats?.completed ?? 0)}
           />

@@ -19,7 +19,7 @@ export function BottomNavigation() {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-4 py-2 flex justify-around z-40">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white/60 backdrop-blur-md border-t border-white/30 px-4 py-2 flex justify-around z-40">
       {NAV_ITEMS.map(({ path, label, icon: Icon }) => {
         const active = isActive(path);
         return (
@@ -27,8 +27,11 @@ export function BottomNavigation() {
             key={path}
             href={path}
             className={`flex flex-col items-center gap-1 py-2 px-5 rounded-xl transition ${
-              active ? "bg-[#141414] text-white" : "text-gray-500 hover:text-gray-800"
+              active
+                ? "text-white"
+                : "text-gray-500 hover:text-gray-800"
             }`}
+            style={active ? { background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" } : {}}
           >
             <Icon className="w-5 h-5" strokeWidth={1.5} />
             <span className="text-[10px] tracking-wide font-grotesk">{label}</span>
