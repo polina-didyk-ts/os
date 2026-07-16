@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { Plus, FileText, Eye, EyeOff, Pencil, Trash2, MessageCircle, ChevronDown, ChevronUp } from "lucide-react";
+import { Plus, FileText, Eye, EyeOff, Pencil, Trash2, MessageCircle, ChevronDown, ChevronUp, Heart } from "lucide-react";
 import { AdminHeader, BottomNavigation } from "../components";
 
 interface AdminComment {
@@ -10,6 +10,12 @@ interface AdminComment {
   content: string;
   createdAt: string;
   author: { id: string; name: string | null; email: string };
+}
+
+interface ArticleLiker {
+  id: string;
+  createdAt: string;
+  user: { id: string; name: string | null; email: string; image: string | null };
 }
 
 interface Article {
@@ -38,6 +44,8 @@ export default function AdminArticlesPage() {
   const [error, setError] = useState<string | null>(null);
   const [expandedComments, setExpandedComments] = useState<string | null>(null);
   const [commentsByArticle, setCommentsByArticle] = useState<Record<string, AdminComment[]>>({});
+  const [expandedLikes, setExpandedLikes] = useState<string | null>(null);
+  const [likersByArticle, setLikersByArticle] = useState<Record<string, ArticleLiker[]>>({});
 
   const fetchArticles = useCallback(async () => {
     setLoading(true);
@@ -53,6 +61,18 @@ export default function AdminArticlesPage() {
   }, []);
 
   useEffect(() => { fetchArticles(); }, [fetchArticles]);
+
+  const toggleLikes = async (articleId: string) => {
+    if (expandedLikes === articleId) { setExpandedLikes(null); return; }
+    setExpandedLikes(articleId);
+    if (!likersByArticle[articleId]) {
+      const res = await fetch(`/api/admin/articles/${articleId}/likes`);
+      if (res.ok) {
+        const data: ArticleLiker[] = await res.json();
+        setLikersByArticle((prev) => ({ ...prev, [articleId]: data }));
+      }
+    }
+  };
 
   const toggleComments = async (articleId: string) => {
     if (expandedComments === articleId) { setExpandedComments(null); return; }
@@ -178,6 +198,14 @@ export default function AdminArticlesPage() {
                     {article.published ? "Unpublish" : "Publish"}
                   </button>
                   <button
+                    onClick={() => toggleLikes(article.id)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/50 backdrop-blur-sm text-gray-700 text-xs font-grotesk border border-white/60 hover:bg-white/80 transition cursor-pointer"
+                  >
+                    <Heart className="w-3.5 h-3.5" />
+                    Likes
+                    {expandedLikes === article.id ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                  </button>
+                  <button
                     onClick={() => toggleComments(article.id)}
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/50 backdrop-blur-sm text-gray-700 text-xs font-grotesk border border-white/60 hover:bg-white/80 transition cursor-pointer"
                   >
@@ -193,6 +221,39 @@ export default function AdminArticlesPage() {
                     Delete
                   </button>
                 </div>
+
+                {expandedLikes === article.id && (
+                  <div className="mt-3 border-t border-white/40 pt-3">
+                    {!likersByArticle[article.id] ? (
+                      <p className="text-xs text-gray-400 font-techstack">Loading...</p>
+                    ) : likersByArticle[article.id].length === 0 ? (
+                      <p className="text-xs text-gray-400 font-techstack">No likes yet</p>
+                    ) : (
+                      <div className="flex flex-wrap gap-2">
+                        {likersByArticle[article.id].map((liker) => {
+                          const name = liker.user.name ?? liker.user.email.split("@")[0];
+                          const initials = name.slice(0, 2).toUpperCase();
+                          return (
+                            <div key={liker.id} className="flex items-center gap-1.5 px-2.5 py-1 bg-white/50 backdrop-blur-sm rounded-full border border-white/50">
+                              {liker.user.image ? (
+                                <img src={liker.user.image} alt={name} className="w-4 h-4 rounded-full object-cover" />
+                              ) : (
+                                <div
+                                  className="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-grotesk relative overflow-hidden shrink-0"
+                                  style={{ background: "linear-gradient(135deg, #fbbf24 0%, #f97316 100%)" }}
+                                >
+                                  <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent" />
+                                  <span className="relative z-10">{initials}</span>
+                                </div>
+                              )}
+                              <span className="text-xs font-grotesk text-gray-700">{name}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {expandedComments === article.id && (
                   <div className="mt-3 border-t border-white/40 pt-3 space-y-2">

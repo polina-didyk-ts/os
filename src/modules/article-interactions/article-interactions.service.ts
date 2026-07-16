@@ -26,6 +26,16 @@ export const articleInteractionsService = {
     return { count, liked: !!like };
   },
 
+  async getLikers(articleId: string) {
+    return prisma.articleLike.findMany({
+      where: { articleId },
+      orderBy: { createdAt: "desc" },
+      include: {
+        user: { select: { id: true, name: true, email: true, image: true } },
+      },
+    });
+  },
+
   async getComments(articleId: string) {
     return prisma.articleComment.findMany({
       where: { articleId },
