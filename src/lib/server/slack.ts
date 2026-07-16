@@ -16,8 +16,11 @@ export async function sendAnnouncementSlack(opts: {
 }): Promise<{ ok: boolean; email: string; error?: string }> {
   const { to, subject, message } = opts;
   const plainText = message
+    .replace(/<\/p>/gi, "\n")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/li>/gi, "\n")
     .replace(/<[^>]*>/g, "")
-    .replace(/\s+/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
     .trim();
 
   if (!process.env.SLACK_BOT_TOKEN) {
