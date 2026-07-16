@@ -139,6 +139,22 @@
   animation: fade-up 0.45s ease-out both;
 }
 
+/* Rich text editor paragraph spacing */
+.ProseMirror p {
+  margin-bottom: 0.875rem;
+}
+.ProseMirror p:last-child {
+  margin-bottom: 0;
+}
+.ProseMirror ul,
+.ProseMirror ol {
+  padding-left: 1.25rem;
+  margin-bottom: 0.875rem;
+}
+.ProseMirror li {
+  margin-bottom: 0.25rem;
+}
+
 @keyframes shake {
   0%,
   100% {

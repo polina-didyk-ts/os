@@ -113,7 +113,7 @@ export default function AnnouncementsPage() {
                 </div>
                 {/<[a-z][\s\S]*>/i.test(item.message) ? (
                   <div
-                    className="prose prose-sm max-w-none text-gray-700 [&_a]:text-amber-600 [&_a]:underline"
+                    className="prose prose-sm max-w-none text-gray-700 [&_a]:text-amber-600 [&_a]:underline [&_p]:mb-3 [&_p:last-child]:mb-0 [&_ul]:pl-5 [&_ul]:mb-3 [&_ol]:pl-5 [&_ol]:mb-3"
                     dangerouslySetInnerHTML={{ __html: item.message }}
                   />
                 ) : (
