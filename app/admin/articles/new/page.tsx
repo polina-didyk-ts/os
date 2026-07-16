@@ -70,7 +70,10 @@ export default function NewArticlePage() {
         <span className="text-lg font-grotesk text-gray-900">New Article</span>
       </header>
 
-      <form onSubmit={handleSubmit} className="flex-1 pb-10 px-4 py-5 flex flex-col gap-4 max-w-2xl mx-auto w-full">
+      <form
+        onSubmit={handleSubmit}
+        className="flex-1 pb-10 px-4 py-5 flex flex-col gap-4 max-w-2xl mx-auto w-full"
+      >
         {error && (
           <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
             <AlertCircle className="w-4 h-4 shrink-0" />
@@ -80,7 +83,9 @@ export default function NewArticlePage() {
 
         {/* Title */}
         <div>
-          <label className="block text-xs font-grotesk text-gray-500 uppercase tracking-widest mb-2">Title</label>
+          <label className="block text-xs font-grotesk text-gray-500 uppercase tracking-widest mb-2">
+            Title
+          </label>
           <Input
             value={form.title}
             onChange={(e) => handleTitleChange(e.target.value)}
@@ -93,7 +98,9 @@ export default function NewArticlePage() {
 
         {/* Slug */}
         <div>
-          <label className="block text-xs font-grotesk text-gray-500 uppercase tracking-widest mb-2">Slug</label>
+          <label className="block text-xs font-grotesk text-gray-500 uppercase tracking-widest mb-2">
+            Slug
+          </label>
           <Input
             value={form.slug}
             onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))}
@@ -120,8 +127,7 @@ export default function NewArticlePage() {
           </div>
           <div>
             <label className="block text-xs font-grotesk text-gray-500 uppercase tracking-widest mb-2">
-              Category{" "}
-              <span className="text-gray-400 normal-case font-techstack">(optional)</span>
+              Category <span className="text-gray-400 normal-case font-techstack">(optional)</span>
             </label>
             <select
               value={form.category}
@@ -130,7 +136,9 @@ export default function NewArticlePage() {
             >
               <option value="">No category</option>
               {ARTICLE_CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>{cat}</option>
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
               ))}
             </select>
           </div>
@@ -140,7 +148,9 @@ export default function NewArticlePage() {
         <div>
           <label className="block text-xs font-grotesk text-gray-500 uppercase tracking-widest mb-2">
             Excerpt{" "}
-            <span className="text-gray-400 normal-case font-techstack">(short preview description)</span>
+            <span className="text-gray-400 normal-case font-techstack">
+              (short preview description)
+            </span>
           </label>
           <Textarea
             value={form.excerpt}
@@ -154,7 +164,9 @@ export default function NewArticlePage() {
 
         {/* Content */}
         <div>
-          <label className="block text-xs font-grotesk text-gray-500 uppercase tracking-widest mb-2">Content</label>
+          <label className="block text-xs font-grotesk text-gray-500 uppercase tracking-widest mb-2">
+            Content
+          </label>
           <ArticleEditor content={content} onChange={setContent} />
         </div>
 
@@ -163,9 +175,15 @@ export default function NewArticlePage() {
           <div
             onClick={() => setForm((f) => ({ ...f, published: !f.published }))}
             className="w-11 h-6 rounded-full transition-colors relative"
-            style={{ background: form.published ? "linear-gradient(135deg, #fbbf24 0%, #f97316 100%)" : "#e5e7eb" }}
+            style={{
+              background: form.published
+                ? "linear-gradient(135deg, #fbbf24 0%, #f97316 100%)"
+                : "#e5e7eb",
+            }}
           >
-            <div className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${form.published ? "translate-x-5" : ""}`} />
+            <div
+              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${form.published ? "translate-x-5" : ""}`}
+            />
           </div>
           <span className="text-sm font-grotesk text-gray-900">Publish immediately</span>
         </label>

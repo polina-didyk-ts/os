@@ -145,7 +145,9 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
 
       {/* Quantity */}
       <div>
-        <label className="block text-xs text-gray-500 uppercase tracking-widest mb-2 font-grotesk">Quantity</label>
+        <label className="block text-xs text-gray-500 uppercase tracking-widest mb-2 font-grotesk">
+          Quantity
+        </label>
         <Input
           type="number"
           value={formData.quantity}
@@ -165,7 +167,9 @@ export function OrderForm({ onSuccess }: OrderFormProps) {
 
       {/* Priority */}
       <div>
-        <label className="block text-xs text-gray-500 uppercase tracking-widest mb-3 font-grotesk">Priority</label>
+        <label className="block text-xs text-gray-500 uppercase tracking-widest mb-3 font-grotesk">
+          Priority
+        </label>
         <div className="flex gap-2 flex-wrap">
           <button
             type="button"

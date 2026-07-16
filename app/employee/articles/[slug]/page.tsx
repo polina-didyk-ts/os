@@ -4,7 +4,16 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Calendar, ArrowUp, Heart, MessageCircle, Send, Pencil, Trash2 } from "lucide-react";
+import {
+  ArrowLeft,
+  Calendar,
+  ArrowUp,
+  Heart,
+  MessageCircle,
+  Send,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 import { useSession } from "@/src/lib/client";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -80,7 +89,9 @@ function TableOfContents({ items, activeId }: { items: TocItem[]; activeId: stri
             href={`#${item.id}`}
             onClick={(e) => {
               e.preventDefault();
-              document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+              document
+                .getElementById(item.id)
+                ?.scrollIntoView({ behavior: "smooth", block: "start" });
             }}
             className={`block text-xs font-techstack leading-snug py-1 transition-all duration-150 border-l-2 pl-3 ${
               activeId === item.id
@@ -185,7 +196,9 @@ function ArticleLikeButton({ articleId }: { articleId: string }) {
   const [likes, setLikes] = useState({ count: 0, liked: false });
 
   useEffect(() => {
-    fetch(`/api/articles/${articleId}/likes`).then((r) => r.json()).then(setLikes);
+    fetch(`/api/articles/${articleId}/likes`)
+      .then((r) => r.json())
+      .then(setLikes);
   }, [articleId]);
 
   const handleLike = async () => {
@@ -229,7 +242,9 @@ function ArticleComments({
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    fetch(`/api/articles/${articleId}/comments`).then((r) => r.json()).then(setComments);
+    fetch(`/api/articles/${articleId}/comments`)
+      .then((r) => r.json())
+      .then(setComments);
   }, [articleId]);
 
   const handleComment = async () => {
@@ -274,9 +289,7 @@ function ArticleComments({
           <MessageCircle className="w-4 h-4 text-gray-400" />
           <h3 className="text-sm font-grotesk text-gray-900">
             Comments
-            {comments.length > 0 && (
-              <span className="text-gray-400 ml-1">({comments.length})</span>
-            )}
+            {comments.length > 0 && <span className="text-gray-400 ml-1">({comments.length})</span>}
           </h3>
         </div>
 
@@ -394,7 +407,9 @@ function ArticleComments({
               onClick={handleComment}
               disabled={!input.trim() || submitting}
               className="w-9 h-9 rounded-xl flex items-center justify-center text-white disabled:opacity-40 transition shrink-0 mb-0.5 cursor-pointer"
-              style={{ background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" }}
+              style={{
+                background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)",
+              }}
             >
               <Send className="w-4 h-4" />
             </button>

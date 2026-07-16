@@ -36,7 +36,10 @@ export default function AdminProfilePage() {
           <span className="text-lg font-grotesk text-gray-900">Digital Office</span>
         </div>
         <div className="flex items-center gap-2">
-          <button className="p-2 hover:bg-white/60 rounded-lg transition cursor-pointer" aria-label="Notifications">
+          <button
+            className="p-2 hover:bg-white/60 rounded-lg transition cursor-pointer"
+            aria-label="Notifications"
+          >
             <Bell className="w-5 h-5 text-gray-700" />
           </button>
           <div
@@ -55,7 +58,10 @@ export default function AdminProfilePage() {
         <div className="relative mb-5">
           <div
             className="w-28 h-28 rounded-full flex items-center justify-center text-white text-3xl font-bold select-none relative overflow-hidden"
-            style={{ background: "linear-gradient(135deg, #fde68a 0%, #fbbf24 32%, #f97316 65%, #ea580c 100%)" }}
+            style={{
+              background:
+                "linear-gradient(135deg, #fde68a 0%, #fbbf24 32%, #f97316 65%, #ea580c 100%)",
+            }}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-white/5 to-transparent" />
             <span className="relative z-10">{initials}</span>

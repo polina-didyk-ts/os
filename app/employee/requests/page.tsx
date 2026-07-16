@@ -95,24 +95,24 @@ const TYPE_CONFIG: Record<
   RequestType,
   { icon: React.ElementType; holoIndex: number; label: string }
 > = {
-  order:    { icon: Package,       holoIndex: 0, label: "Order" },
-  problem:  { icon: Zap,           holoIndex: 1, label: "Problem" },
+  order: { icon: Package, holoIndex: 0, label: "Order" },
+  problem: { icon: Zap, holoIndex: 1, label: "Problem" },
   question: { icon: MessageCircle, holoIndex: 2, label: "Question" },
-  idea:     { icon: Sparkles,      holoIndex: 3, label: "Idea" },
+  idea: { icon: Sparkles, holoIndex: 3, label: "Idea" },
 };
 
 const PRIORITY_CONFIG: Record<string, { label: string; className: string }> = {
-  high:   { label: "High",   className: "bg-red-50 text-red-600 border border-red-200" },
+  high: { label: "High", className: "bg-red-50 text-red-600 border border-red-200" },
   medium: { label: "Medium", className: "bg-amber-50 text-amber-700 border border-amber-200" },
-  low:    { label: "Low",    className: "bg-green-50 text-green-700 border border-green-200" },
+  low: { label: "Low", className: "bg-green-50 text-green-700 border border-green-200" },
 };
 
 function getRequestTitle(request: Request): string {
   const meta = request.metadata as Record<string, string | number>;
-  if (request.type === "order")    return (meta.what as string)     ?? "Order";
-  if (request.type === "problem")  return (meta.what as string)     ?? "Problem";
+  if (request.type === "order") return (meta.what as string) ?? "Order";
+  if (request.type === "problem") return (meta.what as string) ?? "Problem";
   if (request.type === "question") return (meta.question as string) ?? "Question";
-  if (request.type === "idea")     return (meta.idea as string)     ?? "Idea";
+  if (request.type === "idea") return (meta.idea as string) ?? "Idea";
   return "Request";
 }
 
@@ -124,7 +124,7 @@ function formatDate(dateStr: string): string {
 
   const timeStr = date.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
 
-  if (date.toDateString() === today.toDateString())     return `Today, ${timeStr}`;
+  if (date.toDateString() === today.toDateString()) return `Today, ${timeStr}`;
   if (date.toDateString() === yesterday.toDateString()) return `Yesterday, ${timeStr}`;
 
   return date.toLocaleDateString("en-US", { month: "long", day: "numeric" }) + `, ${timeStr}`;
@@ -201,7 +201,9 @@ export default function EmployeeRequestsPage() {
     }
   }, []);
 
-  useEffect(() => { fetchRequests(); }, [fetchRequests]);
+  useEffect(() => {
+    fetchRequests();
+  }, [fetchRequests]);
 
   const filtered =
     activeFilter === "all" ? requests : requests.filter((r) => r.status === activeFilter);
@@ -210,15 +212,23 @@ export default function EmployeeRequestsPage() {
     const arr = [...filtered];
     switch (sortBy) {
       case "oldest":
-        return arr.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+        return arr.sort(
+          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
       case "updated":
-        return arr.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+        return arr.sort(
+          (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        );
       case "priority":
-        return arr.sort((a, b) => (PRIORITY_ORDER[a.priority] ?? 2) - (PRIORITY_ORDER[b.priority] ?? 2));
+        return arr.sort(
+          (a, b) => (PRIORITY_ORDER[a.priority] ?? 2) - (PRIORITY_ORDER[b.priority] ?? 2)
+        );
       case "status":
         return arr.sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
       default:
-        return arr.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        return arr.sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
     }
   }, [filtered, sortBy]);
 
@@ -255,7 +265,11 @@ export default function EmployeeRequestsPage() {
                   ? "text-white"
                   : "bg-white/40 backdrop-blur-sm text-gray-600 border border-white/60 hover:bg-white/60"
               }`}
-              style={sortBy === opt.value ? { background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" } : {}}
+              style={
+                sortBy === opt.value
+                  ? { background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" }
+                  : {}
+              }
             >
               {opt.label}
             </button>
@@ -295,7 +309,9 @@ export default function EmployeeRequestsPage() {
 
         {loading ? (
           <div className="flex flex-col gap-3">
-            {[1, 2, 3].map((i) => <RequestCardSkeleton key={i} />)}
+            {[1, 2, 3].map((i) => (
+              <RequestCardSkeleton key={i} />
+            ))}
           </div>
         ) : sorted.length === 0 ? (
           <EmptyState filtered={activeFilter !== "all"} />
@@ -323,7 +339,10 @@ export default function EmployeeRequestsPage() {
                       style={{ background: HOLO[typeConf.holoIndex] }}
                     >
                       <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-white/5 to-transparent" />
-                      <Icon className="w-5 h-5 text-white relative z-10 drop-shadow-sm" strokeWidth={1.5} />
+                      <Icon
+                        className="w-5 h-5 text-white relative z-10 drop-shadow-sm"
+                        strokeWidth={1.5}
+                      />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
@@ -337,7 +356,9 @@ export default function EmployeeRequestsPage() {
                               <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-amber-400 rounded-full" />
                             </div>
                           )}
-                          <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${statusConf.badgeClass}`}>
+                          <span
+                            className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${statusConf.badgeClass}`}
+                          >
                             {statusConf.label}
                           </span>
                         </div>
@@ -349,7 +370,9 @@ export default function EmployeeRequestsPage() {
                         <span className="text-[11px] font-grotesk px-2 py-0.5 rounded-md bg-white/60 text-gray-500 border border-white/40">
                           {typeConf.label}
                         </span>
-                        <span className={`text-[11px] font-grotesk px-2 py-0.5 rounded-md ${priorityConf.className}`}>
+                        <span
+                          className={`text-[11px] font-grotesk px-2 py-0.5 rounded-md ${priorityConf.className}`}
+                        >
                           {priorityConf.label}
                         </span>
                       </div>

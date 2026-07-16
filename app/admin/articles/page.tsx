@@ -2,7 +2,18 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { Plus, FileText, Eye, EyeOff, Pencil, Trash2, MessageCircle, ChevronDown, ChevronUp, Heart } from "lucide-react";
+import {
+  Plus,
+  FileText,
+  Eye,
+  EyeOff,
+  Pencil,
+  Trash2,
+  MessageCircle,
+  ChevronDown,
+  ChevronUp,
+  Heart,
+} from "lucide-react";
 import { AdminHeader, BottomNavigation } from "../components";
 
 interface AdminComment {
@@ -60,10 +71,15 @@ export default function AdminArticlesPage() {
     }
   }, []);
 
-  useEffect(() => { fetchArticles(); }, [fetchArticles]);
+  useEffect(() => {
+    fetchArticles();
+  }, [fetchArticles]);
 
   const toggleLikes = async (articleId: string) => {
-    if (expandedLikes === articleId) { setExpandedLikes(null); return; }
+    if (expandedLikes === articleId) {
+      setExpandedLikes(null);
+      return;
+    }
     setExpandedLikes(articleId);
     if (!likersByArticle[articleId]) {
       const res = await fetch(`/api/admin/articles/${articleId}/likes`);
@@ -75,7 +91,10 @@ export default function AdminArticlesPage() {
   };
 
   const toggleComments = async (articleId: string) => {
-    if (expandedComments === articleId) { setExpandedComments(null); return; }
+    if (expandedComments === articleId) {
+      setExpandedComments(null);
+      return;
+    }
     setExpandedComments(articleId);
     if (!commentsByArticle[articleId]) {
       const res = await fetch(`/api/articles/${articleId}/comments`);
@@ -144,7 +163,10 @@ export default function AdminArticlesPage() {
         {loading ? (
           <div className="flex flex-col gap-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 animate-pulse border border-white/40 shadow-[0_4px_12px_rgba(20,20,20,0.06)]">
+              <div
+                key={i}
+                className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 animate-pulse border border-white/40 shadow-[0_4px_12px_rgba(20,20,20,0.06)]"
+              >
                 <div className="h-4 bg-gray-100 rounded w-2/3 mb-2" />
                 <div className="h-3 bg-gray-100 rounded w-1/3" />
               </div>
@@ -153,7 +175,10 @@ export default function AdminArticlesPage() {
         ) : articles.length === 0 ? (
           <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-8 text-center border border-white/40 shadow-[0_4px_12px_rgba(20,20,20,0.06)]">
             <p className="text-gray-400 font-techstack text-sm">No articles yet</p>
-            <Link href="/admin/articles/new" className="mt-3 inline-block text-sm font-grotesk text-amber-600 underline">
+            <Link
+              href="/admin/articles/new"
+              className="mt-3 inline-block text-sm font-grotesk text-amber-600 underline"
+            >
               Create first article
             </Link>
           </div>
@@ -172,12 +197,18 @@ export default function AdminArticlesPage() {
                       {formatDate(article.createdAt)} · /{article.slug}
                     </p>
                     {article.excerpt && (
-                      <p className="text-xs font-techstack text-gray-500 mt-1 line-clamp-2">{article.excerpt}</p>
+                      <p className="text-xs font-techstack text-gray-500 mt-1 line-clamp-2">
+                        {article.excerpt}
+                      </p>
                     )}
                   </div>
-                  <span className={`shrink-0 text-[10px] px-2 py-0.5 rounded-full font-grotesk ${
-                    article.published ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
-                  }`}>
+                  <span
+                    className={`shrink-0 text-[10px] px-2 py-0.5 rounded-full font-grotesk ${
+                      article.published
+                        ? "bg-green-100 text-green-700"
+                        : "bg-gray-100 text-gray-500"
+                    }`}
+                  >
                     {article.published ? "PUBLISHED" : "DRAFT"}
                   </span>
                 </div>
@@ -194,7 +225,11 @@ export default function AdminArticlesPage() {
                     onClick={() => togglePublish(article)}
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/50 backdrop-blur-sm text-gray-700 text-xs font-grotesk border border-white/60 hover:bg-white/80 transition cursor-pointer"
                   >
-                    {article.published ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    {article.published ? (
+                      <EyeOff className="w-3.5 h-3.5" />
+                    ) : (
+                      <Eye className="w-3.5 h-3.5" />
+                    )}
                     {article.published ? "Unpublish" : "Publish"}
                   </button>
                   <button
@@ -203,7 +238,11 @@ export default function AdminArticlesPage() {
                   >
                     <Heart className="w-3.5 h-3.5" />
                     Likes
-                    {expandedLikes === article.id ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                    {expandedLikes === article.id ? (
+                      <ChevronUp className="w-3 h-3" />
+                    ) : (
+                      <ChevronDown className="w-3 h-3" />
+                    )}
                   </button>
                   <button
                     onClick={() => toggleComments(article.id)}
@@ -211,7 +250,11 @@ export default function AdminArticlesPage() {
                   >
                     <MessageCircle className="w-3.5 h-3.5" />
                     Comments
-                    {expandedComments === article.id ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                    {expandedComments === article.id ? (
+                      <ChevronUp className="w-3 h-3" />
+                    ) : (
+                      <ChevronDown className="w-3 h-3" />
+                    )}
                   </button>
                   <button
                     onClick={() => handleDelete(article.id)}
@@ -234,13 +277,22 @@ export default function AdminArticlesPage() {
                           const name = liker.user.name ?? liker.user.email.split("@")[0];
                           const initials = name.slice(0, 2).toUpperCase();
                           return (
-                            <div key={liker.id} className="flex items-center gap-1.5 px-2.5 py-1 bg-white/50 backdrop-blur-sm rounded-full border border-white/50">
+                            <div
+                              key={liker.id}
+                              className="flex items-center gap-1.5 px-2.5 py-1 bg-white/50 backdrop-blur-sm rounded-full border border-white/50"
+                            >
                               {liker.user.image ? (
-                                <img src={liker.user.image} alt={name} className="w-4 h-4 rounded-full object-cover" />
+                                <img
+                                  src={liker.user.image}
+                                  alt={name}
+                                  className="w-4 h-4 rounded-full object-cover"
+                                />
                               ) : (
                                 <div
                                   className="w-4 h-4 rounded-full flex items-center justify-center text-white text-[8px] font-grotesk relative overflow-hidden shrink-0"
-                                  style={{ background: "linear-gradient(135deg, #fbbf24 0%, #f97316 100%)" }}
+                                  style={{
+                                    background: "linear-gradient(135deg, #fbbf24 0%, #f97316 100%)",
+                                  }}
                                 >
                                   <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent" />
                                   <span className="relative z-10">{initials}</span>
@@ -263,24 +315,39 @@ export default function AdminArticlesPage() {
                       <p className="text-xs text-gray-400 font-techstack">No comments yet</p>
                     ) : (
                       commentsByArticle[article.id].map((comment) => {
-                        const displayName = comment.author.name ?? comment.author.email.split("@")[0];
+                        const displayName =
+                          comment.author.name ?? comment.author.email.split("@")[0];
                         return (
-                          <div key={comment.id} className="flex items-start gap-2 p-2.5 bg-white/40 backdrop-blur-sm rounded-xl border border-white/40">
+                          <div
+                            key={comment.id}
+                            className="flex items-start gap-2 p-2.5 bg-white/40 backdrop-blur-sm rounded-xl border border-white/40"
+                          >
                             <div
                               className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[10px] font-grotesk shrink-0 relative overflow-hidden"
-                              style={{ background: "linear-gradient(135deg, #fbbf24 0%, #f97316 100%)" }}
+                              style={{
+                                background: "linear-gradient(135deg, #fbbf24 0%, #f97316 100%)",
+                              }}
                             >
                               <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent" />
-                              <span className="relative z-10">{displayName.slice(0, 2).toUpperCase()}</span>
+                              <span className="relative z-10">
+                                {displayName.slice(0, 2).toUpperCase()}
+                              </span>
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center justify-between gap-2">
-                                <span className="text-[11px] font-grotesk text-gray-700">{displayName}</span>
+                                <span className="text-[11px] font-grotesk text-gray-700">
+                                  {displayName}
+                                </span>
                                 <span className="text-[10px] text-gray-400 font-techstack shrink-0">
-                                  {new Date(comment.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+                                  {new Date(comment.createdAt).toLocaleDateString("en-GB", {
+                                    day: "numeric",
+                                    month: "short",
+                                  })}
                                 </span>
                               </div>
-                              <p className="text-xs text-gray-600 font-techstack mt-0.5 line-clamp-2">{comment.content}</p>
+                              <p className="text-xs text-gray-600 font-techstack mt-0.5 line-clamp-2">
+                                {comment.content}
+                              </p>
                             </div>
                             <button
                               onClick={() => handleDeleteComment(article.id, comment.id)}

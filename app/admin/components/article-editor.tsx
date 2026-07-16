@@ -301,7 +301,11 @@ export function ArticleEditor({ content, onChange }: ArticleEditorProps) {
             </div>
             {quoteFields.authorPhoto && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={quoteFields.authorPhoto} alt="" className="w-8 h-8 rounded-full object-cover" />
+              <img
+                src={quoteFields.authorPhoto}
+                alt=""
+                className="w-8 h-8 rounded-full object-cover"
+              />
             )}
             <input type="file" accept="image/*" className="sr-only" onChange={handlePhotoUpload} />
           </label>
@@ -316,7 +320,10 @@ export function ArticleEditor({ content, onChange }: ArticleEditorProps) {
             </button>
             <button
               type="button"
-              onClick={() => { setQuoteOpen(false); setQuoteFields(emptyQuote); }}
+              onClick={() => {
+                setQuoteOpen(false);
+                setQuoteFields(emptyQuote);
+              }}
               className="flex items-center gap-1.5 px-3 py-1.5 border border-gray-200 text-sm rounded-lg font-grotesk text-gray-600 cursor-pointer"
             >
               <X className="w-3.5 h-3.5" /> Cancel

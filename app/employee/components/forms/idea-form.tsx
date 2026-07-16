@@ -124,7 +124,9 @@ export function IdeaForm({ onSuccess }: IdeaFormProps) {
 
       {/* Priority */}
       <div>
-        <label className="block text-xs text-gray-500 uppercase tracking-widest mb-3 font-grotesk">Priority</label>
+        <label className="block text-xs text-gray-500 uppercase tracking-widest mb-3 font-grotesk">
+          Priority
+        </label>
         <div className="flex gap-2 flex-wrap">
           <button
             type="button"

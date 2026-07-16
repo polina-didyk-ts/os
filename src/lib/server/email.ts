@@ -187,12 +187,6 @@ export async function sendAnnouncementEmail(opts: AnnouncementEmailOptions) {
     return;
   }
 
-  const messageHtml = message
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/\n/g, "<br>");
-
   const html = `
     <!DOCTYPE html>
     <html>
@@ -211,7 +205,7 @@ export async function sendAnnouncementEmail(opts: AnnouncementEmailOptions) {
         <!-- Body -->
         <div style="padding:32px;">
           <p style="margin:0 0 24px;font-size:16px;font-weight:700;color:#111827;">${subject}</p>
-          <p style="margin:0;font-size:14px;color:#374151;line-height:1.7;">${messageHtml}</p>
+          <div style="font-size:14px;color:#374151;line-height:1.7;">${message}</div>
 
           <hr style="margin:28px 0;border:none;border-top:1px solid #e5e7eb;" />
           <p style="margin:0;font-size:12px;color:#9ca3af;">

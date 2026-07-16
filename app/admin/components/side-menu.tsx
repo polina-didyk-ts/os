@@ -41,7 +41,9 @@ export function SideMenu() {
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
   const isActive = (href: string) => {
@@ -76,7 +78,8 @@ export function SideMenu() {
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         style={{
-          background: "linear-gradient(160deg, rgba(255,251,240,0.97) 0%, rgba(255,237,210,0.96) 60%, rgba(255,228,196,0.95) 100%)",
+          background:
+            "linear-gradient(160deg, rgba(255,251,240,0.97) 0%, rgba(255,237,210,0.96) 60%, rgba(255,228,196,0.95) 100%)",
           backdropFilter: "blur(24px)",
           boxShadow: "4px 0 40px rgba(20,20,20,0.12)",
         }}
@@ -133,7 +136,9 @@ export function SideMenu() {
                       strokeWidth={1.5}
                     />
                   </div>
-                  <span className={`text-sm font-grotesk ${active ? "text-gray-900" : "text-gray-600"}`}>
+                  <span
+                    className={`text-sm font-grotesk ${active ? "text-gray-900" : "text-gray-600"}`}
+                  >
                     {label}
                   </span>
                 </div>

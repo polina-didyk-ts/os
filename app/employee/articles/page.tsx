@@ -7,7 +7,7 @@ import { ArrowLeft, Calendar } from "lucide-react";
 import { BottomNavigation } from "../components";
 
 const CATEGORIES = ["All", "News", "Guides", "Office Life", "Events"] as const;
-type Category = typeof CATEGORIES[number];
+type Category = (typeof CATEGORIES)[number];
 
 interface Article {
   id: string;
@@ -29,8 +29,8 @@ function formatDate(dateStr: string) {
 }
 
 export default function EmployeeArticlesPage() {
-  const [articles, setArticles]             = useState<Article[]>([]);
-  const [loading, setLoading]               = useState(true);
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState<Category>("All");
 
   const fetchArticles = useCallback(async (category: Category) => {
@@ -50,7 +50,9 @@ export default function EmployeeArticlesPage() {
     }
   }, []);
 
-  useEffect(() => { fetchArticles(activeCategory); }, [fetchArticles, activeCategory]);
+  useEffect(() => {
+    fetchArticles(activeCategory);
+  }, [fetchArticles, activeCategory]);
 
   return (
     <main className="min-h-screen bg-transparent flex flex-col">
@@ -78,7 +80,11 @@ export default function EmployeeArticlesPage() {
                 ? "text-white"
                 : "bg-white/40 backdrop-blur-sm text-gray-600 border border-white/60 hover:bg-white/60"
             }`}
-            style={activeCategory === cat ? { background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" } : {}}
+            style={
+              activeCategory === cat
+                ? { background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" }
+                : {}
+            }
           >
             {cat}
           </button>
@@ -119,7 +125,12 @@ export default function EmployeeArticlesPage() {
             >
               {article.coverImage && (
                 <div className="relative w-full h-44">
-                  <Image src={article.coverImage} alt={article.title} fill className="object-cover" />
+                  <Image
+                    src={article.coverImage}
+                    alt={article.title}
+                    fill
+                    className="object-cover"
+                  />
                 </div>
               )}
               <div className="p-4">
@@ -138,7 +149,9 @@ export default function EmployeeArticlesPage() {
                     </div>
                   )}
                 </div>
-                <h2 className="text-base font-grotesk text-gray-900 leading-snug">{article.title}</h2>
+                <h2 className="text-base font-grotesk text-gray-900 leading-snug">
+                  {article.title}
+                </h2>
                 {article.excerpt && (
                   <p className="text-sm text-gray-500 mt-1.5 font-techstack line-clamp-2">
                     {article.excerpt}

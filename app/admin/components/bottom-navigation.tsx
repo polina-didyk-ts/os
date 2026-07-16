@@ -27,11 +27,13 @@ export function BottomNavigation() {
             key={path}
             href={path}
             className={`flex flex-col items-center gap-1 py-2 px-5 rounded-xl transition ${
-              active
-                ? "text-white"
-                : "text-gray-500 hover:text-gray-800"
+              active ? "text-white" : "text-gray-500 hover:text-gray-800"
             }`}
-            style={active ? { background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" } : {}}
+            style={
+              active
+                ? { background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" }
+                : {}
+            }
           >
             <Icon className="w-5 h-5" strokeWidth={1.5} />
             <span className="text-[10px] tracking-wide font-grotesk">{label}</span>

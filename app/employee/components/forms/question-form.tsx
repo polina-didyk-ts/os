@@ -122,7 +122,9 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
 
       {/* Priority */}
       <div>
-        <label className="block text-xs text-gray-500 uppercase tracking-widest mb-3 font-grotesk">Priority</label>
+        <label className="block text-xs text-gray-500 uppercase tracking-widest mb-3 font-grotesk">
+          Priority
+        </label>
         <div className="flex gap-2 flex-wrap">
           <button
             type="button"
@@ -164,9 +166,7 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
       </div>
 
       {/* Note About Response Time */}
-      <p className="text-xs text-gray-400 font-techstack">
-        We usually respond within 24 hours
-      </p>
+      <p className="text-xs text-gray-400 font-techstack">We usually respond within 24 hours</p>
 
       {/* Submit */}
       <Button

@@ -17,7 +17,13 @@ interface QuickActionCardProps {
   onClick?: () => void;
 }
 
-function QuickActionCard({ icon: Icon, title, description, holoIndex, onClick }: QuickActionCardProps) {
+function QuickActionCard({
+  icon: Icon,
+  title,
+  description,
+  holoIndex,
+  onClick,
+}: QuickActionCardProps) {
   return (
     <button
       onClick={onClick}
@@ -33,7 +39,9 @@ function QuickActionCard({ icon: Icon, title, description, holoIndex, onClick }:
       </div>
       <div>
         <p className="text-sm text-gray-900 font-grotesk leading-tight">{title}</p>
-        <p className="text-xs text-gray-400 font-techstack leading-snug mt-0.5 line-clamp-2">{description}</p>
+        <p className="text-xs text-gray-400 font-techstack leading-snug mt-0.5 line-clamp-2">
+          {description}
+        </p>
       </div>
     </button>
   );
@@ -51,10 +59,34 @@ export function QuickActions({ onRequestTypeClick }: QuickActionsProps) {
         Submit a request or report an issue.
       </p>
       <div className="grid grid-cols-2 gap-3">
-        <QuickActionCard icon={Package}      title="Order"          description="Stationery, food, equipment"          holoIndex={0} onClick={() => onRequestTypeClick("order")} />
-        <QuickActionCard icon={Zap}          title="Problem"        description="Something is broken or not working"   holoIndex={1} onClick={() => onRequestTypeClick("problem")} />
-        <QuickActionCard icon={MessageCircle} title="Question"      description="Ask the office manager"              holoIndex={2} onClick={() => onRequestTypeClick("question")} />
-        <QuickActionCard icon={Sparkles}     title="Idea / Feedback" description="Share your ideas and feedback"      holoIndex={3} onClick={() => onRequestTypeClick("idea")} />
+        <QuickActionCard
+          icon={Package}
+          title="Order"
+          description="Stationery, food, equipment"
+          holoIndex={0}
+          onClick={() => onRequestTypeClick("order")}
+        />
+        <QuickActionCard
+          icon={Zap}
+          title="Problem"
+          description="Something is broken or not working"
+          holoIndex={1}
+          onClick={() => onRequestTypeClick("problem")}
+        />
+        <QuickActionCard
+          icon={MessageCircle}
+          title="Question"
+          description="Ask the office manager"
+          holoIndex={2}
+          onClick={() => onRequestTypeClick("question")}
+        />
+        <QuickActionCard
+          icon={Sparkles}
+          title="Idea / Feedback"
+          description="Share your ideas and feedback"
+          holoIndex={3}
+          onClick={() => onRequestTypeClick("idea")}
+        />
       </div>
     </div>
   );

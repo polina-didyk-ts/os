@@ -157,7 +157,9 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
 
       {/* Priority */}
       <div>
-        <label className="block text-xs text-gray-500 uppercase tracking-widest mb-3 font-grotesk">Priority</label>
+        <label className="block text-xs text-gray-500 uppercase tracking-widest mb-3 font-grotesk">
+          Priority
+        </label>
         <div className="flex gap-2 flex-wrap">
           <button
             type="button"
@@ -201,7 +203,10 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
       {/* Comment */}
       <div>
         <label className="block text-xs text-gray-500 uppercase tracking-widest mb-2 font-grotesk">
-          Comment <span className="text-gray-400 text-xs font-normal normal-case tracking-normal">optional</span>
+          Comment{" "}
+          <span className="text-gray-400 text-xs font-normal normal-case tracking-normal">
+            optional
+          </span>
         </label>
         <Textarea
           placeholder="Any additional information..."

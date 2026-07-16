@@ -25,13 +25,17 @@ export function SuccessScreen({ ticketNumber }: SuccessScreenProps) {
 
       {/* Ticket Number */}
       <div className="space-y-1 text-center">
-        <p className="text-xs text-gray-500 uppercase font-grotesk tracking-widest">Request Number</p>
+        <p className="text-xs text-gray-500 uppercase font-grotesk tracking-widest">
+          Request Number
+        </p>
         <p className="text-2xl text-gray-900 font-grotesk">#{ticketNumber}</p>
       </div>
 
       {/* What Next */}
       <div className="w-full max-w-md bg-white/50 backdrop-blur-sm rounded-2xl p-4 space-y-2 border border-white/60 shadow-[0_4px_12px_rgba(20,20,20,0.06)]">
-        <p className="text-xs text-gray-500 uppercase tracking-widest font-grotesk">What&apos;s Next?</p>
+        <p className="text-xs text-gray-500 uppercase tracking-widest font-grotesk">
+          What&apos;s Next?
+        </p>
         <p className="text-sm text-gray-600 font-techstack">
           Your request is now being reviewed by the office manager. You&apos;ll typically receive a
           response within 2 business hours. Check updates in your profile.

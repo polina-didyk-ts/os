@@ -15,6 +15,10 @@ export async function sendAnnouncementSlack(opts: {
   message: string;
 }): Promise<{ ok: boolean; email: string; error?: string }> {
   const { to, subject, message } = opts;
+  const plainText = message
+    .replace(/<[^>]*>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
 
   if (!process.env.SLACK_BOT_TOKEN) {
     log.warn("SLACK_BOT_TOKEN not configured — skipping Slack DM");
@@ -40,7 +44,7 @@ export async function sendAnnouncementSlack(opts: {
 
     await client.chat.postMessage({
       channel: channelId,
-      text: `${subject}: ${message}`,
+      text: `${subject}: ${plainText}`,
       blocks: [
         {
           type: "header",
@@ -48,7 +52,7 @@ export async function sendAnnouncementSlack(opts: {
         },
         {
           type: "section",
-          text: { type: "mrkdwn", text: message },
+          text: { type: "mrkdwn", text: plainText },
         },
         { type: "divider" },
         {

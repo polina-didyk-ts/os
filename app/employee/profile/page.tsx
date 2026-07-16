@@ -1,7 +1,15 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Menu, FileText, Hourglass, CheckCircle2, MoreHorizontal, Upload, Trash2 } from "lucide-react";
+import {
+  Menu,
+  FileText,
+  Hourglass,
+  CheckCircle2,
+  MoreHorizontal,
+  Upload,
+  Trash2,
+} from "lucide-react";
 import { BottomNavigation, useSideMenu } from "../components";
 import { useSession } from "@/src/lib/client";
 
@@ -138,7 +146,9 @@ export default function EmployeeProfilePage() {
     }
   }, []);
 
-  useEffect(() => { fetchStats(); }, [fetchStats]);
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
 
   const user = session?.user;
   const initials = getInitials(user?.name, user?.email ?? "");
@@ -196,7 +206,10 @@ export default function EmployeeProfilePage() {
             {avatarMenuOpen && (
               <div className="absolute top-6 right-[-60px] z-20 w-44 bg-white/90 backdrop-blur-md rounded-xl shadow-[0_8px_24px_rgba(20,20,20,0.12)] border border-white/60 py-1 overflow-hidden">
                 <button
-                  onClick={() => { setAvatarMenuOpen(false); fileInputRef.current?.click(); }}
+                  onClick={() => {
+                    setAvatarMenuOpen(false);
+                    fileInputRef.current?.click();
+                  }}
                   className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm font-grotesk text-gray-700 hover:bg-amber-50 transition cursor-pointer"
                 >
                   <Upload className="w-4 h-4 text-amber-500" />
@@ -204,7 +217,10 @@ export default function EmployeeProfilePage() {
                 </button>
                 {avatarUrl && (
                   <button
-                    onClick={() => { setAvatarMenuOpen(false); handleAvatarDelete(); }}
+                    onClick={() => {
+                      setAvatarMenuOpen(false);
+                      handleAvatarDelete();
+                    }}
                     className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm font-grotesk text-red-500 hover:bg-red-50 transition cursor-pointer"
                   >
                     <Trash2 className="w-4 h-4" />

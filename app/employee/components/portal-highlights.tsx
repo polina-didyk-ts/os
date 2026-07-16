@@ -26,7 +26,7 @@ function formatDate(dateStr: string) {
 
 export function PortalHighlights() {
   const [articles, setArticles] = useState<Article[]>([]);
-  const [loading, setLoading]   = useState(true);
+  const [loading, setLoading] = useState(true);
 
   const fetchArticles = useCallback(async () => {
     setLoading(true);
@@ -41,7 +41,9 @@ export function PortalHighlights() {
     }
   }, []);
 
-  useEffect(() => { fetchArticles(); }, [fetchArticles]);
+  useEffect(() => {
+    fetchArticles();
+  }, [fetchArticles]);
 
   return (
     <div className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] overflow-hidden">
@@ -50,7 +52,10 @@ export function PortalHighlights() {
         <div className="flex items-center gap-2.5">
           <div
             className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0 relative overflow-hidden"
-            style={{ background: "linear-gradient(135deg, #fde68a 0%, #fbbf24 38%, #f97316 75%, #ea580c 100%)" }}
+            style={{
+              background:
+                "linear-gradient(135deg, #fde68a 0%, #fbbf24 38%, #f97316 75%, #ea580c 100%)",
+            }}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-white/5 to-transparent" />
             <Sparkles className="w-3.5 h-3.5 text-white relative z-10" strokeWidth={1.5} />

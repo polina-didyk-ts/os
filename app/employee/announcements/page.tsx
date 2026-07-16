@@ -45,7 +45,9 @@ export default function AnnouncementsPage() {
     }
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
 
   return (
     <main className="min-h-screen bg-transparent flex flex-col">
@@ -109,9 +111,10 @@ export default function AnnouncementsPage() {
                     <span className="shrink-0 w-2 h-2 rounded-full bg-amber-400 mt-1.5" />
                   )}
                 </div>
-                <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed font-techstack">
-                  {item.message}
-                </p>
+                <div
+                  className="prose prose-sm max-w-none text-gray-700 leading-relaxed font-techstack [&_a]:text-amber-600 [&_a]:underline"
+                  dangerouslySetInnerHTML={{ __html: item.message }}
+                />
                 <p className="text-xs text-gray-400 mt-3 font-techstack">
                   {formatDate(item.createdAt)}
                 </p>
