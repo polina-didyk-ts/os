@@ -7,19 +7,23 @@ interface SideMenuContextValue {
   open: () => void;
   close: () => void;
   toggle: () => void;
+  isCollapsed: boolean;
+  toggleCollapse: () => void;
 }
 
 const SideMenuContext = createContext<SideMenuContextValue | null>(null);
 
 export function SideMenuProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const open = useCallback(() => setIsOpen(true), []);
   const close = useCallback(() => setIsOpen(false), []);
   const toggle = useCallback(() => setIsOpen((v) => !v), []);
+  const toggleCollapse = useCallback(() => setIsCollapsed((v) => !v), []);
 
   return (
-    <SideMenuContext.Provider value={{ isOpen, open, close, toggle }}>
+    <SideMenuContext.Provider value={{ isOpen, open, close, toggle, isCollapsed, toggleCollapse }}>
       {children}
     </SideMenuContext.Provider>
   );

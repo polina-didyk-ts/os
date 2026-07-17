@@ -3,7 +3,18 @@
 import { useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useSession } from "@/src/lib/client";
-import { SideMenuProvider, SideMenu } from "./components";
+import { SideMenuProvider, SideMenu, useSideMenu } from "./components";
+
+function ContentWrapper({ children }: { children: React.ReactNode }) {
+  const { isCollapsed } = useSideMenu();
+  return (
+    <div
+      className={`transition-all duration-300 ease-in-out ${isCollapsed ? "lg:pl-16" : "lg:pl-64"}`}
+    >
+      {children}
+    </div>
+  );
+}
 
 export default function EmployeeLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -49,7 +60,7 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
         <div className="absolute top-2/3 left-1/2 w-[400px] h-[400px] rounded-full bg-rose-300/25 blur-[75px]" />
       </div>
       <SideMenu />
-      {children}
+      <ContentWrapper>{children}</ContentWrapper>
     </SideMenuProvider>
   );
 }
