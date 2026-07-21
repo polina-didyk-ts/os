@@ -27,7 +27,6 @@ interface Article {
   tags: string[];
   readTime: number | null;
   publishedAt: string | null;
-  author: { name: string | null; image: string | null; bio: string | null };
 }
 
 interface TocItem {
@@ -70,13 +69,11 @@ function formatDate(dateStr: string) {
   });
 }
 
-function AuthorMeta({
-  author,
+function ArticleMeta({
   publishedAt,
   readTime,
   light,
 }: {
-  author: Article["author"];
   publishedAt: string | null;
   readTime: number;
   light?: boolean;
@@ -86,35 +83,8 @@ function AuthorMeta({
 
   return (
     <div className={`flex items-center gap-2.5 flex-wrap text-sm font-techstack ${textCls}`}>
-      {author.image ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={author.image}
-          alt={author.name ?? ""}
-          className="w-7 h-7 rounded-full object-cover border border-white/30 shrink-0"
-        />
-      ) : author.name ? (
-        <div
-          className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-grotesk shrink-0 ${
-            light ? "bg-white/20 text-white border border-white/30" : "text-white"
-          }`}
-          style={light ? {} : { background: "linear-gradient(135deg, #fbbf24 0%, #f97316 100%)" }}
-        >
-          {author.name[0].toUpperCase()}
-        </div>
-      ) : null}
-      {author.name && (
-        <span className={light ? "text-white/90 font-grotesk" : "text-gray-700 font-grotesk"}>
-          {author.name}
-        </span>
-      )}
-      {publishedAt && (
-        <>
-          <span className={dotCls}>·</span>
-          <span>{formatDate(publishedAt)}</span>
-        </>
-      )}
-      <span className={dotCls}>·</span>
+      {publishedAt && <span>{formatDate(publishedAt)}</span>}
+      {publishedAt && <span className={dotCls}>·</span>}
       <span className="flex items-center gap-1">
         <Clock className="w-3.5 h-3.5" />
         {readTime} min read
@@ -568,12 +538,7 @@ export default function ArticlePage() {
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-grotesk text-white leading-tight mb-4 drop-shadow-sm max-w-3xl">
               {article.title}
             </h1>
-            <AuthorMeta
-              author={article.author}
-              publishedAt={article.publishedAt}
-              readTime={readTime}
-              light
-            />
+            <ArticleMeta publishedAt={article.publishedAt} readTime={readTime} light />
           </div>
         </div>
       ) : (
@@ -588,11 +553,7 @@ export default function ArticlePage() {
             {article.title}
           </h1>
           <div className="pb-6 border-b border-gray-100">
-            <AuthorMeta
-              author={article.author}
-              publishedAt={article.publishedAt}
-              readTime={readTime}
-            />
+            <ArticleMeta publishedAt={article.publishedAt} readTime={readTime} />
           </div>
         </div>
       )}
@@ -643,40 +604,6 @@ export default function ArticlePage() {
           </div>
         </div>
       </div>
-
-      {/* ─── AUTHOR BIO ─── */}
-      {article.author.bio && (
-        <div className="w-full max-w-5xl mx-auto px-4 lg:px-8 mb-6">
-          <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-5 border border-white/40 shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] flex items-start gap-4">
-            {article.author.image ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={article.author.image}
-                alt={article.author.name ?? ""}
-                className="w-12 h-12 rounded-full object-cover border border-white/40 shrink-0"
-              />
-            ) : article.author.name ? (
-              <div
-                className="w-12 h-12 rounded-full flex items-center justify-center text-white font-grotesk text-base shrink-0"
-                style={{ background: "linear-gradient(135deg, #fbbf24 0%, #f97316 100%)" }}
-              >
-                {article.author.name[0].toUpperCase()}
-              </div>
-            ) : null}
-            <div>
-              <p className="text-xs font-grotesk text-gray-400 uppercase tracking-widest mb-0.5">
-                About the author
-              </p>
-              {article.author.name && (
-                <p className="text-sm font-grotesk text-gray-900 mb-1">{article.author.name}</p>
-              )}
-              <p className="text-sm font-techstack text-gray-600 leading-relaxed">
-                {article.author.bio}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* ─── COMMENTS ─── */}
       {session && (

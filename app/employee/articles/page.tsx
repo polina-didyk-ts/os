@@ -20,7 +20,6 @@ interface Article {
   readTime: number | null;
   featured: boolean;
   publishedAt: string | null;
-  author: { name: string | null; image: string | null };
 }
 
 function formatDate(dateStr: string) {
@@ -79,12 +78,6 @@ function FeaturedCard({ article }: { article: Article }) {
         )}
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 text-xs text-gray-400 font-techstack min-w-0">
-            {article.author.name && (
-              <>
-                <span className="truncate">{article.author.name}</span>
-                {article.publishedAt && <span>·</span>}
-              </>
-            )}
             {article.publishedAt && (
               <span className="shrink-0">{formatDate(article.publishedAt)}</span>
             )}
@@ -125,13 +118,8 @@ function RegularCard({ article, delay }: { article: Article; delay: number }) {
             {article.excerpt}
           </p>
         )}
-        <div className="flex items-center justify-between mt-3">
-          {article.author.name && (
-            <span className="text-xs text-gray-400 font-techstack truncate">
-              {article.author.name}
-            </span>
-          )}
-          <span className="text-xs text-amber-600 font-grotesk ml-auto">Read →</span>
+        <div className="flex items-center justify-end mt-3">
+          <span className="text-xs text-amber-600 font-grotesk">Read →</span>
         </div>
       </div>
     </Link>
