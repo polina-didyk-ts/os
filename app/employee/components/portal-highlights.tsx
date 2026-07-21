@@ -46,7 +46,7 @@ export function PortalHighlights() {
   }, [fetchArticles]);
 
   return (
-    <div className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] overflow-hidden">
+    <div className="bg-white/28 backdrop-blur-xl rounded-2xl shadow-[0_8px_32px_rgba(20,20,20,0.11),inset_0_1px_0_rgba(255,255,255,0.55)] border border-white/15 overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-5 pt-5 pb-4">
         <div className="flex items-center gap-2.5">

@@ -27,7 +27,7 @@ function QuickActionCard({
   return (
     <button
       onClick={onClick}
-      className="bg-white/40 backdrop-blur-sm rounded-xl p-3.5 flex flex-col gap-2.5 text-left cursor-pointer transition-all duration-200 border border-white/50 hover:border-white/80 hover:bg-white/60 hover:shadow-[0_4px_12px_rgba(20,20,20,0.08)] hover:-translate-y-0.5"
+      className="bg-white/15 backdrop-blur-md rounded-xl p-3.5 flex flex-col gap-2.5 text-left cursor-pointer transition-all duration-200 border border-white/18 hover:border-white/35 hover:bg-white/28 hover:shadow-[0_6px_20px_rgba(20,20,20,0.10)] hover:-translate-y-0.5"
     >
       <div
         className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 relative overflow-hidden"
@@ -53,7 +53,7 @@ interface QuickActionsProps {
 
 export function QuickActions({ onRequestTypeClick }: QuickActionsProps) {
   return (
-    <div className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] px-5 py-5">
+    <div className="bg-white/28 backdrop-blur-xl rounded-2xl shadow-[0_8px_32px_rgba(20,20,20,0.11),inset_0_1px_0_rgba(255,255,255,0.55)] border border-white/15 px-5 py-5">
       <h2 className="text-base font-grotesk text-gray-900">Quick actions</h2>
       <p className="text-xs font-techstack text-gray-400 mt-0.5 mb-4">
         Submit a request or report an issue.
