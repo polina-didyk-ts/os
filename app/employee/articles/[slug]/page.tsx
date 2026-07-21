@@ -607,7 +607,7 @@ export default function ArticlePage() {
 
       {/* ─── COMMENTS ─── */}
       {session && (
-        <div className="w-full max-w-5xl mx-auto px-4 lg:px-8 mb-6">
+        <div className="w-full max-w-5xl mx-auto px-4 lg:px-8 pb-32">
           <ArticleComments
             articleId={article.id}
             currentUserId={session.user.id}
