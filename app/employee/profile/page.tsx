@@ -52,7 +52,7 @@ function StatCard({
     "linear-gradient(45deg,  #fef9c3 0%, #fde047 32%, #fb923c 65%, #f97316 100%)",
   ];
   return (
-    <div className="flex-1 bg-white/60 backdrop-blur-sm rounded-2xl py-4 flex flex-col items-center gap-1 shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] border border-white/40">
+    <div className="flex-1 bg-white/28 backdrop-blur-xl rounded-2xl py-4 flex flex-col items-center gap-1 shadow-[0_8px_32px_rgba(20,20,20,0.11),inset_0_1px_0_rgba(255,255,255,0.55)] border border-white/15">
       <div
         className="w-9 h-9 rounded-xl flex items-center justify-center relative overflow-hidden"
         style={{ background: HOLO[holoIndex] }}
@@ -188,7 +188,7 @@ export default function EmployeeProfilePage() {
 
       <div className="flex-1 pb-28 px-4 py-4 flex flex-col gap-4">
         {/* Profile card */}
-        <div className="bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-8 flex flex-col items-center shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] border border-white/40 animate-fade-up">
+        <div className="bg-white/28 backdrop-blur-xl rounded-2xl px-6 py-8 flex flex-col items-center shadow-[0_8px_32px_rgba(20,20,20,0.11),inset_0_1px_0_rgba(255,255,255,0.55)] border border-white/15 animate-fade-up">
           {/* Avatar */}
           <div className="relative mb-4" ref={avatarMenuRef}>
             {/* Avatar circle */}
@@ -258,13 +258,13 @@ export default function EmployeeProfilePage() {
           <p className="text-sm text-gray-500 mt-0.5 font-techstack">{email}</p>
 
           {/* Role badge */}
-          <span className="mt-3 px-4 py-1 rounded-full bg-white/50 backdrop-blur-sm text-gray-600 text-xs uppercase tracking-wide border border-white/60 font-grotesk">
+          <span className="mt-3 px-4 py-1 rounded-full bg-white/20 text-gray-600 text-xs uppercase tracking-wide border border-white/25 font-grotesk">
             Member
           </span>
         </div>
 
         {/* Bio */}
-        <div className="bg-white/60 backdrop-blur-sm rounded-2xl px-5 py-4 shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] border border-white/40 animate-fade-up [animation-delay:80ms]">
+        <div className="bg-white/28 backdrop-blur-xl rounded-2xl px-5 py-4 shadow-[0_8px_32px_rgba(20,20,20,0.11),inset_0_1px_0_rgba(255,255,255,0.55)] border border-white/15 animate-fade-up [animation-delay:80ms]">
           <div className="flex items-center justify-between mb-3">
             <p className="text-xs font-grotesk text-gray-500 uppercase tracking-widest">About me</p>
             {!bioEditing && (
@@ -289,7 +289,7 @@ export default function EmployeeProfilePage() {
                 maxLength={500}
                 autoFocus
                 placeholder="Write something about yourself…"
-                className="w-full text-sm font-techstack text-gray-700 bg-white/50 border border-white/60 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-1 focus:ring-amber-400/50 placeholder:text-gray-300"
+                className="w-full text-sm font-techstack text-gray-700 bg-white/20 border border-white/30 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-1 focus:ring-amber-400/50 placeholder:text-gray-300"
               />
               <div className="flex gap-2">
                 <button
@@ -303,7 +303,7 @@ export default function EmployeeProfilePage() {
                 </button>
                 <button
                   onClick={() => setBioEditing(false)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white/50 border border-white/60 text-gray-600 text-xs font-grotesk rounded-lg cursor-pointer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white/20 border border-white/30 text-gray-600 text-xs font-grotesk rounded-lg cursor-pointer"
                 >
                   <X className="w-3.5 h-3.5" />
                   Cancel

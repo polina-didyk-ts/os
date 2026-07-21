@@ -38,7 +38,7 @@ export default function NewRequestPage() {
       <main className="min-h-screen bg-transparent flex flex-col">
         <EmployeeHeader />
         <div className="flex-1 pb-32 overflow-y-auto">
-          <div className="mx-4 mt-4 bg-white/60 backdrop-blur-sm rounded-2xl p-5 shadow-[0_4px_12px_rgba(20,20,20,0.06)] border border-white/40 animate-fade-scale">
+          <div className="mx-4 mt-4 bg-white/28 backdrop-blur-xl rounded-2xl p-5 shadow-[0_8px_32px_rgba(20,20,20,0.11),inset_0_1px_0_rgba(255,255,255,0.55)] border border-white/15 animate-fade-scale">
             <SuccessScreen ticketNumber={successTicket} />
           </div>
         </div>
@@ -53,7 +53,7 @@ export default function NewRequestPage() {
 
       <div className="flex-1 pb-32 overflow-y-auto">
         {/* Header */}
-        <div className="mx-4 mt-4 bg-white/60 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-[0_4px_12px_rgba(20,20,20,0.06)] border border-white/40 flex items-center justify-between animate-fade-up">
+        <div className="mx-4 mt-4 bg-white/28 backdrop-blur-xl rounded-2xl px-4 py-3 shadow-[0_8px_32px_rgba(20,20,20,0.11),inset_0_1px_0_rgba(255,255,255,0.55)] border border-white/15 flex items-center justify-between animate-fade-up">
           <button
             onClick={() => router.back()}
             className="p-1 hover:bg-white/60 rounded-lg transition cursor-pointer"
@@ -67,7 +67,7 @@ export default function NewRequestPage() {
         </div>
 
         {/* Title */}
-        <div className="mx-4 mt-3 bg-white/60 backdrop-blur-sm rounded-2xl p-5 shadow-[0_4px_12px_rgba(20,20,20,0.06)] border border-white/40 animate-fade-up [animation-delay:80ms]">
+        <div className="mx-4 mt-3 bg-white/28 backdrop-blur-xl rounded-2xl p-5 shadow-[0_8px_32px_rgba(20,20,20,0.11),inset_0_1px_0_rgba(255,255,255,0.55)] border border-white/15 animate-fade-up [animation-delay:80ms]">
           <h2 className="text-2xl text-gray-900 font-grotesk">
             {requestType.title === "Order"
               ? "What do you need?"
@@ -89,7 +89,7 @@ export default function NewRequestPage() {
         </div>
 
         {/* Form */}
-        <div className="mx-4 mt-3 mb-4 bg-white/60 backdrop-blur-sm rounded-2xl p-5 shadow-[0_4px_12px_rgba(20,20,20,0.06)] border border-white/40 animate-fade-up [animation-delay:160ms]">
+        <div className="mx-4 mt-3 mb-4 bg-white/28 backdrop-blur-xl rounded-2xl p-5 shadow-[0_8px_32px_rgba(20,20,20,0.11),inset_0_1px_0_rgba(255,255,255,0.55)] border border-white/15 animate-fade-up [animation-delay:160ms]">
           {type === "order" && <OrderForm onSuccess={setSuccessTicket} />}
           {type === "problem" && <ProblemForm onSuccess={setSuccessTicket} />}
           {type === "question" && <QuestionForm onSuccess={setSuccessTicket} />}

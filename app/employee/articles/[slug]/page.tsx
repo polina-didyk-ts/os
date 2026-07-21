@@ -235,7 +235,7 @@ function ArticleLikeButton({ articleId }: { articleId: string }) {
       className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-grotesk transition-all cursor-pointer ${
         likes.liked
           ? "text-amber-700"
-          : "bg-white/50 backdrop-blur-sm text-gray-500 border border-white/60 hover:bg-white/70"
+          : "bg-white/28 backdrop-blur-xl text-gray-500 border border-white/20 hover:bg-white/40"
       }`}
       style={likes.liked ? { background: "linear-gradient(135deg, #fef3c7, #fed7aa)" } : {}}
     >
@@ -306,7 +306,7 @@ function ArticleComments({
   };
 
   return (
-    <div className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] border border-white/40 overflow-hidden">
+    <div className="bg-white/28 backdrop-blur-xl rounded-2xl shadow-[0_8px_32px_rgba(20,20,20,0.11),inset_0_1px_0_rgba(255,255,255,0.55)] border border-white/15 overflow-hidden">
       <div className="px-5 py-4 border-b border-white/40 flex items-center gap-2">
         <MessageCircle className="w-4 h-4 text-gray-400" />
         <h3 className="text-sm font-grotesk text-gray-900">
@@ -424,7 +424,7 @@ function ArticleComments({
             }}
             placeholder="Write a comment..."
             rows={1}
-            className="flex-1 text-sm font-techstack text-gray-700 bg-white/50 backdrop-blur-sm border border-white/60 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-1 focus:ring-amber-400/50 placeholder:text-gray-400"
+            className="flex-1 text-sm font-techstack text-gray-700 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-1 focus:ring-amber-400/50 placeholder:text-gray-400"
           />
           <button
             onClick={handleComment}
@@ -620,7 +620,7 @@ export default function ArticlePage() {
       {showBackToTop && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="fixed bottom-28 right-4 w-10 h-10 bg-white/70 backdrop-blur-sm rounded-full shadow-[0_4px_12px_rgba(20,20,20,0.12)] border border-white/40 flex items-center justify-center text-gray-600 hover:bg-white/90 transition-all z-30"
+          className="fixed bottom-28 right-4 w-10 h-10 bg-white/35 backdrop-blur-xl rounded-full shadow-[0_4px_12px_rgba(20,20,20,0.12)] border border-white/20 flex items-center justify-center text-gray-600 hover:bg-white/55 transition-all z-30"
           aria-label="Back to top"
         >
           <ArrowUp className="w-4 h-4" />

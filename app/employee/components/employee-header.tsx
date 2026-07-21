@@ -41,7 +41,7 @@ export function EmployeeHeader() {
   const initial = getInitial(user?.name, user?.email ?? "");
 
   return (
-    <header className="flex items-center justify-between px-4 py-3 border-b border-white/30 bg-white/60 backdrop-blur-md sticky top-0 z-10">
+    <header className="flex items-center justify-between px-4 py-3 border-b border-white/15 bg-white/28 backdrop-blur-xl sticky top-0 z-10">
       <div className="flex items-center gap-3">
         {/* Mobile: opens drawer */}
         <button

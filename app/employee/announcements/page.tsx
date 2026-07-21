@@ -74,7 +74,7 @@ export default function AnnouncementsPage() {
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="bg-white/60 backdrop-blur-sm rounded-xl p-4 space-y-2 animate-pulse border border-white/40 shadow-[0_2px_8px_rgba(20,20,20,0.06)]"
+                className="bg-white/28 backdrop-blur-xl rounded-xl p-4 space-y-2 animate-pulse border border-white/15 shadow-[0_2px_8px_rgba(20,20,20,0.06)]"
               >
                 <div className="h-4 bg-gray-100 rounded w-3/4" />
                 <div className="h-3 bg-gray-100 rounded w-1/3" />
@@ -85,7 +85,7 @@ export default function AnnouncementsPage() {
 
         {!loading && !error && items.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-white/60 backdrop-blur-sm border border-white/40 flex items-center justify-center mb-4">
+            <div className="w-16 h-16 rounded-2xl bg-white/28 backdrop-blur-xl border border-white/15 flex items-center justify-center mb-4">
               <Bell className="w-8 h-8 text-gray-300" strokeWidth={1} />
             </div>
             <p className="text-gray-500 font-grotesk">No announcements yet</p>
@@ -100,7 +100,7 @@ export default function AnnouncementsPage() {
             {items.map((item, i) => (
               <div
                 key={item.id}
-                className="bg-white/60 backdrop-blur-sm rounded-xl p-4 shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] border border-white/40 animate-fade-up"
+                className="bg-white/28 backdrop-blur-xl rounded-xl p-4 shadow-[0_8px_32px_rgba(20,20,20,0.11),inset_0_1px_0_rgba(255,255,255,0.55)] border border-white/15 animate-fade-up"
                 style={{ animationDelay: `${80 + Math.min(i * 70, 350)}ms` }}
               >
                 <div className="flex items-start justify-between gap-2 mb-2">

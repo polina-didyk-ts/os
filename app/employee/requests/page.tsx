@@ -130,7 +130,7 @@ function formatDate(dateStr: string): string {
 
 function RequestCardSkeleton() {
   return (
-    <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 animate-pulse border border-white/40">
+    <div className="bg-white/28 backdrop-blur-xl rounded-2xl p-4 animate-pulse border border-white/15">
       <div className="flex items-start gap-3">
         <div className="w-10 h-10 rounded-2xl bg-gray-200 shrink-0" />
         <div className="flex-1 min-w-0">
@@ -152,7 +152,7 @@ function RequestCardSkeleton() {
 function EmptyState({ filtered }: { filtered: boolean }) {
   return (
     <div className="flex flex-col items-center justify-center py-20 px-6 text-center">
-      <div className="w-16 h-16 rounded-2xl bg-white/60 backdrop-blur-sm border border-white/40 flex items-center justify-center mb-4">
+      <div className="w-16 h-16 rounded-2xl bg-white/28 backdrop-blur-xl border border-white/15 flex items-center justify-center mb-4">
         <MessageSquare className="w-7 h-7 text-gray-400" />
       </div>
       <p className="text-gray-800 text-base font-grotesk">
@@ -233,7 +233,7 @@ export default function EmployeeRequestsPage() {
       <EmployeeHeader />
 
       {/* Sort filter */}
-      <div className="bg-white/50 backdrop-blur-sm border-b border-white/30 px-4 py-3">
+      <div className="bg-white/20 backdrop-blur-xl border-b border-white/15 px-4 py-3">
         <div className="flex gap-2 overflow-x-auto scrollbar-none">
           {SORT_OPTIONS.map((opt) => (
             <button
@@ -242,7 +242,7 @@ export default function EmployeeRequestsPage() {
               className={`px-4 py-1.5 rounded-full text-sm font-grotesk whitespace-nowrap transition cursor-pointer ${
                 sortBy === opt.value
                   ? "text-white"
-                  : "bg-white/40 backdrop-blur-sm text-gray-600 border border-white/60 hover:bg-white/60"
+                  : "bg-white/20 text-gray-600 border border-white/30 hover:bg-white/35"
               }`}
               style={
                 sortBy === opt.value
@@ -257,7 +257,7 @@ export default function EmployeeRequestsPage() {
       </div>
 
       {/* Status filter */}
-      <div className="bg-white/50 backdrop-blur-sm border-b border-white/30 px-4 pb-3">
+      <div className="bg-white/20 backdrop-blur-xl border-b border-white/15 px-4 pb-3">
         <div className="flex gap-1 overflow-x-auto scrollbar-none">
           {STATUS_FILTERS.map((f) => (
             <button
@@ -308,7 +308,7 @@ export default function EmployeeRequestsPage() {
                 <Link
                   key={request.id}
                   href={`/employee/requests/${request.id}`}
-                  className="bg-white/60 backdrop-blur-sm rounded-2xl px-4 pt-4 pb-0 shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] border border-white/40 block animate-fade-up"
+                  className="bg-white/28 backdrop-blur-xl rounded-2xl px-4 pt-4 pb-0 shadow-[0_8px_32px_rgba(20,20,20,0.11),inset_0_1px_0_rgba(255,255,255,0.55)] border border-white/15 block animate-fade-up"
                   style={{ animationDelay: `${Math.min(i * 70, 350)}ms` }}
                   data-testid="request-card"
                 >
@@ -346,7 +346,7 @@ export default function EmployeeRequestsPage() {
                         ID #{request.ticketNumber}
                       </p>
                       <div className="flex items-center gap-1.5 mt-2">
-                        <span className="text-[11px] font-grotesk px-2 py-0.5 rounded-md bg-white/60 text-gray-500 border border-white/40">
+                        <span className="text-[11px] font-grotesk px-2 py-0.5 rounded-md bg-white/20 text-gray-500 border border-white/20">
                           {typeConf.label}
                         </span>
                         <span

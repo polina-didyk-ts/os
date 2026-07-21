@@ -42,7 +42,7 @@ function FeaturedCard({ article }: { article: Article }) {
   return (
     <Link
       href={`/employee/articles/${article.slug}`}
-      className="block rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(20,20,20,0.10),0_2px_8px_rgba(20,20,20,0.06)] border border-white/40 hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(20,20,20,0.14)] transition-all duration-200 animate-fade-up bg-white/60 backdrop-blur-sm"
+      className="block rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(20,20,20,0.11),inset_0_1px_0_rgba(255,255,255,0.55)] border border-white/15 hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(20,20,20,0.14)] transition-all duration-200 animate-fade-up bg-white/28 backdrop-blur-xl"
     >
       {article.coverImage ? (
         <div className="relative w-full" style={{ height: "clamp(180px, 42vw, 280px)" }}>
@@ -93,7 +93,7 @@ function RegularCard({ article, delay }: { article: Article; delay: number }) {
   return (
     <Link
       href={`/employee/articles/${article.slug}`}
-      className="bg-white/60 backdrop-blur-sm rounded-2xl overflow-hidden shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] border border-white/40 block hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(20,20,20,0.10)] transition-all duration-200 animate-fade-up"
+      className="bg-white/28 backdrop-blur-xl rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(20,20,20,0.11),inset_0_1px_0_rgba(255,255,255,0.55)] border border-white/15 block hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(20,20,20,0.14)] transition-all duration-200 animate-fade-up"
       style={{ animationDelay: `${delay}ms` }}
     >
       {article.coverImage && (
@@ -160,7 +160,7 @@ export default function EmployeeArticlesPage() {
       <EmployeeHeader />
 
       {/* Category chips */}
-      <div className="flex gap-2 px-4 py-3 bg-white/50 backdrop-blur-sm border-b border-white/30 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex gap-2 px-4 py-3 bg-white/20 backdrop-blur-xl border-b border-white/15 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {CATEGORIES.map((cat) => (
           <button
             key={cat}
@@ -168,7 +168,7 @@ export default function EmployeeArticlesPage() {
             className={`shrink-0 px-3 py-1 rounded-full text-xs font-grotesk transition-all cursor-pointer ${
               activeCategory === cat
                 ? "text-white"
-                : "bg-white/40 backdrop-blur-sm text-gray-600 border border-white/60 hover:bg-white/60"
+                : "bg-white/20 text-gray-600 border border-white/30 hover:bg-white/35"
             }`}
             style={
               activeCategory === cat
@@ -185,7 +185,7 @@ export default function EmployeeArticlesPage() {
         {loading ? (
           <>
             {/* Featured skeleton */}
-            <div className="bg-white/60 backdrop-blur-sm rounded-2xl overflow-hidden animate-pulse border border-white/40 shadow-[0_8px_32px_rgba(20,20,20,0.08)]">
+            <div className="bg-white/28 backdrop-blur-xl rounded-2xl overflow-hidden animate-pulse border border-white/15 shadow-[0_8px_32px_rgba(20,20,20,0.08)]">
               <div className="h-52 bg-gray-100/60" />
               <div className="p-4 space-y-2">
                 <div className="h-4 bg-gray-200 rounded w-3/4" />
@@ -196,7 +196,7 @@ export default function EmployeeArticlesPage() {
             {[1, 2].map((i) => (
               <div
                 key={i}
-                className="bg-white/60 backdrop-blur-sm rounded-2xl overflow-hidden animate-pulse border border-white/40 shadow-[0_4px_12px_rgba(20,20,20,0.06)]"
+                className="bg-white/28 backdrop-blur-xl rounded-2xl overflow-hidden animate-pulse border border-white/15 shadow-[0_4px_12px_rgba(20,20,20,0.06)]"
               >
                 <div className="h-40 bg-gray-100/60" />
                 <div className="p-4 space-y-2">

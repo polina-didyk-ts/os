@@ -159,8 +159,8 @@ export function SideMenu() {
                     isCollapsed ? "px-2 py-3 justify-center" : "px-3 py-3"
                   } ${
                     active
-                      ? "bg-white/70 backdrop-blur-sm shadow-[0_2px_8px_rgba(20,20,20,0.06)] border border-white/50"
-                      : "hover:bg-white/50"
+                      ? "bg-white/35 backdrop-blur-xl shadow-[0_2px_8px_rgba(20,20,20,0.06)] border border-white/25"
+                      : "hover:bg-white/28"
                   }`}
                 >
                   <div
@@ -247,11 +247,11 @@ export function SideMenu() {
         <AuroraBlobs rounded />
 
         {/* User info card */}
-        <div className="relative mx-4 mt-10 mb-3 bg-white/60 backdrop-blur-sm rounded-2xl px-5 py-5 border border-white/50 shadow-[0_4px_12px_rgba(20,20,20,0.06)]">
+        <div className="relative mx-4 mt-10 mb-3 bg-white/28 backdrop-blur-xl rounded-2xl px-5 py-5 border border-white/15 shadow-[0_8px_32px_rgba(20,20,20,0.11),inset_0_1px_0_rgba(255,255,255,0.55)]">
           <UserAvatar image={user?.image} name={user?.name} initials={initials} size="lg" />
           <p className="text-base text-gray-900 font-grotesk">{displayName}</p>
           <p className="text-sm text-gray-500 mt-0.5 font-techstack">{email}</p>
-          <span className="mt-2 inline-block px-3 py-0.5 rounded-full bg-white/50 backdrop-blur-sm text-gray-600 text-xs uppercase tracking-wide border border-white/60 font-grotesk">
+          <span className="mt-2 inline-block px-3 py-0.5 rounded-full bg-white/20 text-gray-600 text-xs uppercase tracking-wide border border-white/25 font-grotesk">
             Member
           </span>
         </div>
