@@ -10,10 +10,8 @@ import {
   MessageCircle,
   Sparkles,
   MessageSquare,
-  Menu,
 } from "lucide-react";
-import { BottomNavigation, useSideMenu } from "../components";
-import { useSession } from "@/src/lib/client";
+import { EmployeeHeader, BottomNavigation } from "../components";
 
 type RequestStatus = "new" | "in_progress" | "completed" | "rejected";
 type RequestType = "order" | "problem" | "question" | "idea";
@@ -178,8 +176,6 @@ function EmptyState({ filtered }: { filtered: boolean }) {
 }
 
 export default function EmployeeRequestsPage() {
-  const { data: session } = useSession();
-  const { toggle } = useSideMenu();
   const [requests, setRequests] = useState<Request[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -232,26 +228,9 @@ export default function EmployeeRequestsPage() {
     }
   }, [filtered, sortBy]);
 
-  const userInitial = session?.user?.name?.[0]?.toUpperCase() ?? "?";
-
   return (
     <main className="min-h-screen bg-transparent flex flex-col">
-      {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 border-b border-white/30 bg-white/60 backdrop-blur-md sticky top-0 z-10">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={toggle}
-            className="p-2 hover:bg-white/60 rounded-lg transition cursor-pointer"
-            aria-label="Open menu"
-          >
-            <Menu className="w-6 h-6 text-gray-700" />
-          </button>
-          <span className="text-lg text-gray-900 font-grotesk">My Requests</span>
-        </div>
-        <div className="w-9 h-9 rounded-full bg-[#141414] flex items-center justify-center text-white text-sm font-grotesk">
-          {userInitial}
-        </div>
-      </header>
+      <EmployeeHeader />
 
       {/* Sort filter */}
       <div className="bg-white/50 backdrop-blur-sm border-b border-white/30 px-4 py-3">

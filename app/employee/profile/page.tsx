@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import {
-  Menu,
   FileText,
   Hourglass,
   CheckCircle2,
@@ -10,7 +9,7 @@ import {
   Upload,
   Trash2,
 } from "lucide-react";
-import { BottomNavigation, useSideMenu } from "../components";
+import { EmployeeHeader, BottomNavigation } from "../components";
 import { useSession } from "@/src/lib/client";
 
 interface Request {
@@ -68,7 +67,6 @@ function StatCard({
 
 export default function EmployeeProfilePage() {
   const { data: session } = useSession();
-  const { toggle } = useSideMenu();
   const [stats, setStats] = useState<Stats | null>(null);
   const [statsLoading, setStatsLoading] = useState(true);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
@@ -157,20 +155,7 @@ export default function EmployeeProfilePage() {
 
   return (
     <main className="min-h-screen bg-transparent flex flex-col">
-      {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 border-b border-white/30 bg-white/60 backdrop-blur-md sticky top-0 z-10">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={toggle}
-            className="p-2 hover:bg-white/60 rounded-lg transition cursor-pointer"
-            aria-label="Open menu"
-          >
-            <Menu className="w-6 h-6 text-gray-700" />
-          </button>
-          <span className="text-lg text-gray-900 font-grotesk">Profile</span>
-        </div>
-        <span className="text-lg text-[#141414] font-grotesk">Digital Office</span>
-      </header>
+      <EmployeeHeader />
 
       <div className="flex-1 pb-28 px-4 py-4 flex flex-col gap-4">
         {/* Profile card */}

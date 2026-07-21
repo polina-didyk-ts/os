@@ -3,8 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Calendar } from "lucide-react";
-import { BottomNavigation } from "../components";
+import { Calendar } from "lucide-react";
+import { EmployeeHeader, BottomNavigation } from "../components";
 
 const CATEGORIES = ["All", "News", "Guides", "Office Life", "Events"] as const;
 type Category = (typeof CATEGORIES)[number];
@@ -56,18 +56,7 @@ export default function EmployeeArticlesPage() {
 
   return (
     <main className="min-h-screen bg-transparent flex flex-col">
-      {/* Header */}
-      <header className="flex items-center gap-3 px-4 py-3 bg-white/60 backdrop-blur-md sticky top-0 z-10 border-b border-white/30">
-        <Link href="/employee" className="p-2 hover:bg-white/60 rounded-lg transition">
-          <ArrowLeft className="w-5 h-5 text-gray-700" />
-        </Link>
-        <div>
-          <p className="text-[10px] uppercase tracking-widest text-gray-400 font-grotesk">
-            Stacky&apos;s Internal Portal
-          </p>
-          <span className="text-lg font-grotesk text-gray-900">What&apos;s New</span>
-        </div>
-      </header>
+      <EmployeeHeader />
 
       {/* Category chips */}
       <div className="flex gap-2 px-4 py-3 bg-white/50 backdrop-blur-sm border-b border-white/30 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
