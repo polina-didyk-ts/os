@@ -37,6 +37,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="absolute top-1/4 -left-40 w-[650px] h-[650px] rounded-full bg-orange-300/34 blur-[95px]" />
         <div className="absolute bottom-10 right-1/3 w-[550px] h-[550px] rounded-full bg-yellow-300/38 blur-[95px]" />
         <div className="absolute top-2/3 left-1/2 w-[400px] h-[400px] rounded-full bg-rose-300/19 blur-[75px]" />
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: "radial-gradient(circle, rgba(120,80,20,0.09) 1px, transparent 1px)",
+            backgroundSize: "24px 24px",
+          }}
+        />
       </div>
       <SideMenu />
       {children}
