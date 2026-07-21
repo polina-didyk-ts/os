@@ -19,6 +19,7 @@ model User {
   banned        Boolean?  @default(false)
   emailVerified Boolean   @default(false)
   image         String?
+  bio           String?
   accounts               Account[]
   articles               Article[]
   comments               Comment[]
@@ -188,6 +189,9 @@ model Article {
   content     Json
   coverImage  String?
   category    String?
+  tags        String[]
+  readTime    Int?
+  featured    Boolean   @default(false)
   published   Boolean   @default(false)
   publishedAt DateTime?
   createdAt   DateTime  @default(now())
@@ -199,6 +203,7 @@ model Article {
 
   @@index([authorId])
   @@index([published])
+  @@index([featured])
   @@index([slug])
   @@index([category])
   @@map("articles")

@@ -4,16 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  ArrowLeft,
-  Calendar,
-  ArrowUp,
-  Heart,
-  MessageCircle,
-  Send,
-  Pencil,
-  Trash2,
-} from "lucide-react";
+import { ArrowUp, Heart, MessageCircle, Send, Pencil, Trash2, Clock } from "lucide-react";
 import { useSession } from "@/src/lib/client";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -22,7 +13,8 @@ import TiptapLink from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
 import { PersonQuoteExtension } from "@/app/components/person-quote-extension";
-import { BottomNavigation } from "../../components";
+import { ImageFigureExtension } from "@/app/components/image-figure-extension";
+import { EmployeeHeader, BottomNavigation } from "../../components";
 
 interface Article {
   id: string;
@@ -31,8 +23,11 @@ interface Article {
   excerpt: string | null;
   content: object;
   coverImage: string | null;
+  category: string | null;
+  tags: string[];
+  readTime: number | null;
   publishedAt: string | null;
-  author: { name: string | null };
+  author: { name: string | null; image: string | null; bio: string | null };
 }
 
 interface TocItem {
@@ -75,11 +70,64 @@ function formatDate(dateStr: string) {
   });
 }
 
+function AuthorMeta({
+  author,
+  publishedAt,
+  readTime,
+  light,
+}: {
+  author: Article["author"];
+  publishedAt: string | null;
+  readTime: number;
+  light?: boolean;
+}) {
+  const textCls = light ? "text-white/75" : "text-gray-500";
+  const dotCls = light ? "text-white/35" : "text-gray-300";
+
+  return (
+    <div className={`flex items-center gap-2.5 flex-wrap text-sm font-techstack ${textCls}`}>
+      {author.image ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={author.image}
+          alt={author.name ?? ""}
+          className="w-7 h-7 rounded-full object-cover border border-white/30 shrink-0"
+        />
+      ) : author.name ? (
+        <div
+          className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-grotesk shrink-0 ${
+            light ? "bg-white/20 text-white border border-white/30" : "text-white"
+          }`}
+          style={light ? {} : { background: "linear-gradient(135deg, #fbbf24 0%, #f97316 100%)" }}
+        >
+          {author.name[0].toUpperCase()}
+        </div>
+      ) : null}
+      {author.name && (
+        <span className={light ? "text-white/90 font-grotesk" : "text-gray-700 font-grotesk"}>
+          {author.name}
+        </span>
+      )}
+      {publishedAt && (
+        <>
+          <span className={dotCls}>·</span>
+          <span>{formatDate(publishedAt)}</span>
+        </>
+      )}
+      <span className={dotCls}>·</span>
+      <span className="flex items-center gap-1">
+        <Clock className="w-3.5 h-3.5" />
+        {readTime} min read
+      </span>
+    </div>
+  );
+}
+
 function TableOfContents({ items, activeId }: { items: TocItem[]; activeId: string }) {
   if (items.length === 0) return null;
   return (
-    <nav className="hidden lg:block w-52 shrink-0 animate-fade-up [animation-delay:40ms]">
-      <div className="sticky top-20 space-y-0.5">
+    <nav className="hidden lg:block w-52 shrink-0">
+      <div className="sticky top-24 space-y-0.5">
         <p className="text-[10px] uppercase tracking-widest text-gray-400 font-grotesk mb-3">
           Contents
         </p>
@@ -95,9 +143,9 @@ function TableOfContents({ items, activeId }: { items: TocItem[]; activeId: stri
             }}
             className={`block text-xs font-techstack leading-snug py-1 transition-all duration-150 border-l-2 pl-3 ${
               activeId === item.id
-                ? "border-[#FFC600] text-[#141414] font-grotesk"
+                ? "border-amber-400 text-gray-900 font-grotesk"
                 : "border-transparent text-gray-400 hover:text-gray-600"
-            }`}
+            } ${item.level === 3 ? "pl-5" : ""}`}
           >
             {item.text}
           </a>
@@ -123,8 +171,12 @@ function ArticleContent({
       StarterKit,
       Underline,
       TiptapImage.configure({ inline: false }),
+      ImageFigureExtension,
       TiptapLink.configure({
-        HTMLAttributes: { class: "text-[#141414] underline", target: "_blank" },
+        HTMLAttributes: {
+          class: "text-amber-700 underline underline-offset-2 hover:text-amber-800",
+          target: "_blank",
+        },
       }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       PersonQuoteExtension,
@@ -134,33 +186,33 @@ function ArticleContent({
     editorProps: {
       attributes: {
         class: [
-          "prose prose-sm max-w-none font-techstack text-gray-800",
-          "prose-headings:font-grotesk prose-headings:text-gray-900",
-          "prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg",
-          "prose-img:rounded-2xl prose-img:shadow-[0_4px_12px_rgba(20,20,20,0.12)]",
-          "prose-blockquote:border-l-4 prose-blockquote:border-[#FFC600] prose-blockquote:bg-[#FAF8F5] prose-blockquote:rounded-r-xl prose-blockquote:px-4 prose-blockquote:py-2 prose-blockquote:not-italic",
-          "prose-a:text-[#141414] prose-strong:font-grotesk",
+          "prose max-w-none font-techstack text-gray-800",
+          "prose-headings:font-grotesk prose-headings:text-gray-900 prose-headings:leading-tight prose-headings:tracking-tight",
+          "prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h4:text-lg",
+          "prose-p:text-[15px] prose-p:leading-[1.85] prose-p:text-gray-700",
+          "prose-img:rounded-2xl prose-img:shadow-[0_6px_24px_rgba(20,20,20,0.12)] prose-img:w-full",
+          "prose-blockquote:border-l-4 prose-blockquote:border-amber-400 prose-blockquote:bg-amber-50/60 prose-blockquote:rounded-r-xl prose-blockquote:px-5 prose-blockquote:py-3 prose-blockquote:not-italic prose-blockquote:text-gray-600",
+          "prose-a:text-amber-700 prose-a:no-underline hover:prose-a:underline",
+          "prose-strong:text-gray-900 prose-strong:font-grotesk",
+          "prose-li:text-gray-700 prose-li:text-[15px]",
+          "prose-hr:border-gray-100",
+          "focus:outline-none",
         ].join(" "),
       },
     },
   });
 
-  // Add IDs to heading DOM elements and set up IntersectionObserver
   useEffect(() => {
     if (!editor || tocItems.length === 0) return;
-
     const container = editorRef.current;
     if (!container) return;
 
-    // Add IDs to headings
     const headings = container.querySelectorAll("h1,h2,h3,h4,h5,h6");
     headings.forEach((el) => {
-      const text = el.textContent ?? "";
-      const id = slugify(text);
+      const id = slugify(el.textContent ?? "");
       if (id) el.id = id;
     });
 
-    // IntersectionObserver to track active heading
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -208,21 +260,22 @@ function ArticleLikeButton({ articleId }: { articleId: string }) {
   };
 
   return (
-    <div className="flex items-center gap-3 pt-4 mt-4 border-t border-gray-100">
-      <button
-        onClick={handleLike}
-        className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-grotesk transition-all cursor-pointer ${
-          likes.liked
-            ? "bg-amber-100/80 text-amber-700"
-            : "bg-white/40 backdrop-blur-sm text-gray-500 border border-white/60 hover:bg-white/60"
-        }`}
-      >
-        <Heart
-          className={`w-4 h-4 transition-all ${likes.liked ? "fill-amber-400 text-amber-400" : ""}`}
-        />
-        <span>{likes.count}</span>
-      </button>
-    </div>
+    <button
+      onClick={handleLike}
+      className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-grotesk transition-all cursor-pointer ${
+        likes.liked
+          ? "text-amber-700"
+          : "bg-white/50 backdrop-blur-sm text-gray-500 border border-white/60 hover:bg-white/70"
+      }`}
+      style={likes.liked ? { background: "linear-gradient(135deg, #fef3c7, #fed7aa)" } : {}}
+    >
+      <Heart
+        className={`w-4 h-4 transition-all ${likes.liked ? "fill-amber-400 text-amber-400" : ""}`}
+      />
+      <span>
+        {likes.count > 0 ? likes.count : ""} {likes.liked ? "Liked" : "Like"}
+      </span>
+    </button>
   );
 }
 
@@ -283,141 +336,138 @@ function ArticleComments({
   };
 
   return (
-    <div className="mx-4 mt-3 mb-4 lg:mx-0 animate-fade-up [animation-delay:160ms]">
-      <div className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] border border-white/40 overflow-hidden">
-        <div className="px-5 py-4 border-b border-white/40 flex items-center gap-2">
-          <MessageCircle className="w-4 h-4 text-gray-400" />
-          <h3 className="text-sm font-grotesk text-gray-900">
-            Comments
-            {comments.length > 0 && <span className="text-gray-400 ml-1">({comments.length})</span>}
-          </h3>
-        </div>
+    <div className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] border border-white/40 overflow-hidden">
+      <div className="px-5 py-4 border-b border-white/40 flex items-center gap-2">
+        <MessageCircle className="w-4 h-4 text-gray-400" />
+        <h3 className="text-sm font-grotesk text-gray-900">
+          Comments
+          {comments.length > 0 && <span className="text-gray-400 ml-1">({comments.length})</span>}
+        </h3>
+      </div>
 
-        {comments.length === 0 ? (
-          <p className="px-5 py-8 text-center text-sm text-gray-400 font-techstack">
-            No comments yet. Be the first!
-          </p>
-        ) : (
-          <div className="divide-y divide-white/40">
-            {comments.map((comment) => {
-              const isOwn = comment.author.id === currentUserId;
-              const canDelete = isOwn || isAdmin;
-              const displayName = comment.author.name ?? comment.author.email.split("@")[0];
-              const initials = displayName.slice(0, 2).toUpperCase();
+      {comments.length === 0 ? (
+        <p className="px-5 py-8 text-center text-sm text-gray-400 font-techstack">
+          No comments yet. Be the first!
+        </p>
+      ) : (
+        <div className="divide-y divide-white/40">
+          {comments.map((comment) => {
+            const isOwn = comment.author.id === currentUserId;
+            const canDelete = isOwn || isAdmin;
+            const displayName = comment.author.name ?? comment.author.email.split("@")[0];
+            const initials = displayName.slice(0, 2).toUpperCase();
 
-              return (
-                <div key={comment.id} className="px-5 py-4">
-                  <div className="flex items-start gap-3">
-                    {comment.author.image ? (
-                      <img
-                        src={comment.author.image}
-                        alt={displayName}
-                        className="w-8 h-8 rounded-full object-cover shrink-0"
-                      />
-                    ) : (
-                      <div className="w-8 h-8 rounded-full bg-[#141414] flex items-center justify-center text-white text-xs font-grotesk shrink-0">
-                        {initials}
-                      </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-2 mb-1">
-                        <span className="text-xs font-grotesk text-gray-900">{displayName}</span>
-                        <div className="flex items-center gap-0.5 shrink-0">
-                          <span className="text-[10px] text-gray-400 font-techstack mr-1">
-                            {new Date(comment.createdAt).toLocaleDateString("en-GB", {
-                              day: "numeric",
-                              month: "short",
-                            })}
-                          </span>
-                          {isOwn && editingId !== comment.id && (
-                            <button
-                              onClick={() => {
-                                setEditingId(comment.id);
-                                setEditContent(comment.content);
-                              }}
-                              className="p-1 text-gray-400 hover:text-gray-700 transition rounded cursor-pointer"
-                            >
-                              <Pencil className="w-3 h-3" />
-                            </button>
-                          )}
-                          {canDelete && editingId !== comment.id && (
-                            <button
-                              onClick={() => handleDelete(comment.id)}
-                              className="p-1 text-gray-400 hover:text-red-500 transition rounded cursor-pointer"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                            </button>
-                          )}
-                        </div>
-                      </div>
-
-                      {editingId === comment.id ? (
-                        <div className="space-y-2">
-                          <textarea
-                            value={editContent}
-                            onChange={(e) => setEditContent(e.target.value)}
-                            rows={3}
-                            autoFocus
-                            className="w-full text-sm text-gray-700 font-techstack border border-gray-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-[#FFC600] focus:border-[#FFC600]"
-                          />
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => handleEdit(comment.id)}
-                              className="px-3 py-1 bg-[#141414] text-white text-xs font-grotesk rounded-lg"
-                            >
-                              Save
-                            </button>
-                            <button
-                              onClick={() => setEditingId(null)}
-                              className="px-3 py-1 bg-gray-100 text-gray-600 text-xs font-grotesk rounded-lg"
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <p className="text-sm text-gray-700 font-techstack leading-relaxed whitespace-pre-wrap">
-                          {comment.content}
-                        </p>
-                      )}
+            return (
+              <div key={comment.id} className="px-5 py-4">
+                <div className="flex items-start gap-3">
+                  {comment.author.image ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={comment.author.image}
+                      alt={displayName}
+                      className="w-8 h-8 rounded-full object-cover shrink-0"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-[#141414] flex items-center justify-center text-white text-xs font-grotesk shrink-0">
+                      {initials}
                     </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2 mb-1">
+                      <span className="text-xs font-grotesk text-gray-900">{displayName}</span>
+                      <div className="flex items-center gap-0.5 shrink-0">
+                        <span className="text-[10px] text-gray-400 font-techstack mr-1">
+                          {new Date(comment.createdAt).toLocaleDateString("en-GB", {
+                            day: "numeric",
+                            month: "short",
+                          })}
+                        </span>
+                        {isOwn && editingId !== comment.id && (
+                          <button
+                            onClick={() => {
+                              setEditingId(comment.id);
+                              setEditContent(comment.content);
+                            }}
+                            className="p-1 text-gray-400 hover:text-gray-700 transition rounded cursor-pointer"
+                          >
+                            <Pencil className="w-3 h-3" />
+                          </button>
+                        )}
+                        {canDelete && editingId !== comment.id && (
+                          <button
+                            onClick={() => handleDelete(comment.id)}
+                            className="p-1 text-gray-400 hover:text-red-500 transition rounded cursor-pointer"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {editingId === comment.id ? (
+                      <div className="space-y-2">
+                        <textarea
+                          value={editContent}
+                          onChange={(e) => setEditContent(e.target.value)}
+                          rows={3}
+                          autoFocus
+                          className="w-full text-sm text-gray-700 font-techstack border border-gray-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-amber-400/50"
+                        />
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleEdit(comment.id)}
+                            className="px-3 py-1 bg-[#141414] text-white text-xs font-grotesk rounded-lg cursor-pointer"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={() => setEditingId(null)}
+                            className="px-3 py-1 bg-gray-100 text-gray-600 text-xs font-grotesk rounded-lg cursor-pointer"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-gray-700 font-techstack leading-relaxed whitespace-pre-wrap">
+                        {comment.content}
+                      </p>
+                    )}
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        )}
-
-        <div className="px-5 py-4 border-t border-white/40">
-          <div className="flex gap-3 items-end">
-            <textarea
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleComment();
-                }
-              }}
-              placeholder="Write a comment..."
-              rows={1}
-              className="flex-1 text-sm font-techstack text-gray-700 bg-white/50 backdrop-blur-sm border border-white/60 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-1 focus:ring-amber-400/50 focus:border-amber-300 placeholder:text-gray-400"
-            />
-            <button
-              onClick={handleComment}
-              disabled={!input.trim() || submitting}
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-white disabled:opacity-40 transition shrink-0 mb-0.5 cursor-pointer"
-              style={{
-                background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)",
-              }}
-            >
-              <Send className="w-4 h-4" />
-            </button>
-          </div>
-          <p className="text-[10px] text-gray-400 font-techstack mt-1.5">
-            Enter to send · Shift+Enter for new line
-          </p>
+              </div>
+            );
+          })}
         </div>
+      )}
+
+      <div className="px-5 py-4 border-t border-white/40">
+        <div className="flex gap-3 items-end">
+          <textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleComment();
+              }
+            }}
+            placeholder="Write a comment..."
+            rows={1}
+            className="flex-1 text-sm font-techstack text-gray-700 bg-white/50 backdrop-blur-sm border border-white/60 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-1 focus:ring-amber-400/50 placeholder:text-gray-400"
+          />
+          <button
+            onClick={handleComment}
+            disabled={!input.trim() || submitting}
+            className="w-9 h-9 rounded-xl flex items-center justify-center text-white disabled:opacity-40 transition shrink-0 cursor-pointer"
+            style={{ background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" }}
+          >
+            <Send className="w-4 h-4" />
+          </button>
+        </div>
+        <p className="text-[10px] text-gray-400 font-techstack mt-1.5">
+          Enter to send · Shift+Enter for new line
+        </p>
       </div>
     </div>
   );
@@ -480,81 +530,170 @@ export default function ArticlePage() {
   }
 
   const tocItems = extractHeadings(article.content);
+  const readTime = article.readTime ?? 1;
 
   return (
     <main className="min-h-screen bg-transparent flex flex-col">
       {/* Reading progress bar */}
       <div
         className="fixed top-0 left-0 z-50 h-0.5 transition-[width] duration-100 pointer-events-none"
-        style={{ width: `${progress}%`, background: "linear-gradient(90deg, #fbbf24, #f97316)" }}
+        style={{
+          width: `${progress}%`,
+          background: "linear-gradient(90deg, #fbbf24, #f97316, #ea580c)",
+        }}
       />
 
-      {/* Header */}
-      <header className="flex items-center gap-3 px-4 py-3 bg-white/60 backdrop-blur-md sticky top-0 z-10 border-b border-white/30">
-        <Link href="/employee/articles" className="p-2 hover:bg-white/60 rounded-lg transition">
-          <ArrowLeft className="w-5 h-5 text-gray-700" />
-        </Link>
-        <p className="text-[10px] uppercase tracking-widest text-gray-400 font-grotesk">
-          Stacky&apos;s Internal Portal
-        </p>
-      </header>
+      <EmployeeHeader />
 
-      {/* Desktop: sidebar + content. Mobile: single column */}
-      <div className="flex-1 pb-28 w-full max-w-5xl mx-auto lg:flex lg:gap-8 lg:px-8 lg:pt-8">
+      {/* ─── HERO ─── */}
+      {article.coverImage ? (
+        <div className="relative overflow-hidden" style={{ height: "clamp(260px, 52vw, 480px)" }}>
+          <Image
+            src={article.coverImage}
+            alt={article.title}
+            fill
+            className="object-cover"
+            priority
+          />
+          {/* Gradient: subtle top → strong bottom */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10" />
+
+          {/* Content anchored to bottom */}
+          <div className="absolute inset-x-0 bottom-0 px-4 pb-7 lg:px-8 max-w-5xl mx-auto">
+            {article.category && (
+              <span className="inline-block text-[11px] font-grotesk uppercase tracking-widest text-amber-300 mb-3 bg-black/20 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-amber-400/30">
+                {article.category}
+              </span>
+            )}
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-grotesk text-white leading-tight mb-4 drop-shadow-sm max-w-3xl">
+              {article.title}
+            </h1>
+            <AuthorMeta
+              author={article.author}
+              publishedAt={article.publishedAt}
+              readTime={readTime}
+              light
+            />
+          </div>
+        </div>
+      ) : (
+        /* No cover image — editorial title on aurora background */
+        <div className="px-4 pt-10 pb-8 lg:px-8 max-w-5xl mx-auto w-full">
+          {article.category && (
+            <span className="inline-block text-[11px] font-grotesk uppercase tracking-widest text-amber-600 mb-4 px-2.5 py-0.5 rounded-full border border-amber-300/60 bg-amber-50/50">
+              {article.category}
+            </span>
+          )}
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-grotesk text-gray-900 leading-tight mb-6 max-w-3xl">
+            {article.title}
+          </h1>
+          <div className="pb-6 border-b border-gray-100">
+            <AuthorMeta
+              author={article.author}
+              publishedAt={article.publishedAt}
+              readTime={readTime}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* ─── CONTENT ─── */}
+      <div className="flex-1 pb-28 w-full max-w-5xl mx-auto lg:flex lg:gap-10 lg:px-8 lg:pt-10 px-4 pt-7">
         <TableOfContents items={tocItems} activeId={activeId} />
 
         <div className="flex-1 min-w-0">
-          {/* Cover image */}
-          {article.coverImage && (
-            <div className="relative w-full h-52 animate-fade-up">
-              <Image src={article.coverImage} alt={article.title} fill className="object-cover" />
+          {/* Excerpt — lead paragraph */}
+          {article.excerpt && (
+            <p className="text-lg font-techstack text-gray-600 leading-relaxed mb-8 pb-8 border-b border-gray-100 italic">
+              {article.excerpt}
+            </p>
+          )}
+
+          <ArticleContent
+            content={article.content}
+            tocItems={tocItems}
+            onActiveChange={setActiveId}
+          />
+
+          {/* Tags */}
+          {article.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-8 pt-6 border-t border-gray-100">
+              {article.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="text-xs font-techstack text-amber-700 px-2.5 py-1 rounded-full border border-amber-200/80 bg-amber-50/70"
+                >
+                  #{tag}
+                </span>
+              ))}
             </div>
           )}
 
-          {/* Article card */}
-          <div className="mx-4 mt-4 lg:mx-0 bg-white/60 backdrop-blur-sm rounded-2xl p-5 shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] border border-white/40 animate-fade-up [animation-delay:80ms]">
-            {article.publishedAt && (
-              <div className="flex items-center gap-1.5 mb-3">
-                <Calendar className="w-3.5 h-3.5 text-gray-400" />
-                <span className="text-xs text-gray-400 font-techstack">
-                  {formatDate(article.publishedAt)}
-                </span>
-                {article.author.name && (
-                  <span className="text-xs text-gray-400 font-techstack">
-                    · {article.author.name}
-                  </span>
-                )}
-              </div>
-            )}
-            <h1 className="text-2xl font-grotesk text-gray-900 mb-3">{article.title}</h1>
-            {article.excerpt && (
-              <p className="text-base font-techstack text-gray-500 leading-relaxed mb-5 pb-5 border-b border-gray-100">
-                {article.excerpt}
-              </p>
-            )}
-            <ArticleContent
-              content={article.content}
-              tocItems={tocItems}
-              onActiveChange={setActiveId}
-            />
-            {session && <ArticleLikeButton articleId={article.id} />}
+          {/* Like + back link */}
+          <div
+            className={`flex items-center justify-between flex-wrap gap-3 ${article.tags.length > 0 ? "mt-4" : "mt-8 pt-6 border-t border-gray-100"}`}
+          >
+            {session ? <ArticleLikeButton articleId={article.id} /> : <div />}
+            <Link
+              href="/employee/articles"
+              className="text-sm text-gray-400 font-techstack hover:text-gray-600 transition"
+            >
+              ← All articles
+            </Link>
           </div>
-
-          {session && (
-            <ArticleComments
-              articleId={article.id}
-              currentUserId={session.user.id}
-              isAdmin={session.user.role === "admin"}
-            />
-          )}
         </div>
       </div>
+
+      {/* ─── AUTHOR BIO ─── */}
+      {article.author.bio && (
+        <div className="w-full max-w-5xl mx-auto px-4 lg:px-8 mb-6">
+          <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-5 border border-white/40 shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] flex items-start gap-4">
+            {article.author.image ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={article.author.image}
+                alt={article.author.name ?? ""}
+                className="w-12 h-12 rounded-full object-cover border border-white/40 shrink-0"
+              />
+            ) : article.author.name ? (
+              <div
+                className="w-12 h-12 rounded-full flex items-center justify-center text-white font-grotesk text-base shrink-0"
+                style={{ background: "linear-gradient(135deg, #fbbf24 0%, #f97316 100%)" }}
+              >
+                {article.author.name[0].toUpperCase()}
+              </div>
+            ) : null}
+            <div>
+              <p className="text-xs font-grotesk text-gray-400 uppercase tracking-widest mb-0.5">
+                About the author
+              </p>
+              {article.author.name && (
+                <p className="text-sm font-grotesk text-gray-900 mb-1">{article.author.name}</p>
+              )}
+              <p className="text-sm font-techstack text-gray-600 leading-relaxed">
+                {article.author.bio}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── COMMENTS ─── */}
+      {session && (
+        <div className="w-full max-w-5xl mx-auto px-4 lg:px-8 mb-6">
+          <ArticleComments
+            articleId={article.id}
+            currentUserId={session.user.id}
+            isAdmin={session.user.role === "admin"}
+          />
+        </div>
+      )}
 
       {/* Back to top */}
       {showBackToTop && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="fixed bottom-28 right-4 w-10 h-10 bg-white/70 backdrop-blur-sm rounded-full shadow-[0_4px_12px_rgba(20,20,20,0.12)] border border-white/40 flex items-center justify-center text-gray-600 hover:bg-white/90 transition-all z-30 animate-fade-scale"
+          className="fixed bottom-28 right-4 w-10 h-10 bg-white/70 backdrop-blur-sm rounded-full shadow-[0_4px_12px_rgba(20,20,20,0.12)] border border-white/40 flex items-center justify-center text-gray-600 hover:bg-white/90 transition-all z-30"
           aria-label="Back to top"
         >
           <ArrowUp className="w-4 h-4" />

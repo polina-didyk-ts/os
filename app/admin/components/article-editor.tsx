@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
@@ -34,6 +33,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { PersonQuoteExtension } from "@/app/components/person-quote-extension";
+import { ImageFigureExtension } from "@/app/components/image-figure-extension";
 
 interface ArticleEditorProps {
   content: object;
@@ -76,7 +76,7 @@ export function ArticleEditor({ content, onChange }: ArticleEditorProps) {
     extensions: [
       StarterKit,
       Underline,
-      Image.configure({ inline: false, allowBase64: false }),
+      ImageFigureExtension,
       Placeholder.configure({ placeholder: "Start writing your article…" }),
       Link.configure({ openOnClick: false, HTMLAttributes: { class: "text-[#141414] underline" } }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),
@@ -98,7 +98,13 @@ export function ArticleEditor({ content, onChange }: ArticleEditorProps) {
 
   const addImage = () => {
     const url = window.prompt("Image URL:");
-    if (url) editor.chain().focus().setImage({ src: url }).run();
+    if (url) {
+      editor
+        .chain()
+        .focus()
+        .insertContent({ type: "imageFigure", attrs: { src: url, alt: "", caption: "" } })
+        .run();
+    }
   };
 
   const setLink = () => {

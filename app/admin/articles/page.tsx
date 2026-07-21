@@ -38,6 +38,7 @@ interface Article {
   published: boolean;
   publishedAt: string | null;
   createdAt: string;
+  featured: boolean;
   author: { id: string; name: string | null };
 }
 
@@ -196,21 +197,49 @@ export default function AdminArticlesPage() {
                     <p className="text-xs font-techstack text-gray-400 mt-0.5">
                       {formatDate(article.createdAt)} · /{article.slug}
                     </p>
+                    {article.published &&
+                      article.publishedAt &&
+                      new Date(article.publishedAt) > new Date() && (
+                        <p className="text-[11px] font-techstack text-blue-500 mt-0.5">
+                          Publishes{" "}
+                          {new Date(article.publishedAt).toLocaleString("en-US", {
+                            dateStyle: "medium",
+                            timeStyle: "short",
+                          })}
+                        </p>
+                      )}
                     {article.excerpt && (
                       <p className="text-xs font-techstack text-gray-500 mt-1 line-clamp-2">
                         {article.excerpt}
                       </p>
                     )}
                   </div>
-                  <span
-                    className={`shrink-0 text-[10px] px-2 py-0.5 rounded-full font-grotesk ${
-                      article.published
-                        ? "bg-green-100 text-green-700"
-                        : "bg-gray-100 text-gray-500"
-                    }`}
-                  >
-                    {article.published ? "PUBLISHED" : "DRAFT"}
-                  </span>
+                  <div className="flex items-center gap-1.5 shrink-0 flex-wrap justify-end">
+                    {article.featured && (
+                      <span className="text-[10px] px-2 py-0.5 rounded-full font-grotesk bg-amber-100 text-amber-700">
+                        FEATURED
+                      </span>
+                    )}
+                    {(() => {
+                      const isScheduled =
+                        article.published &&
+                        article.publishedAt &&
+                        new Date(article.publishedAt) > new Date();
+                      return (
+                        <span
+                          className={`text-[10px] px-2 py-0.5 rounded-full font-grotesk ${
+                            isScheduled
+                              ? "bg-blue-100 text-blue-700"
+                              : article.published
+                                ? "bg-green-100 text-green-700"
+                                : "bg-gray-100 text-gray-500"
+                          }`}
+                        >
+                          {isScheduled ? "SCHEDULED" : article.published ? "PUBLISHED" : "DRAFT"}
+                        </span>
+                      );
+                    })()}
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-2 mt-3 pt-3 border-t border-white/40 flex-wrap">

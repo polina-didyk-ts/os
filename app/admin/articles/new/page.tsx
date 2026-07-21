@@ -7,6 +7,8 @@ import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Textarea } from "@/app/components/ui/textarea";
 import { ArticleEditor } from "../../components/article-editor";
+import { CoverImageUpload } from "../../components/cover-image-upload";
+import { TagsInput } from "../../components/tags-input";
 import { ARTICLE_CATEGORIES } from "@/src/modules/articles/articles.dto";
 
 function slugify(text: string) {
@@ -27,7 +29,10 @@ export default function NewArticlePage() {
     excerpt: "",
     coverImage: "",
     category: "" as string,
+    tags: [] as string[],
+    featured: false,
     published: false,
+    scheduledFor: "",
   });
   const [content, setContent] = useState<object>({});
 
@@ -43,7 +48,11 @@ export default function NewArticlePage() {
       const res = await fetch("/api/admin/articles", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, content }),
+        body: JSON.stringify({
+          ...form,
+          content,
+          publishedAt: form.scheduledFor ? new Date(form.scheduledFor).toISOString() : undefined,
+        }),
       });
       if (!res.ok) {
         const data = await res.json();
@@ -111,37 +120,43 @@ export default function NewArticlePage() {
           />
         </div>
 
-        {/* Cover Image + Category row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-xs font-grotesk text-gray-500 uppercase tracking-widest mb-2">
-              Cover Image URL{" "}
-              <span className="text-gray-400 normal-case font-techstack">(optional)</span>
-            </label>
-            <Input
-              value={form.coverImage}
-              onChange={(e) => setForm((f) => ({ ...f, coverImage: e.target.value }))}
-              placeholder="https://..."
-              className="w-full font-techstack bg-white/50 backdrop-blur-sm border-white/60 focus-visible:ring-amber-400/50"
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-grotesk text-gray-500 uppercase tracking-widest mb-2">
-              Category <span className="text-gray-400 normal-case font-techstack">(optional)</span>
-            </label>
-            <select
-              value={form.category}
-              onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
-              className="w-full h-9 rounded-md border border-white/60 bg-white/50 backdrop-blur-sm px-3 text-sm font-techstack text-gray-700 focus:outline-none focus:ring-1 focus:ring-amber-400/50"
-            >
-              <option value="">No category</option>
-              {ARTICLE_CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-          </div>
+        {/* Cover Image */}
+        <div>
+          <label className="block text-xs font-grotesk text-gray-500 uppercase tracking-widest mb-2">
+            Cover Image <span className="text-gray-400 normal-case font-techstack">(optional)</span>
+          </label>
+          <CoverImageUpload
+            value={form.coverImage}
+            onChange={(url) => setForm((f) => ({ ...f, coverImage: url }))}
+          />
+        </div>
+
+        {/* Category */}
+        <div>
+          <label className="block text-xs font-grotesk text-gray-500 uppercase tracking-widest mb-2">
+            Category <span className="text-gray-400 normal-case font-techstack">(optional)</span>
+          </label>
+          <select
+            value={form.category}
+            onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
+            className="w-full h-9 rounded-md border border-white/60 bg-white/50 backdrop-blur-sm px-3 text-sm font-techstack text-gray-700 focus:outline-none focus:ring-1 focus:ring-amber-400/50"
+          >
+            <option value="">No category</option>
+            {ARTICLE_CATEGORIES.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Tags */}
+        <div>
+          <label className="block text-xs font-grotesk text-gray-500 uppercase tracking-widest mb-2">
+            Tags{" "}
+            <span className="text-gray-400 normal-case font-techstack">(optional, max 10)</span>
+          </label>
+          <TagsInput value={form.tags} onChange={(tags) => setForm((f) => ({ ...f, tags }))} />
         </div>
 
         {/* Excerpt */}
@@ -170,23 +185,68 @@ export default function NewArticlePage() {
           <ArticleEditor content={content} onChange={setContent} />
         </div>
 
-        {/* Publish toggle */}
-        <label className="flex items-center gap-3 cursor-pointer">
-          <div
-            onClick={() => setForm((f) => ({ ...f, published: !f.published }))}
-            className="w-11 h-6 rounded-full transition-colors relative"
-            style={{
-              background: form.published
-                ? "linear-gradient(135deg, #fbbf24 0%, #f97316 100%)"
-                : "#e5e7eb",
-            }}
-          >
+        {/* Toggles: Featured + Publish */}
+        <div className="flex flex-col gap-3">
+          <label className="flex items-center gap-3 cursor-pointer">
             <div
-              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${form.published ? "translate-x-5" : ""}`}
-            />
-          </div>
-          <span className="text-sm font-grotesk text-gray-900">Publish immediately</span>
-        </label>
+              onClick={() => setForm((f) => ({ ...f, featured: !f.featured }))}
+              className="w-11 h-6 rounded-full transition-colors relative shrink-0"
+              style={{
+                background: form.featured
+                  ? "linear-gradient(135deg, #fbbf24 0%, #f97316 100%)"
+                  : "#e5e7eb",
+              }}
+            >
+              <div
+                className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${form.featured ? "translate-x-5" : ""}`}
+              />
+            </div>
+            <div>
+              <span className="text-sm font-grotesk text-gray-900">Featured article</span>
+              <p className="text-xs text-gray-400 font-techstack">
+                Pinned to top of the article list
+              </p>
+            </div>
+          </label>
+
+          <label className="flex items-center gap-3 cursor-pointer">
+            <div
+              onClick={() => setForm((f) => ({ ...f, published: !f.published, scheduledFor: "" }))}
+              className="w-11 h-6 rounded-full transition-colors relative shrink-0"
+              style={{
+                background: form.published
+                  ? "linear-gradient(135deg, #fbbf24 0%, #f97316 100%)"
+                  : "#e5e7eb",
+              }}
+            >
+              <div
+                className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${form.published ? "translate-x-5" : ""}`}
+              />
+            </div>
+            <span className="text-sm font-grotesk text-gray-900">Publish</span>
+          </label>
+
+          {form.published && (
+            <div className="ml-14 space-y-1.5">
+              <label className="block text-xs font-grotesk text-gray-500 uppercase tracking-widest">
+                Schedule for later{" "}
+                <span className="text-gray-400 normal-case font-techstack">(optional)</span>
+              </label>
+              <input
+                type="datetime-local"
+                value={form.scheduledFor}
+                min={new Date().toISOString().slice(0, 16)}
+                onChange={(e) => setForm((f) => ({ ...f, scheduledFor: e.target.value }))}
+                className="w-full h-9 rounded-md border border-white/60 bg-white/50 backdrop-blur-sm px-3 text-sm font-techstack text-gray-700 focus:outline-none focus:ring-1 focus:ring-amber-400/50"
+              />
+              <p className="text-[11px] text-gray-400 font-techstack">
+                {form.scheduledFor
+                  ? `Visible from ${new Date(form.scheduledFor).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}`
+                  : "Leave empty to publish immediately"}
+              </p>
+            </div>
+          )}
+        </div>
 
         <Button
           type="submit"

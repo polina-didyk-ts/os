@@ -8,6 +8,9 @@ import {
   MoreHorizontal,
   Upload,
   Trash2,
+  Pencil,
+  Check,
+  X,
 } from "lucide-react";
 import { EmployeeHeader, BottomNavigation } from "../components";
 import { useSession } from "@/src/lib/client";
@@ -73,6 +76,10 @@ export default function EmployeeProfilePage() {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [deletingAvatar, setDeletingAvatar] = useState(false);
   const [avatarMenuOpen, setAvatarMenuOpen] = useState(false);
+  const [bio, setBio] = useState<string>("");
+  const [bioEditing, setBioEditing] = useState(false);
+  const [bioDraft, setBioDraft] = useState("");
+  const [bioSaving, setBioSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const avatarMenuRef = useRef<HTMLDivElement>(null);
 
@@ -89,6 +96,13 @@ export default function EmployeeProfilePage() {
   useEffect(() => {
     if (session?.user.image) setAvatarUrl(session.user.image);
   }, [session?.user.image]);
+
+  useEffect(() => {
+    if (!session) return;
+    fetch("/api/profile")
+      .then((r) => r.json())
+      .then((data) => setBio(data.bio ?? ""));
+  }, [session]);
 
   const handleAvatarDelete = async () => {
     setDeletingAvatar(true);
@@ -123,6 +137,21 @@ export default function EmployeeProfilePage() {
     } finally {
       setUploadingAvatar(false);
       e.target.value = "";
+    }
+  };
+
+  const saveBio = async () => {
+    setBioSaving(true);
+    try {
+      await fetch("/api/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bio: bioDraft.trim() || null }),
+      });
+      setBio(bioDraft.trim());
+      setBioEditing(false);
+    } finally {
+      setBioSaving(false);
     }
   };
 
@@ -232,6 +261,62 @@ export default function EmployeeProfilePage() {
           <span className="mt-3 px-4 py-1 rounded-full bg-white/50 backdrop-blur-sm text-gray-600 text-xs uppercase tracking-wide border border-white/60 font-grotesk">
             Member
           </span>
+        </div>
+
+        {/* Bio */}
+        <div className="bg-white/60 backdrop-blur-sm rounded-2xl px-5 py-4 shadow-[0_4px_12px_rgba(20,20,20,0.06),0_1px_3px_rgba(20,20,20,0.04)] border border-white/40 animate-fade-up [animation-delay:80ms]">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-xs font-grotesk text-gray-500 uppercase tracking-widest">About me</p>
+            {!bioEditing && (
+              <button
+                onClick={() => {
+                  setBioDraft(bio);
+                  setBioEditing(true);
+                }}
+                className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-white/60 transition cursor-pointer"
+              >
+                <Pencil className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          {bioEditing ? (
+            <div className="space-y-2">
+              <textarea
+                value={bioDraft}
+                onChange={(e) => setBioDraft(e.target.value)}
+                rows={3}
+                maxLength={500}
+                autoFocus
+                placeholder="Write something about yourself…"
+                className="w-full text-sm font-techstack text-gray-700 bg-white/50 border border-white/60 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-1 focus:ring-amber-400/50 placeholder:text-gray-300"
+              />
+              <div className="flex gap-2">
+                <button
+                  onClick={saveBio}
+                  disabled={bioSaving}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-white text-xs font-grotesk rounded-lg cursor-pointer disabled:opacity-60"
+                  style={{ background: "linear-gradient(135deg, #fbbf24 0%, #f97316 100%)" }}
+                >
+                  <Check className="w-3.5 h-3.5" />
+                  {bioSaving ? "Saving…" : "Save"}
+                </button>
+                <button
+                  onClick={() => setBioEditing(false)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white/50 border border-white/60 text-gray-600 text-xs font-grotesk rounded-lg cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                  Cancel
+                </button>
+              </div>
+            </div>
+          ) : bio ? (
+            <p className="text-sm font-techstack text-gray-600 leading-relaxed">{bio}</p>
+          ) : (
+            <p className="text-sm font-techstack text-gray-300 italic">
+              No bio yet. Tap the pencil to add one.
+            </p>
+          )}
         </div>
 
         {/* Stats */}

@@ -14,6 +14,8 @@ export const createArticleSchema = z.object({
   content: z.record(z.string(), z.unknown()),
   coverImage: z.string().url().optional().or(z.literal("")),
   category: z.enum(ARTICLE_CATEGORIES).optional().nullable(),
+  tags: z.array(z.string().max(50)).max(10).default([]),
+  featured: z.boolean().optional().default(false),
   published: z.boolean().optional().default(false),
   publishedAt: z.string().datetime().optional().nullable(),
 });
