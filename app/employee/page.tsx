@@ -23,20 +23,20 @@ export default function EmployeeDashboard() {
 
       <div className="flex-1 pb-32">
         {/* Greeting */}
-        <section className="px-4 py-6 bg-gradient-to-br from-white/30 via-amber-50/15 to-orange-50/10 backdrop-blur-xl border-b border-white/15 relative overflow-visible z-20 animate-fade-up">
-          <div className="pr-28">
-            <h1 className="text-3xl text-gray-900 mb-1 font-grotesk">
+        <section className="px-4 py-4 bg-gradient-to-br from-white/30 via-amber-50/15 to-orange-50/10 backdrop-blur-xl border-b border-white/15 relative overflow-visible z-20 animate-fade-up">
+          <div className="pr-24">
+            <h1 className="text-2xl text-gray-900 mb-0.5 font-grotesk">
               Hey, {userName.split(" ")[0]} 👋
             </h1>
-            <p className="text-gray-600 font-techstack">
+            <p className="text-sm text-gray-600 font-techstack">
               Here&apos;s what&apos;s happening at Techstack.
             </p>
           </div>
           <Image
             src="/stacky_no_bg.png"
             alt="Stacky"
-            width={140}
-            height={140}
+            width={110}
+            height={110}
             className="absolute right-3 top-1/2 -translate-y-1/2 z-10"
           />
         </section>
