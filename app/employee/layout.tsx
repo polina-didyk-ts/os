@@ -54,17 +54,26 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
     <SideMenuProvider>
       {/* Aurora mesh background — fixed, behind all content */}
       <div className="fixed inset-0 -z-10 bg-[#fffdf7] overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 right-0 w-[750px] h-[750px] rounded-full bg-amber-300/40 blur-[110px]" />
-        <div className="absolute top-1/4 -left-40 w-[650px] h-[650px] rounded-full bg-orange-300/35 blur-[95px]" />
-        <div className="absolute bottom-10 right-1/3 w-[550px] h-[550px] rounded-full bg-yellow-300/38 blur-[95px]" />
-        <div className="absolute top-2/3 left-1/2 w-[400px] h-[400px] rounded-full bg-rose-300/22 blur-[75px]" />
+        <div className="absolute -top-40 right-0 w-[750px] h-[750px] rounded-full bg-amber-300/28 blur-[120px]" />
+        <div className="absolute top-1/4 -left-40 w-[650px] h-[650px] rounded-full bg-orange-300/18 blur-[105px]" />
+        <div className="absolute bottom-10 right-1/3 w-[550px] h-[550px] rounded-full bg-yellow-200/30 blur-[105px]" />
+        <div className="absolute top-1/2 left-1/4 w-[350px] h-[350px] rounded-full bg-yellow-300/20 blur-[90px]" />
+        <div className="absolute top-2/3 left-1/2 w-[400px] h-[400px] rounded-full bg-rose-300/10 blur-[80px]" />
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: "radial-gradient(circle, rgba(120,80,20,0.09) 1px, transparent 1px)",
+            backgroundImage: "radial-gradient(circle, rgba(120,80,20,0.06) 1px, transparent 1px)",
             backgroundSize: "24px 24px",
           }}
         />
+        {/* Film-grain texture */}
+        <svg className="absolute inset-0 w-full h-full opacity-[0.035]" xmlns="http://www.w3.org/2000/svg">
+          <filter id="grain">
+            <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="4" stitchTiles="stitch" />
+            <feColorMatrix type="saturate" values="0" />
+          </filter>
+          <rect width="100%" height="100%" filter="url(#grain)" />
+        </svg>
       </div>
       <SideMenu />
       <ContentWrapper>{children}</ContentWrapper>

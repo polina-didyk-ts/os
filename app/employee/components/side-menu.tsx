@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Home, FileText, User, LogOut, ChevronRight, BookOpen, Bell } from "lucide-react";
@@ -31,10 +31,11 @@ const HOLO = [
 ];
 
 const SIDEBAR_BG = {
-  background:
-    "linear-gradient(160deg, rgba(255,251,240,0.97) 0%, rgba(255,237,210,0.96) 60%, rgba(255,228,196,0.95) 100%)",
+  background: "linear-gradient(160deg, rgba(255,251,240,0.55) 0%, rgba(255,237,210,0.50) 60%, rgba(255,228,196,0.45) 100%)",
   backdropFilter: "blur(24px)",
-  boxShadow: "4px 0 40px rgba(20,20,20,0.08)",
+  WebkitBackdropFilter: "blur(24px)",
+  borderRight: "1px solid rgba(255,255,255,0.30)",
+  boxShadow: "4px 0 32px rgba(20,20,20,0.07), inset -1px 0 0 rgba(255,255,255,0.55)",
 };
 
 function UserAvatar({
@@ -75,10 +76,8 @@ function AuroraBlobs({ rounded = false }: { rounded?: boolean }) {
     <div
       className={`absolute inset-0 overflow-hidden pointer-events-none ${rounded ? "rounded-r-3xl" : ""}`}
     >
-      <div className="absolute -top-16 -right-8 w-64 h-64 rounded-full bg-amber-400/50 blur-[60px]" />
-      <div className="absolute top-1/3 -right-12 w-48 h-48 rounded-full bg-orange-300/40 blur-[50px]" />
-      <div className="absolute bottom-16 -left-8 w-52 h-52 rounded-full bg-orange-400/40 blur-[55px]" />
-      <div className="absolute bottom-1/3 left-1/4 w-36 h-36 rounded-full bg-yellow-300/35 blur-[45px]" />
+      <div className="absolute -top-16 -right-8 w-64 h-64 rounded-full bg-amber-400/25 blur-[60px]" />
+      <div className="absolute bottom-16 -left-8 w-52 h-52 rounded-full bg-orange-300/25 blur-[55px]" />
     </div>
   );
 }
@@ -88,6 +87,7 @@ export function SideMenu() {
   const { data: session } = useSession();
   const pathname = usePathname();
   const router = useRouter();
+  const [tooltip, setTooltip] = useState<{ label: string; y: number } | null>(null);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
@@ -116,7 +116,7 @@ export function SideMenu() {
     <>
       {/* ─────────────── DESKTOP SIDEBAR ─────────────── */}
       <aside
-        className={`hidden lg:flex flex-col fixed top-0 left-0 h-full z-30 transition-all duration-300 ease-in-out overflow-hidden ${
+        className={`hidden lg:flex flex-col fixed top-0 left-0 h-full z-30 transition-all duration-300 ease-in-out ${
           isCollapsed ? "w-16" : "w-64"
         }`}
         style={SIDEBAR_BG}
@@ -146,7 +146,7 @@ export function SideMenu() {
         </div>
 
         {/* Nav items */}
-        <nav className="relative flex-1 py-3 px-2.5 overflow-y-auto">
+        <nav className="relative flex-1 py-3 px-2.5">
           <div className="space-y-0.5">
             {NAV_ITEMS.map(({ href, label, icon: Icon }, idx) => {
               const active = isActive(href);
@@ -154,8 +154,14 @@ export function SideMenu() {
                 <Link
                   key={href}
                   href={href}
-                  title={isCollapsed ? label : undefined}
-                  className={`flex items-center gap-3 rounded-xl transition-all duration-150 ${
+                  onMouseEnter={(e) => {
+                    if (isCollapsed) {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      setTooltip({ label, y: rect.top + rect.height / 2 });
+                    }
+                  }}
+                  onMouseLeave={() => setTooltip(null)}
+                  className={`relative flex items-center gap-3 rounded-xl transition-all duration-150 ${
                     isCollapsed ? "px-2 py-3 justify-center" : "px-3 py-3"
                   } ${
                     active
@@ -309,6 +315,22 @@ export function SideMenu() {
           </button>
         </div>
       </aside>
+
+      {/* ─────────────── COLLAPSED NAV TOOLTIP ─────────────── */}
+      {isCollapsed && tooltip && (
+        <div
+          key={tooltip.label}
+          className="fixed z-[200] pointer-events-none animate-slide-in-right"
+          style={{ top: tooltip.y - 16, left: 72 }}
+        >
+          <span
+            className="block px-4 py-2 text-white text-sm font-grotesk rounded-xl whitespace-nowrap shadow-[0_4px_16px_rgba(249,115,22,0.3)]"
+            style={{ background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" }}
+          >
+            {tooltip.label}
+          </span>
+        </div>
+      )}
     </>
   );
 }

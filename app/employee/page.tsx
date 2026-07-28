@@ -37,7 +37,7 @@ export default function EmployeeDashboard() {
             alt="Stacky"
             width={110}
             height={110}
-            className="absolute right-3 top-1/2 -translate-y-1/2 z-10"
+            className="absolute right-3 -top-10 z-10"
           />
         </section>
 

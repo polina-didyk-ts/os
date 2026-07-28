@@ -7,6 +7,7 @@ import mascotAnimation from "@/public/mascot.json";
 import { authClient } from "@/src/lib/client";
 import { Alert, AlertDescription } from "@/app/components/ui/alert";
 
+
 function SignInForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -75,7 +76,7 @@ function SignInForm() {
         </div>
 
         {/* Glass card */}
-        <div className="w-full bg-white/65 backdrop-blur-md rounded-3xl px-8 pt-12 pb-8 shadow-[0_8px_40px_rgba(249,115,22,0.12),0_1px_4px_rgba(20,20,20,0.05)] border border-white/50 flex flex-col items-center gap-6">
+        <div className="w-full bg-white/28 backdrop-blur-xl rounded-3xl px-8 pt-12 pb-8 shadow-[0_8px_32px_rgba(20,20,20,0.11),inset_0_1px_0_rgba(255,255,255,0.55)] border border-white/15 flex flex-col items-center gap-6">
           <div className="text-center space-y-2">
             <h1 className="text-3xl text-gray-900 font-grotesk">Digital Office</h1>
             <p className="text-sm text-gray-500 font-techstack">

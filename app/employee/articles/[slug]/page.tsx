@@ -94,9 +94,9 @@ function ArticleMeta({
 }
 
 function TableOfContents({ items, activeId }: { items: TocItem[]; activeId: string }) {
-  if (items.length === 0) return null;
+  if (items.length === 0) return <div className="hidden lg:block" />;
   return (
-    <nav className="hidden lg:block w-52 shrink-0">
+    <nav className="hidden lg:block">
       <div className="sticky top-24 space-y-0.5">
         <p className="text-[10px] uppercase tracking-widest text-gray-400 font-grotesk mb-3">
           Contents
@@ -156,15 +156,15 @@ function ArticleContent({
     editorProps: {
       attributes: {
         class: [
-          "prose max-w-none font-techstack text-gray-800",
+          "prose max-w-none font-techstack text-gray-900",
           "prose-headings:font-grotesk prose-headings:text-gray-900 prose-headings:leading-tight prose-headings:tracking-tight",
           "prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h4:text-lg",
-          "prose-p:text-[15px] prose-p:leading-[1.85] prose-p:text-gray-700",
+          "prose-p:text-[15px] prose-p:leading-[1.85] prose-p:text-gray-900",
           "prose-img:rounded-2xl prose-img:shadow-[0_6px_24px_rgba(20,20,20,0.12)] prose-img:w-full",
           "prose-blockquote:border-l-4 prose-blockquote:border-amber-400 prose-blockquote:bg-amber-50/60 prose-blockquote:rounded-r-xl prose-blockquote:px-5 prose-blockquote:py-3 prose-blockquote:not-italic prose-blockquote:text-gray-600",
           "prose-a:text-amber-700 prose-a:no-underline hover:prose-a:underline",
           "prose-strong:text-gray-900 prose-strong:font-grotesk",
-          "prose-li:text-gray-700 prose-li:text-[15px]",
+          "prose-li:text-gray-900 prose-li:text-[15px]",
           "prose-hr:border-gray-100",
           "focus:outline-none",
         ].join(" "),
@@ -232,12 +232,19 @@ function ArticleLikeButton({ articleId }: { articleId: string }) {
   return (
     <button
       onClick={handleLike}
-      className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-grotesk transition-all cursor-pointer ${
+      className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-grotesk transition-all duration-200 cursor-pointer ${
         likes.liked
-          ? "text-amber-700"
-          : "bg-white/28 backdrop-blur-xl text-gray-500 border border-white/20 hover:bg-white/40"
+          ? "text-amber-800"
+          : "bg-white/28 backdrop-blur-xl text-gray-500 border border-white/15 shadow-[0_4px_16px_rgba(20,20,20,0.08),inset_0_1px_0_rgba(255,255,255,0.6)] hover:bg-white/45 hover:shadow-[0_4px_20px_rgba(20,20,20,0.11)]"
       }`}
-      style={likes.liked ? { background: "linear-gradient(135deg, #fef3c7, #fed7aa)" } : {}}
+      style={
+        likes.liked
+          ? {
+              background: "linear-gradient(135deg, #fef3c7, #fed7aa)",
+              boxShadow: "0 4px 16px rgba(251,191,36,0.25), inset 0 1px 0 rgba(255,255,255,0.7)",
+            }
+          : {}
+      }
     >
       <Heart
         className={`w-4 h-4 transition-all ${likes.liked ? "fill-amber-400 text-amber-400" : ""}`}
@@ -535,7 +542,7 @@ export default function ArticlePage() {
                 {article.category}
               </span>
             )}
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-grotesk text-white leading-tight mb-4 drop-shadow-sm max-w-3xl">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-grotesk font-bold text-white leading-tight mb-4 drop-shadow-sm max-w-3xl">
               {article.title}
             </h1>
             <ArticleMeta publishedAt={article.publishedAt} readTime={readTime} light />
@@ -549,7 +556,7 @@ export default function ArticlePage() {
               {article.category}
             </span>
           )}
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-grotesk text-gray-900 leading-tight mb-6 max-w-3xl">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-grotesk font-bold text-gray-900 leading-tight mb-6 max-w-3xl">
             {article.title}
           </h1>
           <div className="pb-6 border-b border-gray-100">
@@ -559,60 +566,67 @@ export default function ArticlePage() {
       )}
 
       {/* ─── CONTENT ─── */}
-      <div className="flex-1 pb-28 w-full max-w-5xl mx-auto lg:flex lg:gap-10 lg:px-8 lg:pt-10 px-4 pt-7">
-        <TableOfContents items={tocItems} activeId={activeId} />
+      <div className="flex-1 pb-28">
+        <div className="w-full max-w-6xl mx-auto lg:grid lg:grid-cols-[160px_1fr_160px] lg:gap-8 lg:px-8 lg:pt-10 px-4 pt-7">
+          <TableOfContents items={tocItems} activeId={activeId} />
 
-        <div className="flex-1 min-w-0">
-          {/* Excerpt — lead paragraph */}
-          {article.excerpt && (
-            <p className="text-lg font-techstack text-gray-600 leading-relaxed mb-8 pb-8 border-b border-gray-100 italic">
-              {article.excerpt}
-            </p>
-          )}
+          <div className="min-w-0">
+            {/* Excerpt — lead paragraph */}
+            {article.excerpt && (
+              <p className="text-lg font-techstack text-gray-600 leading-relaxed mb-8 pb-8 border-b border-gray-100 italic">
+                {article.excerpt}
+              </p>
+            )}
 
-          <ArticleContent
-            content={article.content}
-            tocItems={tocItems}
-            onActiveChange={setActiveId}
-          />
+            <ArticleContent
+              content={article.content}
+              tocItems={tocItems}
+              onActiveChange={setActiveId}
+            />
 
-          {/* Tags */}
-          {article.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-8 pt-6 border-t border-gray-100">
-              {article.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="text-xs font-techstack text-amber-700 px-2.5 py-1 rounded-full border border-amber-200/80 bg-amber-50/70"
-                >
-                  #{tag}
-                </span>
-              ))}
-            </div>
-          )}
+            {/* Tags */}
+            {article.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-8 pt-6 border-t border-gray-100">
+                {article.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-xs font-techstack text-amber-700 px-2.5 py-1 rounded-full border border-amber-200/80 bg-amber-50/70"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
 
-          {/* Like + back link */}
-          <div
-            className={`flex items-center justify-between flex-wrap gap-3 ${article.tags.length > 0 ? "mt-4" : "mt-8 pt-6 border-t border-gray-100"}`}
-          >
-            {session ? <ArticleLikeButton articleId={article.id} /> : <div />}
-            <Link
-              href="/employee/articles"
-              className="text-sm text-gray-400 font-techstack hover:text-gray-600 transition"
+            {/* Like + back link */}
+            <div
+              className={`flex items-center justify-between flex-wrap gap-3 ${article.tags.length > 0 ? "mt-4" : "mt-8 pt-6 border-t border-gray-100"}`}
             >
-              ← All articles
-            </Link>
+              {session ? <ArticleLikeButton articleId={article.id} /> : <div />}
+              <Link
+                href="/employee/articles"
+                className="text-sm text-gray-400 font-techstack hover:text-gray-600 transition"
+              >
+                ← All articles
+              </Link>
+            </div>
           </div>
+
+          {/* mirror spacer — keeps prose centered */}
+          <div className="hidden lg:block" />
         </div>
       </div>
 
       {/* ─── COMMENTS ─── */}
       {session && (
-        <div className="w-full max-w-5xl mx-auto px-4 lg:px-8 pb-32">
+        <div className="w-full max-w-6xl mx-auto lg:grid lg:grid-cols-[160px_1fr_160px] lg:gap-8 lg:px-8 px-4 pb-32">
+          <div className="hidden lg:block" />
           <ArticleComments
             articleId={article.id}
             currentUserId={session.user.id}
             isAdmin={session.user.role === "admin"}
           />
+          <div className="hidden lg:block" />
         </div>
       )}
 

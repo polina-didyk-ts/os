@@ -88,7 +88,7 @@ function SignInContent() {
 
       {/* Card */}
       <div className="flex-1 flex items-center justify-center px-6 py-10">
-        <div className="w-full max-w-md bg-white/65 backdrop-blur-md rounded-3xl p-8 shadow-[0_8px_40px_rgba(249,115,22,0.12),0_1px_4px_rgba(20,20,20,0.05)] border border-white/50">
+        <div className="w-full max-w-md bg-white/28 backdrop-blur-xl rounded-3xl p-8 shadow-[0_8px_32px_rgba(20,20,20,0.11),inset_0_1px_0_rgba(255,255,255,0.55)] border border-white/15">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-grotesk text-gray-900 mb-2">Log in</h1>
             <p className="text-sm text-gray-500 font-techstack">
