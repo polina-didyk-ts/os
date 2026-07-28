@@ -32,7 +32,7 @@ export function PersonQuoteCard({ quote, authorName, authorRole, authorPhoto }: 
             </div>
           )}
         </div>
-        <div className="flex-1 bg-white rounded-2xl shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] border-l-4 border-[#FFC600] pl-7 pr-5 py-4">
+        <div className="flex-1 bg-white rounded-2xl shadow-[0_4px_12px_rgba(20,20,20,0.08),0_1px_3px_rgba(20,20,20,0.06)] border-l-4 border-[#FFC600] pl-7 pr-5 py-4 transition-all duration-200 ease-out hover:scale-[1.015] hover:shadow-[0_8px_24px_rgba(20,20,20,0.13),0_2px_6px_rgba(20,20,20,0.07)]">
           <p className="text-gray-600 font-techstack text-sm italic leading-relaxed">
             &ldquo;{quote}&rdquo;
           </p>
@@ -40,9 +40,9 @@ export function PersonQuoteCard({ quote, authorName, authorRole, authorPhoto }: 
       </div>
 
       {/* Footnote below */}
-      <div className="mt-2 pl-4">
-        <p className="text-xs font-grotesk text-[#141414]">{authorName}</p>
-        <p className="text-[11px] text-gray-400 font-techstack">{authorRole}</p>
+      <div className="mt-2 pl-4 flex flex-col gap-0.5">
+        <span className="text-xs font-grotesk text-[#141414]">{authorName}</span>
+        <span className="text-[11px] font-techstack text-[#141414]">{authorRole}</span>
       </div>
     </div>
   );
