@@ -542,7 +542,7 @@ export default function ArticlePage() {
                 {article.category}
               </span>
             )}
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-grotesk font-bold text-white leading-tight mb-4 drop-shadow-sm max-w-3xl">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-grotesk text-white leading-tight mb-4 drop-shadow-sm max-w-3xl">
               {article.title}
             </h1>
             <ArticleMeta publishedAt={article.publishedAt} readTime={readTime} light />
@@ -556,10 +556,10 @@ export default function ArticlePage() {
               {article.category}
             </span>
           )}
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-grotesk font-bold text-gray-900 leading-tight mb-6 max-w-3xl">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-grotesk text-gray-900 leading-tight mb-6 max-w-3xl">
             {article.title}
           </h1>
-          <div className="pb-6 border-b border-gray-100">
+          <div className="pb-6 border-b border-gray-900">
             <ArticleMeta publishedAt={article.publishedAt} readTime={readTime} />
           </div>
         </div>
@@ -573,9 +573,12 @@ export default function ArticlePage() {
           <div className="min-w-0">
             {/* Excerpt — lead paragraph */}
             {article.excerpt && (
-              <p className="text-lg font-techstack text-gray-600 leading-relaxed mb-8 pb-8 border-b border-gray-100 italic">
-                {article.excerpt}
-              </p>
+              <>
+                <p className="text-lg font-techstack text-gray-600 leading-relaxed mb-6 italic">
+                  {article.excerpt}
+                </p>
+                <div className="w-full mb-8" style={{ height: "1px", backgroundColor: "#141414" }} />
+              </>
             )}
 
             <ArticleContent
