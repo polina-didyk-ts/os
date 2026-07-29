@@ -197,6 +197,7 @@ model Article {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   authorId    String
+  authorName  String?
   author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   likes       ArticleLike[]
   articleComments ArticleComment[]

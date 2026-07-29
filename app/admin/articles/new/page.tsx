@@ -27,6 +27,7 @@ export default function NewArticlePage() {
     title: "",
     slug: "",
     excerpt: "",
+    authorName: "",
     coverImage: "",
     category: "" as string,
     tags: [] as string[],
@@ -173,6 +174,20 @@ export default function NewArticlePage() {
             placeholder="A short description shown in the article list…"
             rows={2}
             maxLength={500}
+            className="w-full bg-white/50 backdrop-blur-sm border-white/60 focus-visible:ring-amber-400/50"
+          />
+        </div>
+
+        {/* Author name */}
+        <div>
+          <label className="block text-xs font-grotesk text-gray-500 uppercase tracking-widest mb-2">
+            Author <span className="text-gray-400 normal-case font-techstack">(optional)</span>
+          </label>
+          <Input
+            value={form.authorName}
+            onChange={(e) => setForm((f) => ({ ...f, authorName: e.target.value }))}
+            placeholder="e.g. Anna Kovalenko"
+            maxLength={100}
             className="w-full bg-white/50 backdrop-blur-sm border-white/60 focus-visible:ring-amber-400/50"
           />
         </div>

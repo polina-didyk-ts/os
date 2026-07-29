@@ -27,6 +27,7 @@ interface Article {
   tags: string[];
   readTime: number | null;
   publishedAt: string | null;
+  authorName: string | null;
 }
 
 interface TocItem {
@@ -72,10 +73,12 @@ function formatDate(dateStr: string) {
 function ArticleMeta({
   publishedAt,
   readTime,
+  authorName,
   light,
 }: {
   publishedAt: string | null;
   readTime: number;
+  authorName?: string | null;
   light?: boolean;
 }) {
   const textCls = light ? "text-white/75" : "text-gray-500";
@@ -83,6 +86,8 @@ function ArticleMeta({
 
   return (
     <div className={`flex items-center gap-2.5 flex-wrap text-sm font-techstack ${textCls}`}>
+      {authorName && <span>Written by {authorName}</span>}
+      {authorName && <span className={dotCls}>·</span>}
       {publishedAt && <span>{formatDate(publishedAt)}</span>}
       {publishedAt && <span className={dotCls}>·</span>}
       <span className="flex items-center gap-1">
@@ -545,7 +550,7 @@ export default function ArticlePage() {
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-grotesk text-white leading-tight mb-4 drop-shadow-sm max-w-3xl">
               {article.title}
             </h1>
-            <ArticleMeta publishedAt={article.publishedAt} readTime={readTime} light />
+            <ArticleMeta publishedAt={article.publishedAt} readTime={readTime} authorName={article.authorName} light />
           </div>
         </div>
       ) : (
@@ -560,7 +565,7 @@ export default function ArticlePage() {
             {article.title}
           </h1>
           <div className="pb-6 border-b border-gray-900">
-            <ArticleMeta publishedAt={article.publishedAt} readTime={readTime} />
+            <ArticleMeta publishedAt={article.publishedAt} readTime={readTime} authorName={article.authorName} />
           </div>
         </div>
       )}
