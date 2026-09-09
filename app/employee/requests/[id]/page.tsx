@@ -157,9 +157,10 @@ export default function EmployeeRequestDetailPage() {
         <p className="text-gray-600 font-techstack text-sm">{error ?? "Request not found"}</p>
         <button
           onClick={() => router.back()}
-          className="text-amber-600 text-sm font-grotesk underline"
+          className="flex items-center gap-1 text-xs font-grotesk text-gray-500 hover:text-gray-800 transition-colors group"
         >
-          ← Back
+          <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
+          Back
         </button>
       </main>
     );

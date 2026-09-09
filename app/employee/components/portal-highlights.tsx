@@ -64,10 +64,10 @@ export function PortalHighlights() {
         </div>
         <Link
           href="/employee/articles"
-          className="flex items-center gap-0.5 text-xs font-grotesk text-gray-500 hover:text-gray-900 transition"
+          className="flex items-center gap-1 text-xs font-grotesk text-gray-500 hover:text-gray-800 transition-colors group"
         >
           View all
-          <ChevronRight className="w-3.5 h-3.5" />
+          <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
         </Link>
       </div>
 

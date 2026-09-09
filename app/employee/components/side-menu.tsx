@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Home, FileText, User, LogOut, ChevronRight, BookOpen, Bell } from "lucide-react";
+import { Home, FileText, User, LogOut, ChevronRight, BookOpen, Bell, ArrowLeft } from "lucide-react";
 import { useSession, signOut } from "@/src/lib/client";
 import { useSideMenu } from "./side-menu-context";
 
@@ -223,12 +223,10 @@ export function SideMenu() {
           <button
             onClick={handleSignOut}
             title={isCollapsed ? "Sign out" : undefined}
-            className={`flex items-center gap-2 text-red-400 hover:text-red-500 cursor-pointer transition-colors ${
-              isCollapsed ? "" : "px-0"
-            }`}
+            className="flex items-center gap-1 text-xs font-grotesk text-red-400 hover:text-red-500 cursor-pointer transition-colors group"
           >
-            <LogOut className="w-4 h-4 shrink-0" strokeWidth={1.5} />
-            {!isCollapsed && <span className="text-sm font-grotesk">Sign out</span>}
+            <ArrowLeft className="w-3.5 h-3.5 shrink-0 transition-transform group-hover:-translate-x-0.5" strokeWidth={1.5} />
+            {!isCollapsed && <span>Sign out</span>}
           </button>
         </div>
       </aside>

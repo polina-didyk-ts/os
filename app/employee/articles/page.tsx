@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Clock } from "lucide-react";
+import { Clock, ChevronRight } from "lucide-react";
 import { EmployeeHeader, BottomNavigation } from "../components";
 
 const CATEGORIES = ["All", "News", "Guides", "Office Life", "Events"] as const;
@@ -82,7 +82,9 @@ function FeaturedCard({ article }: { article: Article }) {
               <span className="shrink-0">{formatDate(article.publishedAt)}</span>
             )}
           </div>
-          <span className="text-xs text-amber-600 font-grotesk shrink-0">Read →</span>
+          <span className="flex items-center gap-0.5 text-xs font-grotesk text-amber-600 shrink-0">
+            Read <ChevronRight className="w-3.5 h-3.5" />
+          </span>
         </div>
       </div>
     </Link>
@@ -119,7 +121,9 @@ function RegularCard({ article, delay }: { article: Article; delay: number }) {
           </p>
         )}
         <div className="flex items-center justify-end mt-3">
-          <span className="text-xs text-amber-600 font-grotesk">Read →</span>
+          <span className="flex items-center gap-0.5 text-xs font-grotesk text-amber-600">
+            Read <ChevronRight className="w-3.5 h-3.5" />
+          </span>
         </div>
       </div>
     </Link>

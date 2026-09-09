@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, ArrowRight } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Textarea } from "@/app/components/ui/textarea";
@@ -161,42 +161,41 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
           Priority
         </label>
         <div className="flex gap-2 flex-wrap">
-          <button
-            type="button"
-            onClick={() => setFormData({ ...formData, priority: PRIORITY_LEVELS.LOW })}
-            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 cursor-pointer ${
-              formData.priority === PRIORITY_LEVELS.LOW
-                ? "bg-green-100/80 text-green-700 border-2 border-green-400"
-                : "bg-white/40 backdrop-blur-sm text-gray-600 border-2 border-white/60 hover:bg-white/60"
-            }`}
-          >
-            <span className="inline-block w-2.5 h-2.5 rounded-full bg-green-500"></span>
-            Low
-          </button>
-          <button
-            type="button"
-            onClick={() => setFormData({ ...formData, priority: PRIORITY_LEVELS.MEDIUM })}
-            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 cursor-pointer ${
-              formData.priority === PRIORITY_LEVELS.MEDIUM
-                ? "bg-amber-100/80 text-amber-700 border-2 border-amber-400"
-                : "bg-white/40 backdrop-blur-sm text-gray-600 border-2 border-white/60 hover:bg-white/60"
-            }`}
-          >
-            <span className="inline-block w-2.5 h-2.5 rounded-full bg-amber-400"></span>
-            Medium
-          </button>
-          <button
-            type="button"
-            onClick={() => setFormData({ ...formData, priority: PRIORITY_LEVELS.HIGH })}
-            className={`px-4 py-2 rounded-full transition text-sm font-grotesk flex items-center gap-2 cursor-pointer ${
-              formData.priority === PRIORITY_LEVELS.HIGH
-                ? "bg-red-100/80 text-red-700 border-2 border-red-400"
-                : "bg-white/40 backdrop-blur-sm text-gray-600 border-2 border-white/60 hover:bg-white/60"
-            }`}
-          >
-            <span className="inline-block w-2.5 h-2.5 rounded-full bg-red-500"></span>
-            High
-          </button>
+          {(
+            [
+              { level: PRIORITY_LEVELS.LOW,    label: "Low",    dot: "bg-green-500",  ring: "74,222,128" },
+              { level: PRIORITY_LEVELS.MEDIUM, label: "Medium", dot: "bg-amber-400",  ring: "251,191,36" },
+              { level: PRIORITY_LEVELS.HIGH,   label: "High",   dot: "bg-red-500",    ring: "239,68,68"  },
+            ] as const
+          ).map(({ level, label, dot, ring }) => {
+            const active = formData.priority === level;
+            return (
+              <button
+                key={level}
+                type="button"
+                onClick={() => setFormData({ ...formData, priority: level })}
+                className="px-4 py-2 rounded-full text-sm font-grotesk flex items-center gap-2 cursor-pointer transition-all duration-200 active:scale-95"
+                style={{
+                  background: "linear-gradient(160deg, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0.11) 55%, rgba(255,255,255,0.06) 100%)",
+                  backdropFilter: "blur(14px)",
+                  WebkitBackdropFilter: "blur(14px)",
+                  border: "1px solid rgba(255,255,255,0.70)",
+                  boxShadow: [
+                    active ? `0 0 0 1.5px rgba(${ring},0.55)` : "0 0 0 0.5px rgba(0,0,0,0.10)",
+                    "0 2px 8px rgba(0,0,0,0.09)",
+                    "0 1px 2px rgba(0,0,0,0.06)",
+                    "inset 0 1.5px 0 rgba(255,255,255,0.88)",
+                    "inset 1.5px 0 0 rgba(255,255,255,0.30)",
+                    "inset -1.5px 0 0 rgba(255,255,255,0.20)",
+                    "inset 0 -1px 0 rgba(0,0,0,0.07)",
+                  ].join(", "),
+                }}
+              >
+                <span className={`inline-block w-2.5 h-2.5 rounded-full shrink-0 ${dot}`} />
+                <span className={active ? "text-gray-900" : "text-gray-500"}>{label}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -229,7 +228,7 @@ export function ProblemForm({ onSuccess }: ProblemFormProps) {
         className="w-full text-white py-3 rounded-xl font-grotesk font-normal text-lg cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(249,115,22,0.3)] disabled:translate-y-0 disabled:shadow-none disabled:opacity-60"
         style={{ background: "linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ea580c 100%)" }}
       >
-        {loading ? "Submitting..." : "Submit Request →"}
+        {loading ? "Submitting..." : <span className="flex items-center justify-center gap-1.5">Submit Request <ArrowRight className="w-4 h-4" /></span>}
       </Button>
     </form>
   );

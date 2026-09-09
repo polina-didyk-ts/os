@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowUp, Heart, MessageCircle, Send, Pencil, Trash2, Clock } from "lucide-react";
+import { ArrowUp, ArrowLeft, Heart, MessageCircle, Send, Pencil, Trash2, Clock } from "lucide-react";
 import { useSession } from "@/src/lib/client";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -160,15 +160,16 @@ function ArticleContent({
     editable: false,
     editorProps: {
       attributes: {
+        style: "font-family: var(--font-techstack), var(--font-grotesk), sans-serif",
         class: [
-          "prose max-w-none font-techstack text-gray-900",
+          "prose max-w-none text-gray-900",
           "prose-headings:font-grotesk prose-headings:text-gray-900 prose-headings:leading-tight prose-headings:tracking-tight",
           "prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h4:text-lg",
           "prose-p:text-[15px] prose-p:leading-[1.85] prose-p:text-gray-900",
           "prose-img:rounded-2xl prose-img:shadow-[0_6px_24px_rgba(20,20,20,0.12)] prose-img:w-full",
           "prose-blockquote:border-l-4 prose-blockquote:border-amber-400 prose-blockquote:bg-amber-50/60 prose-blockquote:rounded-r-xl prose-blockquote:px-5 prose-blockquote:py-3 prose-blockquote:not-italic prose-blockquote:text-gray-600",
           "prose-a:text-amber-700 prose-a:no-underline hover:prose-a:underline",
-          "prose-strong:text-gray-900 prose-strong:font-grotesk",
+          "prose-strong:text-gray-900 prose-strong:font-techstack prose-strong:font-bold",
           "prose-li:text-gray-900 prose-li:text-[15px]",
           "prose-hr:border-gray-100",
           "focus:outline-none",
@@ -237,26 +238,39 @@ function ArticleLikeButton({ articleId }: { articleId: string }) {
   return (
     <button
       onClick={handleLike}
-      className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-grotesk transition-all duration-200 cursor-pointer ${
-        likes.liked
-          ? "text-amber-800"
-          : "bg-white/28 backdrop-blur-xl text-gray-500 border border-white/15 shadow-[0_4px_16px_rgba(20,20,20,0.08),inset_0_1px_0_rgba(255,255,255,0.6)] hover:bg-white/45 hover:shadow-[0_4px_20px_rgba(20,20,20,0.11)]"
-      }`}
-      style={
-        likes.liked
-          ? {
-              background: "linear-gradient(135deg, #fef3c7, #fed7aa)",
-              boxShadow: "0 4px 16px rgba(251,191,36,0.25), inset 0 1px 0 rgba(255,255,255,0.7)",
-            }
-          : {}
-      }
+      className="flex items-center gap-1.5 px-4 py-[7px] rounded-full cursor-pointer transition-all duration-200 active:scale-95 hover:brightness-[1.04]"
+      style={{
+        background: "linear-gradient(160deg, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0.11) 55%, rgba(255,255,255,0.06) 100%)",
+        backdropFilter: "blur(14px)",
+        WebkitBackdropFilter: "blur(14px)",
+        border: "1px solid rgba(255,255,255,0.70)",
+        boxShadow: [
+          // glass edge: thin dark outer ring for definition
+          "0 0 0 0.5px rgba(0,0,0,0.10)",
+          // lift
+          "0 2px 8px rgba(0,0,0,0.09)",
+          "0 1px 2px rgba(0,0,0,0.06)",
+          // inner top bright highlight — glass surface
+          "inset 0 1.5px 0 rgba(255,255,255,0.88)",
+          // inner side refractions
+          "inset 1.5px 0 0 rgba(255,255,255,0.30)",
+          "inset -1.5px 0 0 rgba(255,255,255,0.20)",
+          // inner bottom depth
+          "inset 0 -1px 0 rgba(0,0,0,0.07)",
+        ].join(", "),
+      }}
     >
       <Heart
-        className={`w-4 h-4 transition-all ${likes.liked ? "fill-amber-400 text-amber-400" : ""}`}
+        className={`w-[15px] h-[15px] transition-all duration-200 ${
+          likes.liked ? "fill-gray-900 text-gray-900" : "text-gray-900"
+        }`}
+        strokeWidth={1.75}
       />
-      <span>
-        {likes.count > 0 ? likes.count : ""} {likes.liked ? "Liked" : "Like"}
-      </span>
+      {likes.count > 0 && (
+        <span className="text-[13px] font-grotesk leading-none tabular-nums text-gray-900">
+          {likes.count}
+        </span>
+      )}
     </button>
   );
 }
@@ -504,8 +518,9 @@ export default function ArticlePage() {
     return (
       <main className="min-h-screen bg-transparent flex flex-col items-center justify-center gap-4 px-4">
         <p className="text-gray-600 font-techstack text-sm">Article not found</p>
-        <Link href="/employee/articles" className="text-amber-600 text-sm font-grotesk underline">
-          ← Back to articles
+        <Link href="/employee/articles" className="flex items-center gap-1 text-xs font-grotesk text-gray-500 hover:text-gray-800 transition-colors group">
+          <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
+          All articles
         </Link>
       </main>
     );
@@ -613,9 +628,10 @@ export default function ArticlePage() {
               {session ? <ArticleLikeButton articleId={article.id} /> : <div />}
               <Link
                 href="/employee/articles"
-                className="text-sm text-gray-400 font-techstack hover:text-gray-600 transition"
+                className="flex items-center gap-1 text-xs font-grotesk text-gray-500 hover:text-gray-800 transition-colors group"
               >
-                ← All articles
+                <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
+                All articles
               </Link>
             </div>
           </div>

@@ -31,7 +31,10 @@ import {
   Check,
   Upload,
   Loader2,
+  Link2,
 } from "lucide-react";
+
+type FloatValue = "none" | "left" | "right";
 import { PersonQuoteExtension } from "@/app/components/person-quote-extension";
 import { ImageFigureExtension } from "@/app/components/image-figure-extension";
 
@@ -67,10 +70,14 @@ function ToolbarButton({
   );
 }
 
+const emptyImage = { url: "", float: "none" as FloatValue, uploading: false };
+
 export function ArticleEditor({ content, onChange }: ArticleEditorProps) {
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [quoteFields, setQuoteFields] = useState(emptyQuote);
   const [photoUploading, setPhotoUploading] = useState(false);
+  const [imageOpen, setImageOpen] = useState(false);
+  const [imageFields, setImageFields] = useState(emptyImage);
 
   const editor = useEditor({
     extensions: [
@@ -96,14 +103,32 @@ export function ArticleEditor({ content, onChange }: ArticleEditorProps) {
 
   if (!editor) return null;
 
-  const addImage = () => {
-    const url = window.prompt("Image URL:");
-    if (url) {
-      editor
-        .chain()
-        .focus()
-        .insertContent({ type: "imageFigure", attrs: { src: url, alt: "", caption: "" } })
-        .run();
+  const insertImage = () => {
+    if (!imageFields.url) return;
+    editor
+      .chain()
+      .focus()
+      .insertContent({
+        type: "imageFigure",
+        attrs: { src: imageFields.url, alt: "", caption: "", float: imageFields.float },
+      })
+      .run();
+    setImageFields(emptyImage);
+    setImageOpen(false);
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImageFields((f) => ({ ...f, uploading: true }));
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      const res = await fetch("/api/uploads", { method: "POST", body: form });
+      const { url } = await res.json();
+      setImageFields((f) => ({ ...f, url, uploading: false }));
+    } catch {
+      setImageFields((f) => ({ ...f, uploading: false }));
     }
   };
 
@@ -256,14 +281,18 @@ export function ArticleEditor({ content, onChange }: ArticleEditorProps) {
         <ToolbarButton onClick={setLink} active={editor.isActive("link")} title="Add link">
           <LinkIcon className="w-4 h-4" />
         </ToolbarButton>
-        <ToolbarButton onClick={addImage} title="Add image (URL)">
+        <ToolbarButton
+          onClick={() => { setImageOpen((v) => !v); setQuoteOpen(false); }}
+          active={imageOpen}
+          title="Insert image"
+        >
           <ImageIcon className="w-4 h-4" />
         </ToolbarButton>
 
         <div className="w-px h-5 bg-gray-200 mx-1" />
 
         <ToolbarButton
-          onClick={() => setQuoteOpen((v) => !v)}
+          onClick={() => { setQuoteOpen((v) => !v); setImageOpen(false); }}
           active={quoteOpen}
           title="Insert person quote"
         >
@@ -330,6 +359,80 @@ export function ArticleEditor({ content, onChange }: ArticleEditorProps) {
                 setQuoteOpen(false);
                 setQuoteFields(emptyQuote);
               }}
+              className="flex items-center gap-1.5 px-3 py-1.5 border border-gray-200 text-sm rounded-lg font-grotesk text-gray-600 cursor-pointer"
+            >
+              <X className="w-3.5 h-3.5" /> Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Image insert panel */}
+      {imageOpen && (
+        <div className="border-b border-gray-100 bg-[#FAFAF9] px-4 py-3 space-y-3">
+          <p className="text-xs font-grotesk text-gray-500 uppercase tracking-wide">Insert image</p>
+
+          {/* Upload or URL */}
+          <div className="flex items-center gap-2">
+            <label className="flex items-center gap-2 px-3 py-2 border border-gray-200 rounded-lg bg-white text-sm font-techstack text-gray-600 hover:border-[#141414] transition cursor-pointer shrink-0">
+              {imageFields.uploading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Upload className="w-4 h-4" />
+              )}
+              {imageFields.uploading ? "Uploading…" : "Upload"}
+              <input type="file" accept="image/*" className="sr-only" onChange={handleImageUpload} />
+            </label>
+            <span className="text-xs text-gray-400 font-techstack shrink-0">or</span>
+            <div className="flex-1 flex items-center gap-1.5 border border-gray-200 rounded-lg bg-white px-3 py-2">
+              <Link2 className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+              <input
+                className="flex-1 text-sm font-techstack focus:outline-none bg-transparent text-gray-700"
+                placeholder="Paste image URL…"
+                value={imageFields.url}
+                onChange={(e) => setImageFields((f) => ({ ...f, url: e.target.value }))}
+              />
+            </div>
+            {imageFields.url && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={imageFields.url} alt="" className="w-10 h-10 rounded-lg object-cover border border-gray-100 shrink-0" />
+            )}
+          </div>
+
+          {/* Float position */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-gray-500 font-grotesk shrink-0">Position:</span>
+            {(["left", "none", "right"] as FloatValue[]).map((val) => (
+              <button
+                key={val}
+                type="button"
+                onClick={() => setImageFields((f) => ({ ...f, float: val }))}
+                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-xs font-techstack transition cursor-pointer ${
+                  imageFields.float === val
+                    ? "bg-[#141414] text-white border-[#141414]"
+                    : "border-gray-200 text-gray-600 hover:border-gray-400 bg-white"
+                }`}
+              >
+                {val === "left" && <AlignLeft className="w-3 h-3" />}
+                {val === "none" && <AlignCenter className="w-3 h-3" />}
+                {val === "right" && <AlignRight className="w-3 h-3" />}
+                {val === "left" ? "Left" : val === "right" ? "Right" : "Full width"}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={insertImage}
+              disabled={!imageFields.url || imageFields.uploading}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#141414] text-white text-sm rounded-lg font-grotesk disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+            >
+              <Check className="w-3.5 h-3.5" /> Insert
+            </button>
+            <button
+              type="button"
+              onClick={() => { setImageOpen(false); setImageFields(emptyImage); }}
               className="flex items-center gap-1.5 px-3 py-1.5 border border-gray-200 text-sm rounded-lg font-grotesk text-gray-600 cursor-pointer"
             >
               <X className="w-3.5 h-3.5" /> Cancel
