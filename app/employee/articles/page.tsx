@@ -110,11 +110,6 @@ function RegularCard({ article, delay }: { article: Article; delay: number }) {
             </div>
           )}
           <div className="absolute bottom-0 left-0 right-0 px-4 pb-3">
-            {article.publishedAt && (
-              <span className="block text-[10px] text-white/60 font-techstack mb-1">
-                {formatDate(article.publishedAt)}
-              </span>
-            )}
             <h2 className="text-xl font-grotesk text-white leading-tight line-clamp-3 drop-shadow-sm">
               {article.title}
             </h2>
@@ -141,8 +136,13 @@ function RegularCard({ article, delay }: { article: Article; delay: number }) {
             {article.excerpt}
           </p>
         )}
-        <div className="flex items-center justify-end">
-          <span className="flex items-center gap-0.5 text-xs font-grotesk text-amber-600">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 text-xs text-gray-400 font-techstack min-w-0">
+            {article.publishedAt && (
+              <span className="shrink-0">{formatDate(article.publishedAt)}</span>
+            )}
+          </div>
+          <span className="flex items-center gap-0.5 text-xs font-grotesk text-amber-600 shrink-0">
             Read <ChevronRight className="w-3.5 h-3.5" />
           </span>
         </div>
