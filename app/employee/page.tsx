@@ -24,7 +24,7 @@ export default function EmployeeDashboard() {
       <div className="flex-1 pb-32">
         {/* Greeting */}
         <section className="px-4 py-4 bg-gradient-to-br from-white/30 via-amber-50/15 to-orange-50/10 backdrop-blur-xl border-b border-white/15 relative overflow-visible z-20 animate-fade-up">
-          <div className="pr-24">
+          <div className="pr-32 md:pr-44">
             <h1 className="text-2xl text-gray-900 mb-0.5 font-grotesk">
               Hey, {userName.split(" ")[0]} 👋
             </h1>
@@ -33,11 +33,13 @@ export default function EmployeeDashboard() {
             </p>
           </div>
           <Image
-            src="/stacky_no_bg.png"
-            alt="Stacky"
-            width={110}
-            height={110}
-            className="absolute right-3 -top-10 z-10"
+            src="/stacky-sleeping.png"
+            alt=""
+            aria-hidden="true"
+            width={1516}
+            height={906}
+            priority
+            className="absolute right-4 lg:right-8 bottom-[-10px] w-[120px] md:w-[160px] h-auto animate-breathe"
           />
         </section>
 

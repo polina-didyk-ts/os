@@ -222,3 +222,44 @@
 @utility animate-fade-scale {
   animation: fade-scale-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
+
+@keyframes peek-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility animate-peek-in {
+  animation: peek-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+@keyframes tail-wag {
+  0%, 100% { transform: rotate(-6deg); }
+  50%       { transform: rotate(6deg); }
+}
+
+@utility animate-tail-wag {
+  transform-origin: top center;
+  animation: tail-wag 3.5s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1, 1); }
+  50%       { transform: scale(1.015, 1.03); }
+}
+
+@utility animate-breathe {
+  transform-origin: bottom center;
+  animation: breathe 4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-peek-in { animation: none; opacity: 1; transform: none; }
+  .animate-tail-wag { animation: none; }
+  .animate-breathe  { animation: none; }
+}

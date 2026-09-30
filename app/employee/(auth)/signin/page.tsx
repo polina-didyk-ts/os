@@ -2,8 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import Lottie from "lottie-react";
-import mascotAnimation from "@/public/mascot.json";
+import Image from "next/image";
 import { authClient } from "@/src/lib/client";
 import { Alert, AlertDescription } from "@/app/components/ui/alert";
 
@@ -31,52 +30,40 @@ function SignInForm() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-6 relative overflow-hidden bg-[#fff7ed]">
-      {/* Saturated focal point — solid colors, no alpha wash */}
-      <div
-        className="fixed inset-0 -z-10 pointer-events-none"
-        style={{
-          background: `
-            radial-gradient(circle at 92% 2%,
-              #fbbf24 0%,
-              #f97316 14%,
-              #ea580c 26%,
-              #fed7aa 48%,
-              transparent 65%),
-            radial-gradient(circle at 2% 98%,
-              #fb923c 0%,
-              #fde68a 22%,
-              #fff7ed 48%,
-              transparent 65%),
-            radial-gradient(circle at 12% 12%,
-              #fef08a 0%,
-              #fde68a 20%,
-              transparent 50%),
-            radial-gradient(circle at 65% 90%,
-              #fed7aa 0%,
-              #fef3c7 30%,
-              transparent 55%),
-            #fff7ed
-          `,
-        }}
-      />
-      {/* Supporting blobs */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute -top-16 -right-16 w-[420px] h-[420px] rounded-full bg-amber-400/60 blur-[50px]" />
-        <div className="absolute top-[18%] right-[20%] w-[280px] h-[280px] rounded-full bg-orange-400/50 blur-[50px]" />
-        <div className="absolute top-[42%] -left-10 w-[320px] h-[320px] rounded-full bg-orange-300/55 blur-[60px]" />
-        <div className="absolute bottom-[3%] right-[20%] w-[300px] h-[300px] rounded-full bg-yellow-300/60 blur-[50px]" />
-        <div className="absolute top-[68%] right-[3%] w-[220px] h-[220px] rounded-full bg-amber-300/45 blur-[45px]" />
-        <div className="absolute top-[32%] left-[35%] w-[240px] h-[240px] rounded-full bg-rose-300/25 blur-[55px]" />
-      </div>
 
-      <div className="w-full max-w-sm flex flex-col items-center">
-        {/* Mascot floats above the card */}
-        <div className="relative z-10 mb-[-32px]">
-          <Lottie animationData={mascotAnimation} loop className="w-40 h-40" />
+      {/* Outer wrapper — space for head above, tail below */}
+      <div className="relative w-full max-w-sm pt-[88px] pb-[80px]">
+
+        {/* Head + paws — z-20 */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20 w-[200px] animate-peek-in">
+          <Image
+            src="/stacky-peek-head.png"
+            alt=""
+            aria-hidden="true"
+            width={200}
+            height={104}
+            priority
+            className="w-full max-w-none h-auto"
+          />
         </div>
 
-        {/* Glass card */}
-        <div className="w-full bg-white/28 backdrop-blur-xl rounded-3xl px-8 pt-12 pb-8 shadow-[0_8px_32px_rgba(20,20,20,0.11),inset_0_1px_0_rgba(255,255,255,0.55)] border border-white/15 flex flex-col items-center gap-6">
+        {/* Inner wrapper — card + tail, relative so tail anchors to card bottom */}
+        <div className="relative">
+
+          {/* Tail — z-0, slightly under card bottom */}
+          <div className="absolute top-[calc(100%-10px)] left-[calc(50%+10px)] -translate-x-1/2 z-0 animate-tail-wag">
+            <Image
+              src="/stacky-peek-tail.png"
+              alt=""
+              aria-hidden="true"
+              width={54}
+              height={83}
+              className="w-[54px]"
+            />
+          </div>
+
+          {/* Glass card — z-10 */}
+          <div className="relative z-10 w-full bg-white/28 backdrop-blur-xl rounded-3xl px-8 pt-10 pb-8 shadow-[0_8px_32px_rgba(20,20,20,0.11),inset_0_1px_0_rgba(255,255,255,0.55)] border border-white/15 flex flex-col items-center gap-6 animate-fade-scale">
           <div className="text-center space-y-2">
             <h1 className="text-3xl text-gray-900 font-grotesk">Digital Office</h1>
             <p className="text-sm text-gray-500 font-techstack">
@@ -144,8 +131,9 @@ function SignInForm() {
           </button>
 
           <p className="text-xs text-gray-400 font-techstack">For Techstack members only</p>
-        </div>
-      </div>
+          </div>{/* end glass card */}
+        </div>{/* end inner wrapper */}
+      </div>{/* end outer wrapper */}
     </main>
   );
 }
