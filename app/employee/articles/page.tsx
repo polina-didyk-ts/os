@@ -98,29 +98,50 @@ function RegularCard({ article, delay }: { article: Article; delay: number }) {
       className="bg-white/28 backdrop-blur-xl rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(20,20,20,0.11),inset_0_1px_0_rgba(255,255,255,0.55)] border border-white/15 block hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(20,20,20,0.14)] transition-all duration-200 animate-fade-up"
       style={{ animationDelay: `${delay}ms` }}
     >
-      {article.coverImage && (
+      {article.coverImage ? (
         <div className="relative w-full h-44">
           <Image src={article.coverImage} alt={article.title} fill className="object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+          {article.category && (
+            <div className="absolute top-3 left-3">
+              <span className="inline-block text-[10px] font-grotesk uppercase tracking-widest text-amber-300 bg-black/30 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-amber-400/30">
+                {article.category}
+              </span>
+            </div>
+          )}
+          <div className="absolute bottom-0 left-0 right-0 px-4 pb-3">
+            {article.publishedAt && (
+              <span className="block text-[10px] text-white/60 font-techstack mb-1">
+                {formatDate(article.publishedAt)}
+              </span>
+            )}
+            <h2 className="text-xl font-grotesk text-white leading-tight line-clamp-3 drop-shadow-sm">
+              {article.title}
+            </h2>
+          </div>
+        </div>
+      ) : (
+        <div className="p-4">
+          <div className="flex items-center gap-2 mb-2">
+            {article.category && <CategoryBadge category={article.category} />}
+            {article.publishedAt && (
+              <span className="text-[10px] text-gray-400 font-techstack">
+                {formatDate(article.publishedAt)}
+              </span>
+            )}
+          </div>
+          <h2 className="text-base font-grotesk text-gray-900 leading-snug line-clamp-2">
+            {article.title}
+          </h2>
         </div>
       )}
-      <div className="p-4">
-        <div className="flex items-center gap-2 mb-2">
-          {article.category && <CategoryBadge category={article.category} />}
-          {article.publishedAt && (
-            <span className="text-[10px] text-gray-400 font-techstack">
-              {formatDate(article.publishedAt)}
-            </span>
-          )}
-        </div>
-        <h2 className="text-base font-grotesk text-gray-900 leading-snug line-clamp-2">
-          {article.title}
-        </h2>
+      <div className="px-4 py-3">
         {article.excerpt && (
-          <p className="text-sm text-gray-500 mt-1.5 font-techstack line-clamp-2 leading-relaxed">
+          <p className="text-sm text-gray-500 font-techstack line-clamp-2 leading-relaxed mb-3">
             {article.excerpt}
           </p>
         )}
-        <div className="flex items-center justify-end mt-3">
+        <div className="flex items-center justify-end">
           <span className="flex items-center gap-0.5 text-xs font-grotesk text-amber-600">
             Read <ChevronRight className="w-3.5 h-3.5" />
           </span>
