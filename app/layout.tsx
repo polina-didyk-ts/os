@@ -22,8 +22,23 @@ const grotesk = localFont({
 });
 
 export const metadata = {
+  metadataBase: new URL("https://digital-office-eta.vercel.app"),
   title: "Digital Office",
   description: "Techstack internal corporate tool",
+  openGraph: {
+    title: "Digital Office",
+    description: "Techstack internal corporate tool",
+    url: "https://digital-office-eta.vercel.app",
+    siteName: "Digital Office",
+    images: [{ url: "/opengraph-image.png", width: 1200, height: 630 }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Digital Office",
+    description: "Techstack internal corporate tool",
+    images: ["/opengraph-image.png"],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
